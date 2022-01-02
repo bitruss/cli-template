@@ -1,4 +1,4 @@
-package config
+package cli
 
 import (
 	"errors"
@@ -7,17 +7,13 @@ import (
 	"github.com/spf13/viper"
 )
 
+var ConfigFile string
+var Config *VConfig
+
 type VConfig struct {
 	*viper.Viper
 	configPath string
 }
-
-//func NewViperConfig() *VConfig {
-//	return &VConfig{
-//		viper.New(),
-//		"",
-//	}
-//}
 
 func ReadConfig(configPath string) (*VConfig, error) {
 	c := &VConfig{viper.New(), ""}

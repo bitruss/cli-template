@@ -5,7 +5,6 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/universe-30/UCliAppTemplate/cli"
-	"github.com/universe-30/UCliAppTemplate/cli/logger"
 )
 
 func StartDefault() {
@@ -20,7 +19,7 @@ func StartDefault() {
 	//print logo
 
 	color.Green(cli.Logo)
-	logger.LocalLogger.Infoln("hello world , this default app")
+	cli.Logger.Infoln("hello world , this default app")
 	//somepack.HowToGetGlobalParam()
 	///start the server
 	//err := global.EchoServer.Start()
@@ -29,7 +28,7 @@ func StartDefault() {
 	//}
 
 	for i := 0; i < 10; i++ {
-		logger.LocalLogger.Infoln("running")
+		cli.Logger.Infoln("running")
 		time.Sleep(1 * time.Second)
 	}
 

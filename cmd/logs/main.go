@@ -2,7 +2,6 @@ package logs
 
 import (
 	"github.com/universe-30/UCliAppTemplate/cli"
-	"github.com/universe-30/UCliAppTemplate/cli/logger"
 )
 
 func StartLog() {
@@ -13,8 +12,8 @@ func StartLog() {
 
 	onlyerr := cli.CmdToDo.CliContext.Bool("onlyerr")
 	if onlyerr {
-		logger.LocalLogger.PrintLastN_ErrLogs(num)
+		cli.Logger.PrintLastN_ErrLogs(num)
 	} else {
-		logger.LocalLogger.PrintLastN_AllLogs(num)
+		cli.Logger.PrintLastN_AllLogs(num)
 	}
 }

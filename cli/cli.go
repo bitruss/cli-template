@@ -3,9 +3,11 @@ package cli
 import (
 	"log"
 	"os"
-
-	"github.com/universe-30/UCliAppTemplate/cli/logger"
 )
+
+func Init() {
+	InitLogger()
+}
 
 func ReadArgs() {
 	//print any initialzation panic
@@ -17,7 +19,7 @@ func ReadArgs() {
 	//}()
 
 	//ini logger
-	logger.IniLocalLogger()
+	InitLogger()
 
 	//config app to run
 	errRun := configCliCmd().Run(os.Args)

@@ -4,17 +4,12 @@ import (
 	"errors"
 
 	"github.com/daqnext/utils/path_util"
-	"github.com/universe-30/UCliAppTemplate/cli/config"
-	"github.com/universe-30/UCliAppTemplate/cli/logger"
 	"github.com/urfave/cli/v2"
 )
 
 type Cmd struct {
 	CmdName    string
 	CliContext *cli.Context
-
-	ConfigFile string
-	Config     *config.VConfig
 }
 
 var CmdToDo *Cmd
@@ -126,7 +121,7 @@ func configCliCmd() *cli.App {
 					//service status
 					{
 						Name:  "status",
-						Usage: "show service status",
+						Usage: "show process status",
 						Action: func(c *cli.Context) error {
 							CmdToDo, todoerr = getCmdToDo(CMD_NAME_SERVICE, false, c)
 							if todoerr != nil {
@@ -142,24 +137,24 @@ func configCliCmd() *cli.App {
 }
 
 ////////end config to do app ///////////
-func readDefaultConfig(isDev bool) (*config.VConfig, string, error) {
+func readDefaultConfig(isDev bool) (*VConfig, string, error) {
 	var defaultConfigPath string
 	if isDev {
-		logger.LocalLogger.Infoln("======== using dev mode ========")
+		Logger.Infoln("======== using dev mode ========")
 		defaultConfigPath = path_util.GetAbsPath("configs/dev.json")
 	} else {
-		logger.LocalLogger.Infoln("======== using pro mode ========")
+		Logger.Infoln("======== using pro mode ========")
 		defaultConfigPath = path_util.GetAbsPath("configs/pro.json")
 	}
 
-	logger.LocalLogger.Info("config file:", defaultConfigPath)
+	Logger.Info("config file:", defaultConfigPath)
 
-	Config, err := config.ReadConfig(defaultConfigPath)
+	config, err := ReadConfig(defaultConfigPath)
 	if err != nil {
-		logger.LocalLogger.Error("no pro.json under /configs folder , use --dev=true to run dev mode")
+		Logger.Error("no pro.json under /configs folder , use --dev=true to run dev mode")
 		return nil, "", err
 	} else {
-		return Config, defaultConfigPath, nil
+		return config, defaultConfigPath, nil
 	}
 }
 
@@ -173,55 +168,46 @@ func getCmdToDo(cmdName string, needconfig bool, c *cli.Context) (*Cmd, error) {
 
 	if needconfig {
 		////read default config
-		Config, defaultConfigPath, err := readDefaultConfig(c.Bool("dev"))
+		config, defaultConfigPath, err := readDefaultConfig(c.Bool("dev"))
 		if err != nil {
 			return nil, err
 		}
-		logger.LocalLogger.Infoln("======== start of config ========")
-		configs, _ := Config.GetConfigAsString()
-		logger.LocalLogger.Infoln(configs)
-		logger.LocalLogger.Infoln("======== end of config ========")
+		Logger.Infoln("======== start of config ========")
+		configs, _ := config.GetConfigAsString()
+		Logger.Infoln(configs)
+		Logger.Infoln("======== end of config ========")
 
-		app.ConfigFile = defaultConfigPath
-		app.Config = Config
+		ConfigFile = defaultConfigPath
+		Config = config
 	}
 
 	logLevel := "INFO"
-	if app.Config != nil {
+	if Config != nil {
 		var err error
-		logLevel, err = app.Config.GetString("local_log_level", "INFO")
+		logLevel, err = Config.GetString("local_log_level", "INFO")
 		if err != nil {
-			return nil, errors.New("local_log_level [string] in config not defined," + err.Error())
+			return nil, errors.New("local_log_level [string] in config err:" + err.Error())
 		}
 	}
-	err := logger.SetLogLevel(logLevel)
-	if err != nil {
-		//todo return this error or just log error
-		logger.LocalLogger.Errorln(err)
-	}
+	SetLogLevel(logLevel)
 	return app, nil
 }
 
 // ManualInitAppConfig init app config when use go test
 func ManualInitAppConfig(configPath string) {
-	logger.LocalLogger.Infoln("configPath:", configPath)
-	Config, err := config.ReadConfig(configPath)
+	Logger.Infoln("configPath:", configPath)
+	config, err := ReadConfig(configPath)
 	if err != nil {
 		panic("Manual read config err " + err.Error())
 	}
 
-	CmdToDo = &Cmd{
-		ConfigFile: configPath,
-		Config:     Config,
-	}
+	ConfigFile = configPath
+	Config = config
 
 	logLevel := "INFO"
 	logLevel, err = Config.GetString("local_log_level", "DEBU")
 	if err != nil {
-		panic("local_log_level [string] in config not defined," + err.Error())
+		panic("local_log_level [string] in config err:" + err.Error())
 	}
-	err = logger.SetLogLevel(logLevel)
-	if err != nil {
-		panic(err.Error())
-	}
+	SetLogLevel(logLevel)
 }
