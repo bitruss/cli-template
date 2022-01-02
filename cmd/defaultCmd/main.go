@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/universe-30/UCliAppTemplate/cli"
+	"github.com/universe-30/CliAppTemplate/cli"
 )
 
 func StartDefault() {

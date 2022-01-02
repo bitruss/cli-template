@@ -1,7 +1,7 @@
 package logs
 
 import (
-	"github.com/universe-30/UCliAppTemplate/cli"
+	"github.com/universe-30/CliAppTemplate/cli"
 )
 
 func StartLog() {

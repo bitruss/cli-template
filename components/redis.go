@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/universe-30/UCliAppTemplate/cli"
+	"github.com/universe-30/CliAppTemplate/cli"
 )
 
 func InitRedis() (*redis.ClusterClient, error) {

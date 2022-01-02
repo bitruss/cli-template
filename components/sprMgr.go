@@ -3,11 +3,11 @@ package components
 import (
 	"errors"
 
-	"github.com/universe-30/UCliAppTemplate/cli"
-	"github.com/universe-30/URedisSpr"
+	"github.com/universe-30/CliAppTemplate/cli"
+	"github.com/universe-30/RedisSpr"
 )
 
-func InitSprMgr() (*URedisSpr.SprJobMgr, error) {
+func InitSprMgr() (*RedisSpr.SprJobMgr, error) {
 
 	//////// ini spr job //////////////////////
 	redis_addr, _redis_addr_err := cli.Config.GetString("redis_addr", "127.0.0.1")
@@ -30,7 +30,7 @@ func InitSprMgr() (*URedisSpr.SprJobMgr, error) {
 		return nil, errors.New("redis_port [int] in config.json err," + redis_port_err.Error())
 	}
 
-	SprMgr, SPR_go_err := URedisSpr.New(URedisSpr.RedisConfig{
+	SprMgr, SPR_go_err := RedisSpr.New(RedisSpr.RedisConfig{
 		Addr:     redis_addr,
 		Port:     redis_port,
 		Password: redis_password,

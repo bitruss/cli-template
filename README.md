@@ -1,1 +1,1 @@
-# UCliAppTemplate
+# CliAppTemplate

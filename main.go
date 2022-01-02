@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/universe-30/UCliAppTemplate/cli"
-	"github.com/universe-30/UCliAppTemplate/cmd/defaultCmd"
-	"github.com/universe-30/UCliAppTemplate/cmd/logs"
+	"github.com/universe-30/CliAppTemplate/cli"
+	"github.com/universe-30/CliAppTemplate/cmd/defaultCmd"
+	"github.com/universe-30/CliAppTemplate/cmd/logs"
 )
 
 func main() {
