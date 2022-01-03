@@ -1,9 +1,9 @@
-package cli
+package cliCmd
 
 import (
 	"errors"
 
-	"github.com/daqnext/utils/path_util"
+	"github.com/universe-30/UUtils/path_util"
 	"github.com/urfave/cli/v2"
 )
 
@@ -47,6 +47,21 @@ func configCliCmd() *cli.App {
 				},
 				Action: func(c *cli.Context) error {
 					CmdToDo, todoerr = getCmdToDo(CMD_NAME_LOG, false, c)
+					if todoerr != nil {
+						return todoerr
+					}
+					return nil
+				},
+			},
+			{
+				Name:    CMD_NAME_CONFIG,
+				Aliases: []string{CMD_NAME_CONFIG},
+				Usage:   "config command",
+				Flags: []cli.Flag{
+					&cli.BoolFlag{Name: "dev", Required: false},
+				},
+				Action: func(c *cli.Context) error {
+					CmdToDo, todoerr = getCmdToDo(CMD_NAME_CONFIG, false, c)
 					if todoerr != nil {
 						return todoerr
 					}
@@ -168,7 +183,7 @@ func getCmdToDo(cmdName string, needconfig bool, c *cli.Context) (*Cmd, error) {
 
 	if needconfig {
 		////read default config
-		config, defaultConfigPath, err := readDefaultConfig(c.Bool("dev"))
+		config, _, err := readDefaultConfig(c.Bool("dev"))
 		if err != nil {
 			return nil, err
 		}
@@ -177,7 +192,7 @@ func getCmdToDo(cmdName string, needconfig bool, c *cli.Context) (*Cmd, error) {
 		Logger.Infoln(configs)
 		Logger.Infoln("======== end of config ========")
 
-		ConfigFile = defaultConfigPath
+		//ConfigFile = defaultConfigPath
 		Config = config
 	}
 
@@ -201,7 +216,7 @@ func ManualInitAppConfig(configPath string) {
 		panic("Manual read config err " + err.Error())
 	}
 
-	ConfigFile = configPath
+	//ConfigFile = configPath
 	Config = config
 
 	logLevel := "INFO"

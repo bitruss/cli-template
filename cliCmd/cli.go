@@ -1,13 +1,8 @@
-package cli
+package cliCmd
 
 import (
-	"log"
 	"os"
 )
-
-func Init() {
-	InitLogger()
-}
 
 func ReadArgs() {
 	//print any initialzation panic
@@ -18,13 +13,9 @@ func ReadArgs() {
 	//	}
 	//}()
 
-	//ini logger
-	InitLogger()
-
 	//config app to run
 	errRun := configCliCmd().Run(os.Args)
 	if errRun != nil {
-		log.Fatal(errRun)
-		panic(errRun.Error())
+		Logger.Panic(errRun)
 	}
 }

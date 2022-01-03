@@ -1,4 +1,4 @@
-package cli
+package cliCmd
 
 import (
 	"errors"
@@ -7,7 +7,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-var ConfigFile string
 var Config *VConfig
 
 type VConfig struct {

@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/universe-30/CliAppTemplate/cli"
+	"github.com/universe-30/CliAppTemplate/cliCmd"
 )
 
 func StartDefault() {
@@ -18,8 +18,8 @@ func StartDefault() {
 
 	//print logo
 
-	color.Green(cli.Logo)
-	cli.Logger.Infoln("hello world , this default app")
+	color.Green(cliCmd.Logo)
+	cliCmd.Logger.Infoln("hello world , this default app")
 	//somepack.HowToGetGlobalParam()
 	///start the server
 	//err := global.EchoServer.Start()
@@ -28,7 +28,7 @@ func StartDefault() {
 	//}
 
 	for i := 0; i < 10; i++ {
-		cli.Logger.Infoln("running")
+		cliCmd.Logger.Infoln("running")
 		time.Sleep(1 * time.Second)
 	}
 

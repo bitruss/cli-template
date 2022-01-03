@@ -1,17 +1,17 @@
-package cli
+package cliCmd
 
 import (
 	"github.com/fatih/color"
+	"github.com/universe-30/Logrus"
 	"github.com/universe-30/ULog"
 	"github.com/universe-30/UUtils/path_util"
-	"github.com/universe-30/logrus"
 )
 
-var Logger *logrus.LocalLog
+var Logger *Logrus.LocalLog
 
 func InitLogger() {
 	var llerr error
-	Logger, llerr = logrus.New(path_util.GetAbsPath("logs"), 2, 20, 30)
+	Logger, llerr = Logrus.New(path_util.GetAbsPath("logs"), 2, 20, 30)
 
 	if llerr != nil {
 		color.Set(color.FgRed)

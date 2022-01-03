@@ -3,15 +3,16 @@ module github.com/universe-30/CliAppTemplate
 go 1.17
 
 require (
-	github.com/daqnext/utils v0.1.2
+	github.com/daqnext/daemon v1.0.1
 	github.com/fatih/color v1.13.0
 	github.com/go-redis/redis/v8 v8.11.4
+	github.com/olivere/elastic/v7 v7.0.30
 	github.com/spf13/viper v1.10.1
+	github.com/universe-30/Logrus v0.1.4
 	github.com/universe-30/RedisSpr v0.1.9
 	github.com/universe-30/UCache v0.1.3
 	github.com/universe-30/ULog v0.1.9
 	github.com/universe-30/UUtils v0.1.0
-	github.com/universe-30/logrus v0.1.2
 	github.com/urfave/cli/v2 v2.3.0
 	gorm.io/driver/mysql v1.2.2
 	gorm.io/gorm v1.22.4
@@ -27,11 +28,14 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.3 // indirect
+	github.com/josharian/intern v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
+	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/russross/blackfriday/v2 v2.0.1 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
