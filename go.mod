@@ -6,20 +6,20 @@ require (
 	github.com/daqnext/daemon v1.0.1
 	github.com/fatih/color v1.13.0
 	github.com/go-redis/redis/v8 v8.11.4
+	github.com/labstack/echo/v4 v4.6.1
 	github.com/olivere/elastic/v7 v7.0.30
 	github.com/spf13/viper v1.10.1
-	github.com/universe-30/Logrus v0.1.4
-	github.com/universe-30/RedisSpr v0.1.9
-	github.com/universe-30/UCache v0.1.3
-	github.com/universe-30/ULog v0.1.9
-	github.com/universe-30/UUtils v0.1.0
+	github.com/universe-30/LogrusULog v0.1.17
+	github.com/universe-30/RedisSpr v0.1.13
+	github.com/universe-30/UCache v0.1.4
+	github.com/universe-30/ULog v0.1.15
+	github.com/universe-30/UUtils v0.1.1
 	github.com/urfave/cli/v2 v2.3.0
 	gorm.io/driver/mysql v1.2.2
 	gorm.io/gorm v1.22.4
 )
 
 require (
-	github.com/antonfisher/nested-logrus-formatter v1.3.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
@@ -29,6 +29,7 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.3 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
+	github.com/labstack/gommon v0.3.0 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
@@ -44,6 +45,10 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
+	github.com/valyala/bytebufferpool v1.0.0 // indirect
+	github.com/valyala/fasttemplate v1.2.1 // indirect
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
+	golang.org/x/net v0.0.0-20211209124913-491a49abca63 // indirect
 	golang.org/x/sys v0.0.0-20211210111614-af8b64212486 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/ini.v1 v1.66.2 // indirect

@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/universe-30/CliAppTemplate/cliCmd"
-	"github.com/universe-30/Logrus"
+	"github.com/universe-30/ULog"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -73,13 +73,13 @@ func InitDB() (*gorm.DB, *sql.DB, error) {
 ///////////////////////////
 
 type gormLocalLogger struct {
-	LocalLogger           *Logrus.LocalLog
+	LocalLogger           ULog.Logger
 	SlowThreshold         time.Duration
 	SourceField           string
 	SkipErrRecordNotFound bool
 }
 
-func New_gormLocalLogger(localLogger *Logrus.LocalLog) *gormLocalLogger {
+func New_gormLocalLogger(localLogger ULog.Logger) *gormLocalLogger {
 	return &gormLocalLogger{
 		LocalLogger:           localLogger,
 		SkipErrRecordNotFound: true,

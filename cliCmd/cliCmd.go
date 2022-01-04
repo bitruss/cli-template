@@ -61,7 +61,7 @@ func configCliCmd() *cli.App {
 					&cli.BoolFlag{Name: "dev", Required: false},
 				},
 				Action: func(c *cli.Context) error {
-					CmdToDo, todoerr = getCmdToDo(CMD_NAME_CONFIG, false, c)
+					CmdToDo, todoerr = getCmdToDo(CMD_NAME_CONFIG, true, c)
 					if todoerr != nil {
 						return todoerr
 					}
@@ -162,11 +162,11 @@ func readDefaultConfig(isDev bool) (*VConfig, string, error) {
 		defaultConfigPath = path_util.GetAbsPath("configs/pro.json")
 	}
 
-	Logger.Info("config file:", defaultConfigPath)
+	Logger.Infoln("config file:", defaultConfigPath)
 
 	config, err := ReadConfig(defaultConfigPath)
 	if err != nil {
-		Logger.Error("no pro.json under /configs folder , use --dev=true to run dev mode")
+		Logger.Errorln("no pro.json under /configs folder , use --dev=true to run dev mode")
 		return nil, "", err
 	} else {
 		return config, defaultConfigPath, nil

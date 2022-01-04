@@ -4,21 +4,10 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"runtime"
 
-	"github.com/daqnext/daemon"
 	"github.com/universe-30/CliAppTemplate/cliCmd"
+	"github.com/universe-30/CliAppTemplate/components"
 )
-
-const (
-	// name of the service
-	name        = "template"
-	description = "app template"
-)
-
-type Service struct {
-	daemon.Daemon
-}
 
 func RunServiceCmd() {
 	//check command
@@ -28,15 +17,7 @@ func RunServiceCmd() {
 		return
 	}
 
-	kind := daemon.SystemDaemon
-	if runtime.GOOS == "darwin" {
-		kind = daemon.UserAgent
-	}
-	srv, err := daemon.New(name, description, kind)
-	if err != nil {
-		cliCmd.Logger.Fatalln("run daemon error:", err)
-	}
-	service := &Service{srv}
+	service := components.NewDaemonService()
 
 	action := subCmds[0]
 	log.Println(action)

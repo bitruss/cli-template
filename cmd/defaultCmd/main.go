@@ -8,7 +8,6 @@ import (
 )
 
 func StartDefault() {
-	//global.Init()
 	//defer func() {
 	//	logger.LocalLogger.Infoln("StartDefault closed , start to ReleaseResource()")
 	//	global.ReleaseResource()
@@ -20,7 +19,7 @@ func StartDefault() {
 
 	color.Green(cliCmd.Logo)
 	cliCmd.Logger.Infoln("hello world , this default app")
-	//somepack.HowToGetGlobalParam()
+
 	///start the server
 	//err := global.EchoServer.Start()
 	//if err != nil {

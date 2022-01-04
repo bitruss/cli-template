@@ -41,7 +41,7 @@ func InitSprMgr() (*RedisSpr.SprJobMgr, error) {
 		return nil, SPR_go_err
 	}
 
-	SprMgr.SetLogger(cliCmd.Logger)
+	SprMgr.SetULogger(cliCmd.Logger)
 
 	return SprMgr, nil
 
