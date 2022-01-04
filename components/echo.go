@@ -2,7 +2,6 @@ package components
 
 import (
 	"errors"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/universe-30/CliAppTemplate/cliCmd"
@@ -40,15 +39,6 @@ func InitEchoServer() (*EchoServer, error) {
 	}
 
 	return esP, nil
-}
-
-func (s *EchoServer) Start() error {
-	cliCmd.Logger.Infoln("http server started on port :" + strconv.Itoa(s.Http_port))
-	cliCmd.Logger.Infoln("http server with static folder:" + s.Http_static_abs_folder)
-	if s.Http_static_abs_folder != "" {
-		s.Echo.Static("/", s.Http_static_abs_folder)
-	}
-	return s.Echo.Start(":" + strconv.Itoa(s.Http_port))
 }
 
 func (s *EchoServer) Close() {
