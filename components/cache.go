@@ -4,6 +4,6 @@ import (
 	"github.com/universe-30/UCache"
 )
 
-func InitCacheMgr() *UCache.Cache {
+func NewUCache() *UCache.Cache {
 	return UCache.New()
 }

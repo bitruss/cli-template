@@ -1,26 +1,26 @@
 package main
 
 import (
-	"github.com/universe-30/CliAppTemplate/cliCmd"
+	"github.com/universe-30/CliAppTemplate/boot"
 	"github.com/universe-30/CliAppTemplate/cmd/config"
-	"github.com/universe-30/CliAppTemplate/cmd/defaultCmd"
+	default_ "github.com/universe-30/CliAppTemplate/cmd/default_"
 	"github.com/universe-30/CliAppTemplate/cmd/log"
 	"github.com/universe-30/CliAppTemplate/cmd/service"
 )
 
 func main() {
-	cliCmd.InitLogger()
-	cliCmd.ReadArgs()
+	//boot.InitLogger()
+	boot.ReadArgs()
 
-	switch cliCmd.CmdToDo.CmdName {
-	case cliCmd.CMD_NAME_LOG:
+	switch boot.CmdToDo.CmdName {
+	case boot.CMD_NAME_LOG:
 		log.StartLog()
-	case cliCmd.CMD_NAME_SERVICE:
+	case boot.CMD_NAME_SERVICE:
 		service.RunServiceCmd()
-	case cliCmd.CMD_NAME_CONFIG:
+	case boot.CMD_NAME_CONFIG:
 		config.ConfigSetting()
 	default:
-		cliCmd.Logger.Infoln("======== start default app ===")
-		defaultCmd.StartDefault()
+		boot.Logger.Infoln("======== start default app ========")
+		default_.StartDefault()
 	}
 }

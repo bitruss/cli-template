@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/labstack/echo/v4"
-	"github.com/universe-30/CliAppTemplate/cliCmd"
+	"github.com/universe-30/CliAppTemplate/boot"
 	"github.com/universe-30/UUtils/path_util"
 )
 
@@ -18,13 +18,13 @@ type EchoServer struct {
 http_port
 http_static_rel_folder
 */
-func InitEchoServer() (*EchoServer, error) {
-	http_port, err := cliCmd.Config.GetInt("http_port", 8080)
+func NewEchoServer() (*EchoServer, error) {
+	http_port, err := boot.Config.GetInt("http_port", 8080)
 	if err != nil {
 		return nil, errors.New("http_port [int] in config error," + err.Error())
 	}
 
-	http_static_rel_folder, err := cliCmd.Config.GetString("http_static_rel_folder", "")
+	http_static_rel_folder, err := boot.Config.GetString("http_static_rel_folder", "")
 	if err != nil {
 		return nil, errors.New("http_static_rel_folder [string] in config error," + err.Error())
 	}
