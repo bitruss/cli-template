@@ -1,1 +1,1 @@
-# CliAppTemplate
+# CliTemplate
