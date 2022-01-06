@@ -7,7 +7,7 @@ import (
 	"time"
 
 	elasticSearch "github.com/olivere/elastic/v7"
-	"github.com/universe-30/CliAppTemplate/boot"
+	"github.com/universe-30/CliAppTemplate/basic"
 )
 
 type ElasticSRetrier struct {
@@ -24,17 +24,17 @@ elasticSearchUserName
 
 func NewElasticSearch() (*elasticSearch.Client, error) {
 
-	elasticSearchAddr, elasticSearchAddr_Err := boot.Config.GetString("elasticsearch_addr", "")
+	elasticSearchAddr, elasticSearchAddr_Err := basic.Config.GetString("elasticsearch_addr", "")
 	if elasticSearchAddr_Err != nil {
 		return nil, errors.New("elasticsearch_addr [string] in config.json not defined," + elasticSearchAddr_Err.Error())
 	}
 
-	elasticSearchUserName, elasticSearchUserName_Err := boot.Config.GetString("elasticsearch_username", "")
+	elasticSearchUserName, elasticSearchUserName_Err := basic.Config.GetString("elasticsearch_username", "")
 	if elasticSearchUserName_Err != nil {
 		return nil, errors.New("elasticsearch_username_err [string] in config.json not defined," + elasticSearchUserName_Err.Error())
 	}
 
-	elasticSearchPassword, elasticSearchPassword_Err := boot.Config.GetString("elasticsearch_password", "")
+	elasticSearchPassword, elasticSearchPassword_Err := basic.Config.GetString("elasticsearch_password", "")
 	if elasticSearchPassword_Err != nil {
 		return nil, errors.New("elasticsearch_password [string] in config.json not defined," + elasticSearchPassword_Err.Error())
 	}

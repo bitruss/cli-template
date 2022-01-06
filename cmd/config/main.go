@@ -4,44 +4,40 @@ import (
 	"fmt"
 
 	"github.com/fatih/color"
-	"github.com/universe-30/CliAppTemplate/boot"
+	"github.com/universe-30/CliAppTemplate/basic"
+	"github.com/urfave/cli/v2"
 )
 
-func ConfigSetting() {
-	//fmt.Println(cliCmd.Config.GetConfigAsString())
-	c := boot.CmdToDo.CliContext
+func ConfigSetting(clictx *cli.Context) {
+
 	configModify := false
 
-	//example
-	intConfParams := []string{"http_port", "db_host"}
-	stringConfParams := []string{"db_host", "db_name"}
-
-	for _, v := range intConfParams {
-		if c.IsSet(v) {
-			newValue := c.Int(v)
+	for _, v := range IntConfParams {
+		if clictx.IsSet(v) {
+			newValue := clictx.Int(v)
 			if newValue != 0 {
-				boot.Config.Set(v, newValue)
+				basic.Config.Set(v, newValue)
 				configModify = true
 			}
 		}
 	}
 
-	for _, v := range stringConfParams {
-		if c.IsSet(v) {
-			newValue := c.String(v)
-			boot.Config.Set(v, newValue)
+	for _, v := range StringConfParams {
+		if clictx.IsSet(v) {
+			newValue := clictx.String(v)
+			basic.Config.Set(v, newValue)
 			configModify = true
 		}
 	}
 
 	if configModify {
-		err := boot.Config.WriteConfig()
+		err := basic.Config.WriteConfig()
 		if err != nil {
 			color.Red("config save error:", err)
 			return
 		}
 		fmt.Println("config modified new config")
-		fmt.Println(boot.Config.GetConfigAsString())
+		fmt.Println(basic.Config.GetConfigAsString())
 	}
 
 }

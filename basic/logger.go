@@ -1,4 +1,4 @@
-package boot
+package basic
 
 import (
 	"github.com/fatih/color"

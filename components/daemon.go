@@ -4,7 +4,7 @@ import (
 	"runtime"
 
 	"github.com/daqnext/daemon"
-	"github.com/universe-30/CliAppTemplate/boot"
+	"github.com/universe-30/CliAppTemplate/basic"
 )
 
 const (
@@ -24,7 +24,7 @@ func NewDaemonService() *Service {
 	}
 	srv, err := daemon.New(name, description, kind)
 	if err != nil {
-		boot.Logger.Fatalln("run daemon error:", err)
+		basic.Logger.Fatalln("run daemon error:", err)
 	}
 	return &Service{srv}
 }

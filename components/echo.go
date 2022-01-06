@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/labstack/echo/v4"
-	"github.com/universe-30/CliAppTemplate/boot"
+	"github.com/universe-30/CliAppTemplate/basic"
 	"github.com/universe-30/EchoMiddleware"
 	"github.com/universe-30/EchoMiddleware/tool"
 	"github.com/universe-30/UUtils/path_util"
@@ -21,12 +21,12 @@ http_port
 http_static_rel_folder
 */
 func NewEchoServer() (*EchoServer, error) {
-	http_port, err := boot.Config.GetInt("http_port", 8080)
+	http_port, err := basic.Config.GetInt("http_port", 8080)
 	if err != nil {
 		return nil, errors.New("http_port [int] in config error," + err.Error())
 	}
 
-	http_static_rel_folder, err := boot.Config.GetString("http_static_rel_folder", "")
+	http_static_rel_folder, err := basic.Config.GetString("http_static_rel_folder", "")
 	if err != nil {
 		return nil, errors.New("http_static_rel_folder [string] in config error," + err.Error())
 	}
@@ -51,7 +51,7 @@ func (s *EchoServer) UseJsoniter() {
 //use default middleware
 func (s *EchoServer) UseDefaultMiddleware() {
 	s.Use(EchoMiddleware.LoggerWithConfig(EchoMiddleware.LoggerConfig{
-		Logger:            boot.Logger,
+		Logger:            basic.Logger,
 		RecordFailRequest: true,
 	}))
 	s.Use(EchoMiddleware.RecoverWithConfig(EchoMiddleware.RecoverConfig{

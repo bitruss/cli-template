@@ -5,14 +5,15 @@ import (
 	"log"
 	"os"
 
-	"github.com/universe-30/CliAppTemplate/boot"
+	"github.com/universe-30/CliAppTemplate/basic"
+	"github.com/urfave/cli/v2"
 )
 
-func RunServiceCmd() {
+func RunServiceCmd(clictx *cli.Context) {
 	//check command
-	subCmds := boot.CmdToDo.CliContext.Command.Names()
+	subCmds := clictx.Command.Names()
 	if len(subCmds) == 0 {
-		boot.Logger.Fatalln("no sub command")
+		basic.Logger.Fatalln("no sub command")
 		return
 	}
 
@@ -24,26 +25,26 @@ func RunServiceCmd() {
 	switch action {
 	case "install":
 		status, e = CompDeamon.Install()
-		boot.Logger.Debugln("cmd install")
+		basic.Logger.Debugln("cmd install")
 	case "remove":
 		CompDeamon.Stop()
 		status, e = CompDeamon.Remove()
-		boot.Logger.Debugln("cmd remove")
+		basic.Logger.Debugln("cmd remove")
 	case "start":
 		status, e = CompDeamon.Start()
-		boot.Logger.Debugln("cmd start")
+		basic.Logger.Debugln("cmd start")
 	case "stop":
 		status, e = CompDeamon.Stop()
-		boot.Logger.Debugln("cmd stop")
+		basic.Logger.Debugln("cmd stop")
 	case "restart":
 		CompDeamon.Stop()
 		status, e = CompDeamon.Start()
-		boot.Logger.Debugln("cmd restart")
+		basic.Logger.Debugln("cmd restart")
 	case "status":
 		status, e = CompDeamon.Status()
-		boot.Logger.Debugln("cmd status")
+		basic.Logger.Debugln("cmd status")
 	default:
-		boot.Logger.Debugln("no sub command")
+		basic.Logger.Debugln("no sub command")
 		return
 	}
 

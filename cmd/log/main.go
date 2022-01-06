@@ -1,20 +1,21 @@
 package log
 
 import (
-	"github.com/universe-30/CliAppTemplate/boot"
+	"github.com/universe-30/CliAppTemplate/basic"
 	"github.com/universe-30/ULog"
+	"github.com/urfave/cli/v2"
 )
 
-func StartLog() {
-	num := boot.CmdToDo.CliContext.Int("num")
+func StartLog(clictx *cli.Context) {
+	num := clictx.Int("num")
 	if num == 0 {
 		num = 20
 	}
 
-	onlyerr := boot.CmdToDo.CliContext.Bool("onlyerr")
+	onlyerr := clictx.Bool("onlyerr")
 	if onlyerr {
-		boot.Logger.PrintLastN(num, []ULog.LogLevel{ULog.PanicLevel, ULog.FatalLevel, ULog.ErrorLevel})
+		basic.Logger.PrintLastN(num, []ULog.LogLevel{ULog.PanicLevel, ULog.FatalLevel, ULog.ErrorLevel})
 	} else {
-		boot.Logger.PrintLastN(num, []ULog.LogLevel{ULog.PanicLevel, ULog.FatalLevel, ULog.ErrorLevel, ULog.InfoLevel, ULog.WarnLevel, ULog.DebugLevel, ULog.TraceLevel})
+		basic.Logger.PrintLastN(num, []ULog.LogLevel{ULog.PanicLevel, ULog.FatalLevel, ULog.ErrorLevel, ULog.InfoLevel, ULog.WarnLevel, ULog.DebugLevel, ULog.TraceLevel})
 	}
 }

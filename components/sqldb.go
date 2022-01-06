@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/universe-30/CliAppTemplate/boot"
+	"github.com/universe-30/CliAppTemplate/basic"
 	"github.com/universe-30/ULog"
 	"gorm.io/gorm/utils"
 
@@ -26,27 +26,27 @@ db_password
 */
 func NewDB() (*gorm.DB, *sql.DB, error) {
 
-	db_host, db_host_err := boot.Config.GetString("db_host", "127.0.0.1")
+	db_host, db_host_err := basic.Config.GetString("db_host", "127.0.0.1")
 	if db_host_err != nil {
 		return nil, nil, errors.New("db_host [string] in config err," + db_host_err.Error())
 	}
 
-	db_port, db_port_err := boot.Config.GetInt("db_port", 3306)
+	db_port, db_port_err := basic.Config.GetInt("db_port", 3306)
 	if db_port_err != nil {
 		return nil, nil, errors.New("db_port [int] in config err," + db_port_err.Error())
 	}
 
-	db_name, db_name_err := boot.Config.GetString("db_name", "dbname")
+	db_name, db_name_err := basic.Config.GetString("db_name", "dbname")
 	if db_name_err != nil {
 		return nil, nil, errors.New("db_name [string] in config err," + db_name_err.Error())
 	}
 
-	db_username, db_username_err := boot.Config.GetString("db_username", "username")
+	db_username, db_username_err := basic.Config.GetString("db_username", "username")
 	if db_username_err != nil {
 		return nil, nil, errors.New("db_username [string] in config err," + db_username_err.Error())
 	}
 
-	db_password, db_password_err := boot.Config.GetString("db_password", "password")
+	db_password, db_password_err := basic.Config.GetString("db_password", "password")
 	if db_password_err != nil {
 		return nil, nil, errors.New("db_password [string] in config err," + db_password_err.Error())
 	}
@@ -54,7 +54,7 @@ func NewDB() (*gorm.DB, *sql.DB, error) {
 	dsn := db_username + ":" + db_password + "@tcp(" + db_host + ":" + strconv.Itoa(db_port) + ")/" + db_name + "?charset=utf8mb4&loc=UTC"
 
 	GormDB, errOpen := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		Logger: New_gormLocalLogger(boot.Logger),
+		Logger: New_gormLocalLogger(basic.Logger),
 	})
 
 	if errOpen != nil {
