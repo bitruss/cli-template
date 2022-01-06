@@ -24,7 +24,7 @@ db_name
 db_username
 db_password
 */
-func InitDB() (*gorm.DB, *sql.DB, error) {
+func NewDB() (*gorm.DB, *sql.DB, error) {
 
 	db_host, db_host_err := boot.Config.GetString("db_host", "127.0.0.1")
 	if db_host_err != nil {
@@ -77,13 +77,13 @@ func InitDB() (*gorm.DB, *sql.DB, error) {
 type gormLocalLogger struct {
 	LocalLogger           ULog.Logger
 	SlowThreshold         time.Duration
-	SourceField           string
 	SkipErrRecordNotFound bool
 }
 
 func New_gormLocalLogger(localLogger ULog.Logger) *gormLocalLogger {
 	return &gormLocalLogger{
 		LocalLogger:           localLogger,
+		SlowThreshold:         200 * time.Millisecond,
 		SkipErrRecordNotFound: true,
 	}
 }

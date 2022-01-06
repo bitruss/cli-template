@@ -12,24 +12,24 @@ func ConfigSetting() {
 	c := boot.CmdToDo.CliContext
 	configModify := false
 
-	if c.IsSet("http_port") {
-		newValue := c.Int("http_port")
-		if newValue != 0 {
-			boot.Config.Set("http_port", newValue)
-			configModify = true
+	//example
+	intConfParams := []string{"http_port", "db_host"}
+	stringConfParams := []string{"db_host", "db_name"}
+
+	for _, v := range intConfParams {
+		if c.IsSet(v) {
+			newValue := c.Int(v)
+			if newValue != 0 {
+				boot.Config.Set(v, newValue)
+				configModify = true
+			}
 		}
 	}
 
-	if c.IsSet("db_host") {
-		newValue := c.String("db_host")
-		boot.Config.Set("db_host", newValue)
-		configModify = true
-	}
-
-	if c.IsSet("db_port") {
-		newValue := c.Int("db_port")
-		if newValue != 0 {
-			boot.Config.Set("db_port", newValue)
+	for _, v := range stringConfParams {
+		if c.IsSet(v) {
+			newValue := c.String(v)
+			boot.Config.Set(v, newValue)
 			configModify = true
 		}
 	}

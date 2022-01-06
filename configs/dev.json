@@ -5,8 +5,6 @@
   "db_password": "123456",
   "db_port": 3306,
   "db_username": "root",
-  "ectm_s_prikey": "xxxx",
-  "ectm_s_pubkey": "yyyy",
   "elasticsearch_addr": "xxxxx",
   "elasticsearch_password": "xxxxx",
   "elasticsearch_username": "xxxxx",

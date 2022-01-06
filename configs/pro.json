@@ -3,8 +3,6 @@
   "local_log_level":"INFO",
   "http_port": 80,
   "http_static_rel_folder": "/assets/apps/default_app/web",
-  "ectm_s_prikey": "xxxx",
-  "ectm_s_pubkey": "yyyy",
   "db_host": "xxxxxx",
   "db_port": 3306,
   "db_username": "xxxxx",
