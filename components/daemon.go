@@ -23,7 +23,7 @@ func NewDaemonService() *Service {
 		kind = daemon.UserAgent
 	}
 	srv, err := daemon.New(name, description, kind)
-	if err != nil {
+	if err != nil && basic.Logger != nil {
 		basic.Logger.Fatalln("run daemon error:", err)
 	}
 	return &Service{srv}

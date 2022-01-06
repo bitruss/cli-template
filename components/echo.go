@@ -40,6 +40,13 @@ func NewEchoServer() (*EchoServer, error) {
 		esP.Http_static_abs_folder = path_util.GetAbsPath(http_static_rel_folder)
 	}
 
+	if basic.Logger != nil {
+		esP.Use(EchoMiddleware.LoggerWithConfig(EchoMiddleware.LoggerConfig{
+			Logger:            basic.Logger,
+			RecordFailRequest: true,
+		}))
+	}
+
 	return esP, nil
 }
 
@@ -48,16 +55,10 @@ func (s *EchoServer) UseJsoniter() {
 	s.JSONSerializer = tool.NewJsoniter()
 }
 
-//use default middleware
-func (s *EchoServer) UseDefaultMiddleware() {
-	s.Use(EchoMiddleware.LoggerWithConfig(EchoMiddleware.LoggerConfig{
-		Logger:            basic.Logger,
-		RecordFailRequest: true,
-	}))
+//set panic handler
+func (s *EchoServer) SetPanicHandler(panicHandler func(panic_err interface{})) {
 	s.Use(EchoMiddleware.RecoverWithConfig(EchoMiddleware.RecoverConfig{
-		OnPanic: func(panic_err interface{}) {
-			//handel panic_err
-		},
+		OnPanic: panicHandler,
 	}))
 }
 

@@ -53,9 +53,15 @@ func NewDB() (*gorm.DB, *sql.DB, error) {
 
 	dsn := db_username + ":" + db_password + "@tcp(" + db_host + ":" + strconv.Itoa(db_port) + ")/" + db_name + "?charset=utf8mb4&loc=UTC"
 
-	GormDB, errOpen := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		Logger: New_gormLocalLogger(basic.Logger),
-	})
+	var GormDB *gorm.DB
+	var errOpen error
+	if basic.Logger != nil {
+		GormDB, errOpen = gorm.Open(mysql.Open(dsn), &gorm.Config{
+			Logger: New_gormLocalLogger(basic.Logger),
+		})
+	} else {
+		GormDB, errOpen = gorm.Open(mysql.Open(dsn))
+	}
 
 	if errOpen != nil {
 		return nil, nil, errOpen
