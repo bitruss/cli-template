@@ -59,6 +59,10 @@ func configCmd() *cli.App {
 				Usage:   "config command",
 				Flags: []cli.Flag{
 					&cli.BoolFlag{Name: "dev", Required: false},
+					//example modify config
+					&cli.IntFlag{Name: "http_port", Required: false},
+					&cli.StringFlag{Name: "db_host", Required: false},
+					&cli.IntFlag{Name: "db_port", Required: false},
 				},
 				Action: func(c *cli.Context) error {
 					CmdToDo, todoerr = getCmdToDo(CMD_NAME_CONFIG, true, c)

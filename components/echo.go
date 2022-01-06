@@ -5,11 +5,13 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/universe-30/CliAppTemplate/boot"
+	"github.com/universe-30/EchoMiddleware"
+	"github.com/universe-30/EchoMiddleware/tool"
 	"github.com/universe-30/UUtils/path_util"
 )
 
 type EchoServer struct {
-	Echo                   *echo.Echo
+	*echo.Echo
 	Http_port              int
 	Http_static_abs_folder string
 }
@@ -39,6 +41,24 @@ func NewEchoServer() (*EchoServer, error) {
 	}
 
 	return esP, nil
+}
+
+//use jsoniter
+func (s *EchoServer) UseJsoniter() {
+	s.JSONSerializer = tool.NewJsoniter()
+}
+
+//use default middleware
+func (s *EchoServer) UseDefaultMiddleware() {
+	s.Use(EchoMiddleware.LoggerWithConfig(EchoMiddleware.LoggerConfig{
+		Logger:            boot.Logger,
+		RecordFailRequest: true,
+	}))
+	s.Use(EchoMiddleware.RecoverWithConfig(EchoMiddleware.RecoverConfig{
+		OnPanic: func(panic_err interface{}) {
+			//handel panic_err
+		},
+	}))
 }
 
 func (s *EchoServer) Close() {
