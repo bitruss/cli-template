@@ -1,9 +1,9 @@
 package boot
 
 import (
-	"errors"
 	"io/ioutil"
 
+	"github.com/spf13/cast"
 	"github.com/spf13/viper"
 )
 
@@ -50,9 +50,9 @@ func (c *VConfig) GetBool(key string, defaultValue bool) (bool, error) {
 	}
 
 	v := c.Viper.Get(key)
-	value, ok := v.(bool)
-	if !ok {
-		return false, errors.New("type error")
+	value, err := cast.ToBoolE(v)
+	if err != nil {
+		return false, err
 	}
 	return value, nil
 }
@@ -63,9 +63,9 @@ func (c *VConfig) GetFloat64(key string, defaultValue float64) (float64, error) 
 	}
 
 	v := c.Viper.Get(key)
-	value, ok := v.(float64)
-	if !ok {
-		return 0, errors.New("type error")
+	value, err := cast.ToFloat64E(v)
+	if err != nil {
+		return 0, err
 	}
 	return value, nil
 }
@@ -75,10 +75,10 @@ func (c *VConfig) GetInt(key string, defaultValue int) (int, error) {
 		return defaultValue, nil
 	}
 
-	v := c.Viper.Get(key)
-	value, ok := v.(int)
-	if !ok {
-		return 0, errors.New("type error")
+	v := c.Viper.GetInt(key)
+	value, err := cast.ToIntE(v)
+	if err != nil {
+		return 0, err
 	}
 	return value, nil
 }
@@ -89,9 +89,9 @@ func (c *VConfig) GetIntSlice(key string, defaultValue []int) ([]int, error) {
 	}
 
 	v := c.Viper.Get(key)
-	value, ok := v.([]int)
-	if !ok {
-		return nil, errors.New("type error")
+	value, err := cast.ToIntSliceE(v)
+	if err != nil {
+		return nil, err
 	}
 	return value, nil
 }
@@ -102,9 +102,9 @@ func (c *VConfig) GetString(key string, defaultValue string) (string, error) {
 	}
 
 	v := c.Viper.Get(key)
-	value, ok := v.(string)
-	if !ok {
-		return "", errors.New("type error")
+	value, err := cast.ToStringE(v)
+	if err != nil {
+		return "", err
 	}
 	return value, nil
 }
@@ -115,9 +115,9 @@ func (c *VConfig) GetStringMap(key string, defaultValue map[string]interface{}) 
 	}
 
 	v := c.Viper.Get(key)
-	value, ok := v.(map[string]interface{})
-	if !ok {
-		return nil, errors.New("type error")
+	value, err := cast.ToStringMapE(v)
+	if err != nil {
+		return nil, err
 	}
 	return value, nil
 }
@@ -128,9 +128,9 @@ func (c *VConfig) GetStringSlice(key string, defaultValue []string) ([]string, e
 	}
 
 	v := c.Viper.Get(key)
-	value, ok := v.([]string)
-	if !ok {
-		return nil, errors.New("type error")
+	value, err := cast.ToStringSliceE(v)
+	if err != nil {
+		return nil, err
 	}
 	return value, nil
 }
