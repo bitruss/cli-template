@@ -20,6 +20,11 @@ or
 2."config" application:
 config is the program used to show or set config file
 
+2.1 set dev.json config
+./CliAppTemplate --dev=true set ... 
+
+2.1 set pro.json config
+./CliAppTemplate --dev=false set ... 
 
 3.run log application 
 log is used to show the local log files
