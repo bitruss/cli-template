@@ -2,10 +2,10 @@ package service
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/universe-30/CliAppTemplate/basic"
+	"github.com/universe-30/CliAppTemplate/components"
 	"github.com/urfave/cli/v2"
 )
 
@@ -18,30 +18,30 @@ func RunServiceCmd(clictx *cli.Context) {
 	}
 
 	action := subCmds[0]
-	log.Println(action)
+	compDeamon := components.NewDaemonService()
 
 	var status string
 	var e error
 	switch action {
 	case "install":
-		status, e = CompDeamon.Install()
+		status, e = compDeamon.Install()
 		basic.Logger.Debugln("cmd install")
 	case "remove":
-		CompDeamon.Stop()
-		status, e = CompDeamon.Remove()
+		compDeamon.Stop()
+		status, e = compDeamon.Remove()
 		basic.Logger.Debugln("cmd remove")
 	case "start":
-		status, e = CompDeamon.Start()
+		status, e = compDeamon.Start()
 		basic.Logger.Debugln("cmd start")
 	case "stop":
-		status, e = CompDeamon.Stop()
+		status, e = compDeamon.Stop()
 		basic.Logger.Debugln("cmd stop")
 	case "restart":
-		CompDeamon.Stop()
-		status, e = CompDeamon.Start()
+		compDeamon.Stop()
+		status, e = compDeamon.Start()
 		basic.Logger.Debugln("cmd restart")
 	case "status":
-		status, e = CompDeamon.Status()
+		status, e = compDeamon.Status()
 		basic.Logger.Debugln("cmd status")
 	default:
 		basic.Logger.Debugln("no sub command")

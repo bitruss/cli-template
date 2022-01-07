@@ -404,8 +404,12 @@ github.com/universe-30/RedisSpr v0.1.13 h1:7yqQdFe3HX3gm52+PM7OZBhm/Pwq8hEvYqFUM
 github.com/universe-30/RedisSpr v0.1.13/go.mod h1:Avza5lP38ZqukjU6fZtIJsg+/5jgcPpQK0hf9n1/FqU=
 github.com/universe-30/UCache v0.1.4 h1:G8AR35Dp/pHBPPdC3u77ZDRFJmDtduf6jReo9+hbCWE=
 github.com/universe-30/UCache v0.1.4/go.mod h1:CxE17GhRUHfWb+XqVjqFxYtF4Tc0Pc1CYoFNDgWDOV8=
+github.com/universe-30/UJob v0.1.3 h1:B6m5AjAv/yII0ffO+DxyXsYjItUsOW5SNDmUJPaL7kM=
+github.com/universe-30/UJob v0.1.3/go.mod h1:p1jeoRTCwAcnZsaME3/L6druF8nawSkoDPZt7NtITr8=
 github.com/universe-30/ULog v0.1.15 h1:t1Pafz50IDJfr7K1O/A9+x82ju69WMZIRnhirPYOgT0=
 github.com/universe-30/ULog v0.1.15/go.mod h1:crCwYCpgVO3bGi0wEx0CKsb9RwsQ2zmnLh1Yov3VKyM=
+github.com/universe-30/USafeGo v0.1.2 h1:y67yXJTdsiqcZ/m2dMPptE/FqzJc8jCQcd99H6dH5Ts=
+github.com/universe-30/USafeGo v0.1.2/go.mod h1:ZlGYmsLU32I4bhhD3YcvjzZc29PBra1xGx7r0CnDdX0=
 github.com/universe-30/UUtils v0.1.1 h1:kwVqMGAp3XL1c9K9WyFmw6hhXh7aQgYTIhS9fji6XwI=
 github.com/universe-30/UUtils v0.1.1/go.mod h1:TMnKGbg4zgONvfQNRm+XA1+gC/KP3Y9om6oNF4445ws=
 github.com/urfave/cli/v2 v2.3.0 h1:qph92Y649prgesehzOrQjdWyxFOp/QVM+6imKHad91M=

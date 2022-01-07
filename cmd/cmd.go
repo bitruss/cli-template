@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"os"
+	"strings"
+
 	"github.com/universe-30/CliAppTemplate/basic"
 	"github.com/universe-30/CliAppTemplate/cmd/config"
 	"github.com/universe-30/CliAppTemplate/cmd/default_"
@@ -17,16 +20,26 @@ const CMD_NAME_CONFIG = "config"
 
 ////////config to do cmd ///////////
 func ConfigCmd() *cli.App {
+	//check is dev or pro
+	isDev := false
+	for index, arg := range os.Args {
+		s := strings.ToLower(arg)
+		if s == "-dev=true" {
+			isDev = true
+			os.Args = append(os.Args[:index], os.Args[index+1:]...)
+			break
+		}
+	}
+	conferr := iniConfig(isDev)
+	if conferr != nil {
+		basic.Logger.Panicln(conferr)
+	}
 
 	return &cli.App{
 		Flags: default_.GetFlags(),
 		Action: func(clictx *cli.Context) error {
 			path_util.ExEPathPrintln()
-			conferr := iniConfig(clictx)
-			if conferr != nil {
-				return conferr
-			}
-			logerr := iniLogger()
+			logerr := setLoggerLevel()
 			if logerr != nil {
 				return logerr
 			}
@@ -36,50 +49,58 @@ func ConfigCmd() *cli.App {
 
 		Commands: []*cli.Command{
 			{
-				Name: CMD_NAME_LOG,
-				//Aliases: []string{CMD_NAME_LOG},
+				Name:  CMD_NAME_LOG,
 				Usage: "print all logs",
 				Flags: log.GetFlags(),
 				Action: func(clictx *cli.Context) error {
 					path_util.ExEPathPrintln()
-					logerr := iniLogger()
-					if logerr != nil {
-						return logerr
-					}
 					log.StartLog(clictx)
 					return nil
 				},
 			},
 			{
-				Name: CMD_NAME_CONFIG,
-				//Aliases: []string{CMD_NAME_CONFIG},
+				Name:  CMD_NAME_CONFIG,
 				Usage: "config command",
-				Flags: config.GetFlags(),
-				Action: func(clictx *cli.Context) error {
-					path_util.ExEPathPrintln()
-					conferr := iniConfig(clictx)
-					if conferr != nil {
-						return conferr
-					}
-					logerr := iniLogger()
-					if logerr != nil {
-						return logerr
-					}
-					config.ConfigSetting(clictx)
-					return nil
+				Subcommands: []*cli.Command{
+					//show config
+					{
+						Name:  "show",
+						Usage: "show configs",
+						Action: func(clictx *cli.Context) error {
+							logerr := setLoggerLevel()
+							if logerr != nil {
+								return logerr
+							}
+							return nil
+						},
+					},
+					//set config
+					{
+						Name:  "set",
+						Usage: "set config",
+						Flags: config.GetFlags(),
+						Action: func(clictx *cli.Context) error {
+							path_util.ExEPathPrintln()
+							logerr := setLoggerLevel()
+							if logerr != nil {
+								return logerr
+							}
+							config.ConfigSetting(clictx)
+							return nil
+						},
+					},
 				},
 			},
 			{
-				Name:    CMD_NAME_SERVICE,
-				Aliases: []string{CMD_NAME_SERVICE},
-				Usage:   "service command",
+				Name:  CMD_NAME_SERVICE,
+				Usage: "service command",
 				Subcommands: []*cli.Command{
 					//service install
 					{
 						Name:  "install",
 						Usage: "install meson node in service",
 						Action: func(clictx *cli.Context) error {
-							logerr := iniLogger()
+							logerr := setLoggerLevel()
 							if logerr != nil {
 								return logerr
 							}
@@ -92,7 +113,7 @@ func ConfigCmd() *cli.App {
 						Name:  "remove",
 						Usage: "remove meson node from service",
 						Action: func(clictx *cli.Context) error {
-							logerr := iniLogger()
+							logerr := setLoggerLevel()
 							if logerr != nil {
 								return logerr
 							}
@@ -105,7 +126,7 @@ func ConfigCmd() *cli.App {
 						Name:  "start",
 						Usage: "run",
 						Action: func(clictx *cli.Context) error {
-							logerr := iniLogger()
+							logerr := setLoggerLevel()
 							if logerr != nil {
 								return logerr
 							}
@@ -118,7 +139,7 @@ func ConfigCmd() *cli.App {
 						Name:  "stop",
 						Usage: "stop",
 						Action: func(clictx *cli.Context) error {
-							logerr := iniLogger()
+							logerr := setLoggerLevel()
 							if logerr != nil {
 								return logerr
 							}
@@ -131,7 +152,7 @@ func ConfigCmd() *cli.App {
 						Name:  "restart",
 						Usage: "restart",
 						Action: func(clictx *cli.Context) error {
-							logerr := iniLogger()
+							logerr := setLoggerLevel()
 							if logerr != nil {
 								return logerr
 							}
@@ -144,7 +165,7 @@ func ConfigCmd() *cli.App {
 						Name:  "status",
 						Usage: "show process status",
 						Action: func(clictx *cli.Context) error {
-							logerr := iniLogger()
+							logerr := setLoggerLevel()
 							if logerr != nil {
 								return logerr
 							}
@@ -180,10 +201,10 @@ func readDefaultConfig(isDev bool) (*basic.VConfig, string, error) {
 	}
 }
 
-func iniConfig(clictx *cli.Context) error {
-	path_util.ExEPathPrintln()
+func iniConfig(isDev bool) error {
+	//path_util.ExEPathPrintln()
 	////read default config
-	config, _, err := readDefaultConfig(clictx.Bool("dev"))
+	config, _, err := readDefaultConfig(isDev)
 	if err != nil {
 		return err
 	}
@@ -195,7 +216,7 @@ func iniConfig(clictx *cli.Context) error {
 	return nil
 }
 
-func iniLogger() error {
+func setLoggerLevel() error {
 	logLevel := "INFO"
 	if basic.Config != nil {
 		var err error
@@ -207,22 +228,3 @@ func iniLogger() error {
 	basic.SetLogLevel(logLevel)
 	return nil
 }
-
-// ManualInitAppConfig init app config when use go test
-// func ManualInitCmdConfig(configPath string) {
-// 	basic.Logger.Infoln("configPath:", configPath)
-// 	config, err := basic.ReadConfig(configPath)
-// 	if err != nil {
-// 		panic("Manual read config err " + err.Error())
-// 	}
-
-// 	//ConfigFile = configPath
-// 	basic.Config = config
-
-// 	logLevel := "INFO"
-// 	logLevel, err = basic.Config.GetString("local_log_level", "DEBU")
-// 	if err != nil {
-// 		panic("local_log_level [string] in config err:" + err.Error())
-// 	}
-// 	basic.SetLogLevel(logLevel)
-// }

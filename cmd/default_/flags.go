@@ -6,7 +6,5 @@ import (
 
 //get default_ config flags
 func GetFlags() (allflags []cli.Flag) {
-	return []cli.Flag{
-		&cli.BoolFlag{Name: "dev", Required: false},
-	}
+	return []cli.Flag{}
 }

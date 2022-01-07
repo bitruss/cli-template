@@ -2,6 +2,7 @@ package components
 
 import (
 	"errors"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/universe-30/CliAppTemplate/basic"
@@ -60,6 +61,16 @@ func (s *EchoServer) SetPanicHandler(panicHandler func(panic_err interface{})) {
 	s.Use(EchoMiddleware.RecoverWithConfig(EchoMiddleware.RecoverConfig{
 		OnPanic: panicHandler,
 	}))
+}
+
+func (s *EchoServer) Start() error {
+	basic.Logger.Infoln("http server started on port :" + strconv.Itoa(s.Http_port))
+	if s.Http_static_abs_folder != "" {
+		basic.Logger.Infoln("http server with static folder:" + s.Http_static_abs_folder)
+		s.Echo.Static("/", s.Http_static_abs_folder)
+	}
+
+	return s.Echo.Start(":" + strconv.Itoa(s.Http_port))
 }
 
 func (s *EchoServer) Close() {

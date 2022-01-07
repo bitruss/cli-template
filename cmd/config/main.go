@@ -12,19 +12,17 @@ func ConfigSetting(clictx *cli.Context) {
 
 	configModify := false
 
-	for _, v := range IntConfParams {
+	for _, v := range stringConfParams {
 		if clictx.IsSet(v) {
-			newValue := clictx.Int(v)
-			if newValue != 0 {
-				basic.Config.Set(v, newValue)
-				configModify = true
-			}
+			newValue := clictx.String(v)
+			basic.Config.Set(v, newValue)
+			configModify = true
 		}
 	}
 
-	for _, v := range StringConfParams {
+	for _, v := range float64ConfParams {
 		if clictx.IsSet(v) {
-			newValue := clictx.String(v)
+			newValue := clictx.Float64(v)
 			basic.Config.Set(v, newValue)
 			configModify = true
 		}

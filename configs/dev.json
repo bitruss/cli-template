@@ -1,5 +1,4 @@
 {
-  "config": "dev",
   "db_host": "127.0.0.1",
   "db_name": "meson_dev",
   "db_password": "123456",
@@ -9,7 +8,7 @@
   "elasticsearch_password": "xxxxx",
   "elasticsearch_username": "xxxxx",
   "eth_wallet_mnemonic": "xxxx",
-  "http_port": 123,
+  "http_port": 8080,
   "http_static_rel_folder": "/assets/apps/default_app/web",
   "infura1": "xxxx",
   "infura2": "xxxxx",

@@ -9,7 +9,7 @@ import (
 
 var Logger ULog.Logger
 
-func init() {
+func InitLogger() {
 	var llerr error
 	Logger, llerr = LogrusULog.New(path_util.GetAbsPath("logs"), 2, 20, 30)
 

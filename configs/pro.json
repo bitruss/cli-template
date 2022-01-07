@@ -1,5 +1,4 @@
 {
-  "config": "pro",
   "db_host": "xxxxxx",
   "db_name": "xxxxx",
   "db_password": "xxxxxx",
@@ -9,7 +8,7 @@
   "elasticsearch_password": "xxxxx",
   "elasticsearch_username": "xxxxx",
   "eth_wallet_mnemonic": "xxxx",
-  "http_port": 3,
+  "http_port": 8081,
   "http_static_rel_folder": "/assets/apps/default_app/web",
   "infura1": "xxxx",
   "infura2": "xxxxx",
