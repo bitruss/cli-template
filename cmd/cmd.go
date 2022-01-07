@@ -36,7 +36,6 @@ func ConfigCmd() *cli.App {
 	}
 
 	return &cli.App{
-		Flags: default_.GetFlags(),
 		Action: func(clictx *cli.Context) error {
 			path_util.ExEPathPrintln()
 			logerr := setLoggerLevel()
