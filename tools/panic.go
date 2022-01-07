@@ -17,12 +17,12 @@ import (
 var errMap sync.Map
 
 //to do panic_err handler :default function
-func PanicHandler(err interface{}) {
-	basic.Logger.Errorln(err)
+func PanicHandler(panic_err interface{}) {
+	basic.Logger.Errorln(panic_err)
 
 	//record panic
 	var errStr string
-	switch e := err.(type) {
+	switch e := panic_err.(type) {
 	case string:
 		errStr = e
 	case runtime.Error:
