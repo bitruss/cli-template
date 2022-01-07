@@ -1,5 +1,5 @@
 {
-  "db_host": "xxxxxx",
+  "db_host": "localhost",
   "db_name": "xxxxx",
   "db_password": "xxxxxx",
   "db_port": 3306,
