@@ -9,7 +9,7 @@
   "elasticsearch_username": "xxxxx",
   "eth_wallet_mnemonic": "xxxx",
   "http_port": 8080,
-  "http_static_rel_folder": "/assets/apps/default_app/web",
+  "http_static_rel_folder": "/assets/default_/web",
   "infura1": "xxxx",
   "infura2": "xxxxx",
   "local_log_level": "DEBUG",
