@@ -16,4 +16,8 @@
 
 logs
 CliAppTemplate
+
+# remove ide related files
+.vscode
 default_dev
+ 
