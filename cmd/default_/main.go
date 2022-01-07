@@ -35,12 +35,14 @@ func StartDefault(clictx *cli.Context) {
 	}
 
 	//redis example
-	global.Redis.Set(context.Background(), "redis-foo", "redis-bar", 10*time.Second)
-	str, err := global.Redis.Get(context.Background(), "redis-foo").Result()
-	if err != nil && err != goredis.Nil {
-		basic.Logger.Errorln(err)
+	if global.Redis != nil {
+		global.Redis.Set(context.Background(), "redis-foo", "redis-bar", 10*time.Second)
+		str, err := global.Redis.Get(context.Background(), "redis-foo").Result()
+		if err != nil && err != goredis.Nil {
+			basic.Logger.Errorln(err)
+		}
+		basic.Logger.Debugln(str)
 	}
-	basic.Logger.Debugln(str)
 
 	//schedule job
 	count := 0

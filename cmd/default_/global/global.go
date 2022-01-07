@@ -35,17 +35,26 @@ func IniResources() {
 
 	Redis, err = components.NewRedis()
 	if err != nil {
-		basic.Logger.Fatalln(err)
+		//error as example
+		basic.Logger.Errorln(err)
+		//panic is suggest in production app
+		//basic.Logger.Fatalln(err)
 	}
 
 	SprMgr, err = components.NewRedisSpr()
 	if err != nil {
-		basic.Logger.Fatalln(err)
+		//error as example
+		basic.Logger.Errorln(err)
+		//panic is suggest in production app
+		//basic.Logger.Fatalln(err)
 	}
 
 	DB, _, err = components.NewDB()
 	if err != nil {
-		basic.Logger.Fatalln(err)
+		//error as example
+		basic.Logger.Errorln(err)
+		//panic is suggest in production app
+		//basic.Logger.Fatalln(err)
 	}
 }
 
