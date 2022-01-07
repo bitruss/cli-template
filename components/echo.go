@@ -41,12 +41,10 @@ func NewEchoServer() (*EchoServer, error) {
 		esP.Http_static_abs_folder = path_util.GetAbsPath(http_static_rel_folder)
 	}
 
-	if basic.Logger != nil {
-		esP.Use(EchoMiddleware.LoggerWithConfig(EchoMiddleware.LoggerConfig{
-			Logger:            basic.Logger,
-			RecordFailRequest: true,
-		}))
-	}
+	esP.Use(EchoMiddleware.LoggerWithConfig(EchoMiddleware.LoggerConfig{
+		Logger:            basic.Logger,
+		RecordFailRequest: true,
+	}))
 
 	return esP, nil
 }

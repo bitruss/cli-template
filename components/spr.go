@@ -41,9 +41,7 @@ func NewRedisSpr() (*RedisSpr.SprJobMgr, error) {
 		return nil, SPR_go_err
 	}
 
-	if basic.Logger != nil {
-		SprMgr.SetULogger(basic.Logger)
-	}
+	SprMgr.SetULogger(basic.Logger)
 
 	return SprMgr, nil
 

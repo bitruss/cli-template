@@ -55,13 +55,10 @@ func NewDB() (*gorm.DB, *sql.DB, error) {
 
 	var GormDB *gorm.DB
 	var errOpen error
-	if basic.Logger != nil {
-		GormDB, errOpen = gorm.Open(mysql.Open(dsn), &gorm.Config{
-			Logger: New_gormLocalLogger(basic.Logger),
-		})
-	} else {
-		GormDB, errOpen = gorm.Open(mysql.Open(dsn))
-	}
+
+	GormDB, errOpen = gorm.Open(mysql.Open(dsn), &gorm.Config{
+		Logger: New_gormLocalLogger(basic.Logger),
+	})
 
 	if errOpen != nil {
 		return nil, nil, errOpen
