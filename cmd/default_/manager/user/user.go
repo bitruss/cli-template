@@ -24,7 +24,7 @@ type UserModel struct {
 func GetUserById(userid int, forceupdate bool) (*UserModel, error) {
 	key := "finance:user:" + strconv.Itoa(userid)
 	if !forceupdate {
-		localvalue, _, syncOk := tools.SmartCheck_LocalCache_Redis(context.Background(), redisClient.GetSingleInstance(), cache.GetSingleInstance(), key)
+		localvalue, _, syncOk := tools.LCR_Check(context.Background(), redisClient.GetSingleInstance(), cache.GetSingleInstance(), key)
 		if syncOk {
 			if localvalue == nil {
 				return nil, nil
@@ -33,7 +33,7 @@ func GetUserById(userid int, forceupdate bool) (*UserModel, error) {
 				if ok {
 					return result, nil
 				} else {
-					tools.SmartDel_LocalCache_Redis(context.Background(), redisClient.GetSingleInstance(), cache.GetSingleInstance(), key)
+					tools.LCR_Del(context.Background(), redisClient.GetSingleInstance(), cache.GetSingleInstance(), key)
 					basic.Logger.Errorln("GetUserById convert error")
 					return nil, errors.New("convert error")
 				}
@@ -50,10 +50,10 @@ func GetUserById(userid int, forceupdate bool) (*UserModel, error) {
 		return nil, err
 	} else {
 		if len(userList) == 0 {
-			tools.SmartSet_LocalCache_Redis(context.Background(), redisClient.GetSingleInstance(), cache.GetSingleInstance(), key, nil, 300)
+			tools.LCR_Set(context.Background(), redisClient.GetSingleInstance(), cache.GetSingleInstance(), key, nil, 300)
 			return nil, nil
 		} else {
-			tools.SmartSet_LocalCache_Redis(context.Background(), redisClient.GetSingleInstance(), cache.GetSingleInstance(), key, userList[0], 300)
+			tools.LCR_Set(context.Background(), redisClient.GetSingleInstance(), cache.GetSingleInstance(), key, userList[0], 300)
 			return userList[0], nil
 		}
 	}
