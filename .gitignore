@@ -21,3 +21,6 @@ CliAppTemplate
 .vscode
 default_dev
  
+# don't forget to remove your pro.json
+
+#.configs/pro.json

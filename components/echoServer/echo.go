@@ -1,11 +1,13 @@
-package components
+package echoServer
 
 import (
 	"errors"
 	"strconv"
+	"sync"
 
 	"github.com/labstack/echo/v4"
 	"github.com/universe-30/CliAppTemplate/basic"
+	"github.com/universe-30/CliAppTemplate/configuration"
 	"github.com/universe-30/EchoMiddleware"
 	"github.com/universe-30/EchoMiddleware/tool"
 	"github.com/universe-30/UUtils/path_util"
@@ -17,17 +19,36 @@ type EchoServer struct {
 	Http_static_abs_folder string
 }
 
+var echoServer *EchoServer
+var once sync.Once
+
+func Init() {
+	//only run once
+	once.Do(func() {
+		var err error = nil
+		echoServer, err = newEchoServer()
+		if err != nil {
+			basic.Logger.Fatalln(err)
+		}
+	})
+}
+
+func GetSingleInstance() *EchoServer {
+	Init()
+	return echoServer
+}
+
 /*
 http_port
 http_static_rel_folder
 */
-func NewEchoServer() (*EchoServer, error) {
-	http_port, err := basic.Config.GetInt("http_port", 8080)
+func newEchoServer() (*EchoServer, error) {
+	http_port, err := configuration.Config.GetInt("http_port", 8080)
 	if err != nil {
 		return nil, errors.New("http_port [int] in config error," + err.Error())
 	}
 
-	http_static_rel_folder, err := basic.Config.GetString("http_static_rel_folder", "")
+	http_static_rel_folder, err := configuration.Config.GetString("http_static_rel_folder", "")
 	if err != nil {
 		return nil, errors.New("http_static_rel_folder [string] in config error," + err.Error())
 	}

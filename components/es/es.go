@@ -1,13 +1,15 @@
-package components
+package es
 
 import (
 	"context"
 	"errors"
 	"net/http"
+	"sync"
 	"time"
 
 	elasticSearch "github.com/olivere/elastic/v7"
 	"github.com/universe-30/CliAppTemplate/basic"
+	"github.com/universe-30/CliAppTemplate/configuration"
 )
 
 type ElasticSRetrier struct {
@@ -22,19 +24,38 @@ elasticSearchAddr
 elasticSearchUserName
 */
 
-func NewElasticSearch() (*elasticSearch.Client, error) {
+var es *elasticSearch.Client
+var once sync.Once
 
-	elasticSearchAddr, elasticSearchAddr_Err := basic.Config.GetString("elasticsearch_addr", "")
+func Init() {
+	//only run once
+	once.Do(func() {
+		var err error = nil
+		es, err = newElasticSearch()
+		if err != nil {
+			basic.Logger.Fatalln(err)
+		}
+	})
+}
+
+func GetSingleInstance() *elasticSearch.Client {
+	Init()
+	return es
+}
+
+func newElasticSearch() (*elasticSearch.Client, error) {
+
+	elasticSearchAddr, elasticSearchAddr_Err := configuration.Config.GetString("elasticsearch_addr", "")
 	if elasticSearchAddr_Err != nil {
 		return nil, errors.New("elasticsearch_addr [string] in config error," + elasticSearchAddr_Err.Error())
 	}
 
-	elasticSearchUserName, elasticSearchUserName_Err := basic.Config.GetString("elasticsearch_username", "")
+	elasticSearchUserName, elasticSearchUserName_Err := configuration.Config.GetString("elasticsearch_username", "")
 	if elasticSearchUserName_Err != nil {
 		return nil, errors.New("elasticsearch_username_err [string] in config error," + elasticSearchUserName_Err.Error())
 	}
 
-	elasticSearchPassword, elasticSearchPassword_Err := basic.Config.GetString("elasticsearch_password", "")
+	elasticSearchPassword, elasticSearchPassword_Err := configuration.Config.GetString("elasticsearch_password", "")
 	if elasticSearchPassword_Err != nil {
 		return nil, errors.New("elasticsearch_password [string] in config error," + elasticSearchPassword_Err.Error())
 	}

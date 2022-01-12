@@ -1,7 +1,8 @@
-package components
+package daemon
 
 import (
 	"runtime"
+	"sync"
 
 	"github.com/daqnext/daemon"
 	"github.com/universe-30/CliAppTemplate/basic"
@@ -17,7 +18,22 @@ type Service struct {
 	daemon.Daemon
 }
 
-func NewDaemonService() *Service {
+var service *Service
+var once sync.Once
+
+func Init() {
+	//only run once
+	once.Do(func() {
+		service = newDaemonService()
+	})
+}
+
+func GetSingleInstance() *Service {
+	Init()
+	return service
+}
+
+func newDaemonService() *Service {
 	kind := daemon.SystemDaemon
 	if runtime.GOOS == "darwin" {
 		kind = daemon.UserAgent

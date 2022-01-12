@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/universe-30/CliAppTemplate/basic"
-	"github.com/universe-30/CliAppTemplate/components"
+	"github.com/universe-30/CliAppTemplate/components/daemon"
 	"github.com/urfave/cli/v2"
 )
 
@@ -18,7 +18,7 @@ func RunServiceCmd(clictx *cli.Context) {
 	}
 
 	action := subCmds[0]
-	compDeamon := components.NewDaemonService()
+	compDeamon := daemon.GetSingleInstance()
 
 	var status string
 	var e error

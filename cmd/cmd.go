@@ -9,6 +9,8 @@ import (
 	"github.com/universe-30/CliAppTemplate/cmd/default_"
 	"github.com/universe-30/CliAppTemplate/cmd/log"
 	"github.com/universe-30/CliAppTemplate/cmd/service"
+	"github.com/universe-30/CliAppTemplate/configuration"
+	"github.com/universe-30/ULog"
 	"github.com/universe-30/UUtils/path_util"
 	"github.com/urfave/cli/v2"
 )
@@ -24,7 +26,7 @@ func ConfigCmd() *cli.App {
 	isDev := false
 	for index, arg := range os.Args {
 		s := strings.ToLower(arg)
-		if s == "-dev=true" {
+		if s == "-dev=true" || s == "--dev=true" {
 			isDev = true
 			os.Args = append(os.Args[:index], os.Args[index+1:]...)
 			break
@@ -179,7 +181,7 @@ func ConfigCmd() *cli.App {
 }
 
 ////////end config to do app ///////////
-func readDefaultConfig(isDev bool) (*basic.VConfig, string, error) {
+func readDefaultConfig(isDev bool) (*configuration.VConfig, string, error) {
 	var defaultConfigPath string
 	if isDev {
 		basic.Logger.Infoln("======== using dev mode ========")
@@ -191,7 +193,7 @@ func readDefaultConfig(isDev bool) (*basic.VConfig, string, error) {
 
 	basic.Logger.Infoln("config file:", defaultConfigPath)
 
-	config, err := basic.ReadConfig(defaultConfigPath)
+	config, err := configuration.ReadConfig(defaultConfigPath)
 	if err != nil {
 		basic.Logger.Errorln("no pro.json under /configs folder , use --dev=true to run dev mode")
 		return nil, "", err
@@ -211,19 +213,21 @@ func iniConfig(isDev bool) error {
 	configs, _ := config.GetConfigAsString()
 	basic.Logger.Infoln(configs)
 	basic.Logger.Infoln("======== end  of  config ========")
-	basic.Config = config
+	configuration.Config = config
 	return nil
 }
 
 func setLoggerLevel() error {
 	logLevel := "INFO"
-	if basic.Config != nil {
+	if configuration.Config != nil {
 		var err error
-		logLevel, err = basic.Config.GetString("local_log_level", "INFO")
+		logLevel, err = configuration.Config.GetString("local_log_level", "INFO")
 		if err != nil {
 			return err
 		}
 	}
-	basic.SetLogLevel(logLevel)
+
+	l := ULog.ParseLogLevel(logLevel)
+	basic.Logger.SetLevel(l)
 	return nil
 }

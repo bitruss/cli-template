@@ -1,4 +1,4 @@
-package basic
+package configuration
 
 import (
 	"io/ioutil"
@@ -24,18 +24,6 @@ func ReadConfig(configPath string) (*VConfig, error) {
 	c.configPath = configPath
 	return c, nil
 }
-
-//GetBool(key string) : bool
-//GetFloat64(key string) : float64
-//GetInt(key string) : int
-//GetIntSlice(key string) : []int
-//GetString(key string) : string
-//GetStringMap(key string) : map[string]interface{}
-//GetStringMapString(key string) : map[string]string
-//GetStringSlice(key string) : []string
-//GetTime(key string) : time.Time
-//GetDuration(key string) : time.Duration
-//AllSettings() : map[string]interface{}
 
 func (c *VConfig) Get(key string, defaultValue interface{}) interface{} {
 	if !c.Viper.IsSet(key) {

@@ -16,5 +16,10 @@
   "redis_addr": "127.0.0.1",
   "redis_password": "",
   "redis_port": 6379,
-  "redis_username": ""
+  "redis_username": "",
+  "provide_folder": [
+    {"abs_path":"/Users/1","size_GB":1},
+    {"abs_path":"/Users/2","size_GB":3},
+    {"abs_path":"/Users/3","size_GB":10}
+  ]
 }

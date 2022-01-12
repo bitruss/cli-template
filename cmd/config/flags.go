@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/universe-30/CliAppTemplate/basic"
+	"github.com/universe-30/CliAppTemplate/configuration"
 	"github.com/urfave/cli/v2"
 )
 
@@ -9,10 +9,11 @@ import (
 var stringConfParams = []string{}
 var float64ConfParams = []string{}
 var boolConfPrams = []string{}
+var otherConf = []string{}
 
 //get all config flags
 func GetFlags() (allflags []cli.Flag) {
-	allConfig := basic.Config.AllSettings()
+	allConfig := configuration.Config.AllSettings()
 	for k, v := range allConfig {
 		switch v.(type) {
 		case string:
@@ -35,6 +36,10 @@ func GetFlags() (allflags []cli.Flag) {
 	for _, name := range boolConfPrams {
 		allflags = append(allflags, &cli.BoolFlag{Name: name, Required: false})
 	}
+
+	//other custom flags
+	allflags = append(allflags, &cli.StringFlag{Name: "addpath", Required: false})
+	allflags = append(allflags, &cli.StringFlag{Name: "removepath", Required: false})
 
 	return
 }

@@ -19,8 +19,3 @@ func InitLogger() {
 		panic("Error:" + llerr.Error())
 	}
 }
-
-func SetLogLevel(logLevel string) {
-	l := ULog.ParseLogLevel(logLevel)
-	Logger.SetLevel(l)
-}
