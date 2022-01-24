@@ -11,6 +11,7 @@ require (
 	github.com/spf13/cast v1.4.1
 	github.com/spf13/viper v1.10.1
 	github.com/universe-30/EchoMiddleware v0.1.4
+	github.com/universe-30/GormULog v0.1.1
 	github.com/universe-30/LogrusULog v0.1.17
 	github.com/universe-30/RedisSpr v0.1.13
 	github.com/universe-30/UCache v0.1.4
@@ -20,5 +21,5 @@ require (
 	github.com/universe-30/UUtils v0.1.1
 	github.com/urfave/cli/v2 v2.3.0
 	gorm.io/driver/mysql v1.2.2
-	gorm.io/gorm v1.22.4
+	gorm.io/gorm v1.22.5
 )

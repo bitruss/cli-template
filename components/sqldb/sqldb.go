@@ -1,22 +1,17 @@
 package sqldb
 
 import (
-	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"strconv"
 	"sync"
 	"time"
 
 	"github.com/universe-30/CliAppTemplate/basic"
 	"github.com/universe-30/CliAppTemplate/configuration"
-	"github.com/universe-30/ULog"
-	"gorm.io/gorm/utils"
-
+	"github.com/universe-30/GormULog"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	gormlogger "gorm.io/gorm/logger"
 )
 
 var db *gorm.DB
@@ -78,7 +73,11 @@ func newDB() (*gorm.DB, *sql.DB, error) {
 	var errOpen error
 
 	GormDB, errOpen = gorm.Open(mysql.Open(dsn), &gorm.Config{
-		Logger: New_gormLocalLogger(basic.Logger),
+		Logger: GormULog.New_gormLocalLogger(basic.Logger, GormULog.Config{
+			SlowThreshold:             500 * time.Millisecond,
+			IgnoreRecordNotFoundError: false,
+			LogLevel:                  GormULog.Warn, //Level: Silent Error Warn Info. Info logs all record. Silent turns off log.
+		}),
 	})
 
 	if errOpen != nil {
@@ -94,82 +93,4 @@ func newDB() (*gorm.DB, *sql.DB, error) {
 
 	return GormDB, sqlDB, nil
 
-}
-
-///////////////////////////
-
-type gormLocalLogger struct {
-	LocalLogger           ULog.Logger
-	SlowThreshold         time.Duration
-	SkipErrRecordNotFound bool
-}
-
-func New_gormLocalLogger(localLogger ULog.Logger) *gormLocalLogger {
-	return &gormLocalLogger{
-		LocalLogger:           localLogger,
-		SlowThreshold:         200 * time.Millisecond,
-		SkipErrRecordNotFound: true,
-	}
-}
-
-func (l *gormLocalLogger) LogMode(gormlogger.LogLevel) gormlogger.Interface {
-	return l
-}
-
-func (l *gormLocalLogger) Trace(ctx context.Context, begin time.Time, fc func() (string, int64), err error) {
-
-	//when no err
-	if err == nil {
-		//return when only interested in Error,Fatal,Panic
-		if l.LocalLogger.GetLevel() < ULog.WarnLevel {
-			return
-		}
-	}
-
-	elapsed := time.Since(begin)
-	elapsedStr := fmt.Sprintf("%fms", float64(elapsed.Nanoseconds())/1e6)
-	if err == nil && l.SlowThreshold != 0 && elapsed > l.SlowThreshold {
-		//slow log
-		sql, _ := fc()
-		slowLog := fmt.Sprintf("SLOW SQL >= %v", l.SlowThreshold)
-		l.LocalLogger.Warnln(utils.FileWithLineNum(), slowLog, elapsedStr, "-", sql)
-		return
-	}
-
-	///errors , when error happens logs it at any loglevel
-	if err != nil && !(errors.Is(err, gorm.ErrRecordNotFound) && l.SkipErrRecordNotFound) {
-		sql, rows := fc()
-		if rows == -1 {
-			l.LocalLogger.Errorln(utils.FileWithLineNum(), "err:", err, elapsedStr, "-", sql)
-		} else {
-			l.LocalLogger.Errorln(utils.FileWithLineNum(), "err:", err, elapsedStr, rows, sql)
-		}
-		return
-	}
-
-	//info
-	if l.LocalLogger.GetLevel() == ULog.TraceLevel {
-		sql, rows := fc()
-		if rows == -1 {
-			l.LocalLogger.Traceln(utils.FileWithLineNum(), "err:", err, elapsedStr, "-", sql)
-		} else {
-			l.LocalLogger.Traceln(utils.FileWithLineNum(), "err:", err, elapsedStr, rows, sql)
-		}
-		return
-	}
-}
-
-func (l *gormLocalLogger) Info(ctx context.Context, s string, args ...interface{}) {
-	//not use
-	//l.LocalLogger.Infoln(s, append([]interface{}{utils.FileWithLineNum()}, args...))
-}
-
-func (l *gormLocalLogger) Warn(ctx context.Context, s string, args ...interface{}) {
-	//not use
-	//l.LocalLogger.Warnln(s, append([]interface{}{utils.FileWithLineNum()}, args...))
-}
-
-func (l *gormLocalLogger) Error(ctx context.Context, s string, args ...interface{}) {
-	//not use
-	//l.LocalLogger.Errorln(s, append([]interface{}{utils.FileWithLineNum()}, args...))
 }
