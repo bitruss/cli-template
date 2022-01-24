@@ -6,9 +6,9 @@ import (
 	"strconv"
 
 	"github.com/universe-30/CliAppTemplate/basic"
-	"github.com/universe-30/CliAppTemplate/components/cache"
-	"github.com/universe-30/CliAppTemplate/components/redisClient"
-	"github.com/universe-30/CliAppTemplate/components/sqldb"
+	"github.com/universe-30/CliAppTemplate/plugin/cache"
+	"github.com/universe-30/CliAppTemplate/plugin/redisClient"
+	"github.com/universe-30/CliAppTemplate/plugin/sqldb"
 	"github.com/universe-30/CliAppTemplate/tools"
 )
 

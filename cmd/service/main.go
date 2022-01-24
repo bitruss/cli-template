@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/universe-30/CliAppTemplate/basic"
-	"github.com/universe-30/CliAppTemplate/components/daemon"
+	"github.com/universe-30/CliAppTemplate/plugin/daemon"
 	"github.com/urfave/cli/v2"
 )
 
