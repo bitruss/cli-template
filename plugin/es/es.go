@@ -4,11 +4,9 @@ import (
 	"context"
 	"errors"
 	"net/http"
-	"sync"
 	"time"
 
 	elasticSearch "github.com/olivere/elastic/v7"
-	"github.com/universe-30/CliAppTemplate/basic"
 	"github.com/universe-30/CliAppTemplate/configuration"
 )
 
@@ -25,42 +23,28 @@ elasticSearchUserName
 */
 
 var es *elasticSearch.Client
-var once sync.Once
-
-func Init() {
-	//only run once
-	once.Do(func() {
-		var err error = nil
-		es, err = newElasticSearch()
-		if err != nil {
-			basic.Logger.Fatalln(err)
-		}
-	})
-}
 
 func GetSingleInstance() *elasticSearch.Client {
-	Init()
 	return es
 }
 
-func newElasticSearch() (*elasticSearch.Client, error) {
-
-	elasticSearchAddr, elasticSearchAddr_Err := configuration.Config.GetString("elasticsearch_addr", "")
-	if elasticSearchAddr_Err != nil {
-		return nil, errors.New("elasticsearch_addr [string] in config error," + elasticSearchAddr_Err.Error())
+func Init() error {
+	elasticSearchAddr, err := configuration.Config.GetString("elasticsearch_addr", "")
+	if err != nil {
+		return errors.New("elasticsearch_addr [string] in config error," + err.Error())
 	}
 
-	elasticSearchUserName, elasticSearchUserName_Err := configuration.Config.GetString("elasticsearch_username", "")
-	if elasticSearchUserName_Err != nil {
-		return nil, errors.New("elasticsearch_username_err [string] in config error," + elasticSearchUserName_Err.Error())
+	elasticSearchUserName, err := configuration.Config.GetString("elasticsearch_username", "")
+	if err != nil {
+		return errors.New("elasticsearch_username_err [string] in config error," + err.Error())
 	}
 
-	elasticSearchPassword, elasticSearchPassword_Err := configuration.Config.GetString("elasticsearch_password", "")
-	if elasticSearchPassword_Err != nil {
-		return nil, errors.New("elasticsearch_password [string] in config error," + elasticSearchPassword_Err.Error())
+	elasticSearchPassword, err := configuration.Config.GetString("elasticsearch_password", "")
+	if err != nil {
+		return errors.New("elasticsearch_password [string] in config error," + err.Error())
 	}
 
-	ElasticSClient, err := elasticSearch.NewClient(
+	es, err = elasticSearch.NewClient(
 		elasticSearch.SetURL(elasticSearchAddr),
 		elasticSearch.SetBasicAuth(elasticSearchUserName, elasticSearchPassword),
 		elasticSearch.SetSniff(false),
@@ -69,8 +53,7 @@ func newElasticSearch() (*elasticSearch.Client, error) {
 		elasticSearch.SetGzip(true),
 	)
 	if err != nil {
-		return nil, err
+		return err
 	}
-
-	return ElasticSClient, nil
+	return nil
 }

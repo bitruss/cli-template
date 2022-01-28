@@ -3,11 +3,12 @@ package echoServer
 import (
 	"errors"
 	"strconv"
-	"sync"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/universe-30/CliAppTemplate/basic"
 	"github.com/universe-30/CliAppTemplate/configuration"
+	"github.com/universe-30/CliAppTemplate/tools"
 	"github.com/universe-30/EchoMiddleware"
 	"github.com/universe-30/EchoMiddleware/tool"
 	"github.com/universe-30/UUtils/path_util"
@@ -20,21 +21,8 @@ type EchoServer struct {
 }
 
 var echoServer *EchoServer
-var once sync.Once
-
-func Init() {
-	//only run once
-	once.Do(func() {
-		var err error = nil
-		echoServer, err = newEchoServer()
-		if err != nil {
-			basic.Logger.Fatalln(err)
-		}
-	})
-}
 
 func GetSingleInstance() *EchoServer {
-	Init()
 	return echoServer
 }
 
@@ -42,44 +30,37 @@ func GetSingleInstance() *EchoServer {
 http_port
 http_static_rel_folder
 */
-func newEchoServer() (*EchoServer, error) {
+func Init() error {
 	http_port, err := configuration.Config.GetInt("http_port", 8080)
 	if err != nil {
-		return nil, errors.New("http_port [int] in config error," + err.Error())
+		return errors.New("http_port [int] in config error," + err.Error())
 	}
 
 	http_static_rel_folder, err := configuration.Config.GetString("http_static_rel_folder", "")
 	if err != nil {
-		return nil, errors.New("http_static_rel_folder [string] in config error," + err.Error())
+		return errors.New("http_static_rel_folder [string] in config error," + err.Error())
 	}
 
-	esP := &EchoServer{
+	echoServer = &EchoServer{
 		echo.New(),
 		http_port,
-		"",
-	}
-	if http_static_rel_folder != "" {
-		esP.Http_static_abs_folder = path_util.GetAbsPath(http_static_rel_folder)
+		path_util.GetAbsPath(http_static_rel_folder),
 	}
 
-	esP.Use(EchoMiddleware.LoggerWithConfig(EchoMiddleware.LoggerConfig{
+	//cros
+	echoServer.Use(middleware.CORS())
+	//logger
+	echoServer.Use(EchoMiddleware.LoggerWithConfig(EchoMiddleware.LoggerConfig{
 		Logger:            basic.Logger,
-		RecordFailRequest: true,
+		RecordFailRequest: false,
 	}))
-
-	return esP, nil
-}
-
-//use jsoniter
-func (s *EchoServer) UseJsoniter() {
-	s.JSONSerializer = tool.NewJsoniter()
-}
-
-//set panic handler
-func (s *EchoServer) SetPanicHandler(panicHandler func(panic_err interface{})) {
-	s.Use(EchoMiddleware.RecoverWithConfig(EchoMiddleware.RecoverConfig{
-		OnPanic: panicHandler,
+	//recover and panicHandler
+	echoServer.Use(EchoMiddleware.RecoverWithConfig(EchoMiddleware.RecoverConfig{
+		OnPanic: tools.PanicHandler,
 	}))
+	echoServer.JSONSerializer = tool.NewJsoniter()
+
+	return nil
 }
 
 func (s *EchoServer) Start() error {

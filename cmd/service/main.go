@@ -14,34 +14,36 @@ func RunServiceCmd(clictx *cli.Context) {
 	subCmds := clictx.Command.Names()
 	if len(subCmds) == 0 {
 		basic.Logger.Fatalln("no sub command")
-		return
 	}
 
 	action := subCmds[0]
-	compDeamon := daemon.GetSingleInstance()
+	err := daemon.Init()
+	if err != nil {
+		basic.Logger.Fatalln("init daemon service error:", err)
+	}
 
 	var status string
 	var e error
 	switch action {
 	case "install":
-		status, e = compDeamon.Install()
+		status, e = daemon.GetSingleInstance().Install()
 		basic.Logger.Debugln("cmd install")
 	case "remove":
-		compDeamon.Stop()
-		status, e = compDeamon.Remove()
+		daemon.GetSingleInstance().Stop()
+		status, e = daemon.GetSingleInstance().Remove()
 		basic.Logger.Debugln("cmd remove")
 	case "start":
-		status, e = compDeamon.Start()
+		status, e = daemon.GetSingleInstance().Start()
 		basic.Logger.Debugln("cmd start")
 	case "stop":
-		status, e = compDeamon.Stop()
+		status, e = daemon.GetSingleInstance().Stop()
 		basic.Logger.Debugln("cmd stop")
 	case "restart":
-		compDeamon.Stop()
-		status, e = compDeamon.Start()
+		daemon.GetSingleInstance().Stop()
+		status, e = daemon.GetSingleInstance().Start()
 		basic.Logger.Debugln("cmd restart")
 	case "status":
-		status, e = compDeamon.Status()
+		status, e = daemon.GetSingleInstance().Status()
 		basic.Logger.Debugln("cmd status")
 	default:
 		basic.Logger.Debugln("no sub command")

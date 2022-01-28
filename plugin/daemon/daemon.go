@@ -2,10 +2,8 @@ package daemon
 
 import (
 	"runtime"
-	"sync"
 
 	"github.com/daqnext/daemon"
-	"github.com/universe-30/CliAppTemplate/basic"
 )
 
 const (
@@ -19,28 +17,20 @@ type Service struct {
 }
 
 var service *Service
-var once sync.Once
-
-func Init() {
-	//only run once
-	once.Do(func() {
-		service = newDaemonService()
-	})
-}
 
 func GetSingleInstance() *Service {
-	Init()
 	return service
 }
 
-func newDaemonService() *Service {
+func Init() error {
 	kind := daemon.SystemDaemon
 	if runtime.GOOS == "darwin" {
 		kind = daemon.UserAgent
 	}
 	srv, err := daemon.New(name, description, kind)
 	if err != nil {
-		basic.Logger.Fatalln("run daemon error:", err)
+		return err
 	}
-	return &Service{srv}
+	service = &Service{srv}
+	return nil
 }

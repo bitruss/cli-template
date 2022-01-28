@@ -18,12 +18,32 @@ import (
 
 //todo: ---
 func InitComponent() {
+	err := echoServer.Init()
+	if err != nil {
+		basic.Logger.Fatalln(err)
+	}
+
+	//err = es.Init()
+	//if err != nil {
+	//	basic.Logger.Fatalln(err)
+	//}
+	//
+	//err = redisClient.Init()
+	//if err != nil {
+	//	basic.Logger.Fatalln(err)
+	//}
+	//
+	//err = sprMgr.Init()
+	//if err != nil {
+	//	basic.Logger.Fatalln(err)
+	//}
+	//
+	//err = sqldb.Init()
+	//if err != nil {
+	//	basic.Logger.Fatalln(err)
+	//}
+
 	cache.Init()
-	//echoServer.Init()
-	//redisClient.Init()
-	//sprMgr.Init()
-	//sqldb.Init()
-	//es.Init()
 }
 
 func StartDefault(clictx *cli.Context) {
@@ -47,11 +67,11 @@ func StartDefault(clictx *cli.Context) {
 	}
 
 	//cache example
-	// cache.GetSingleInstance().Set("foo", "bar", 10)
-	// v, _, exist := cache.GetSingleInstance().Get("foo")
-	// if exist {
-	// 	basic.Logger.Debugln(v.(string))
-	// }
+	cache.GetSingleInstance().Set("foo", "bar", 10)
+	v, _, exist := cache.GetSingleInstance().Get("foo")
+	if exist {
+		basic.Logger.Debugln(v.(string))
+	}
 
 	//redis example
 	// if redisClient.GetSingleInstance() != nil {
@@ -110,7 +130,5 @@ func StartDefault(clictx *cli.Context) {
 	httpServer.GET("/test", func(context echo.Context) error {
 		return context.String(200, "test success")
 	})
-	httpServer.UseJsoniter()
-	httpServer.SetPanicHandler(tools.PanicHandler)
 	httpServer.Start()
 }

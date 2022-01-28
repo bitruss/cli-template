@@ -1,10 +1,8 @@
 package sqldb
 
 import (
-	"database/sql"
 	"errors"
 	"strconv"
-	"sync"
 	"time"
 
 	"github.com/universe-30/CliAppTemplate/basic"
@@ -15,21 +13,8 @@ import (
 )
 
 var db *gorm.DB
-var once sync.Once
-
-func Init() {
-	//only run once
-	once.Do(func() {
-		var err error = nil
-		db, _, err = newDB()
-		if err != nil {
-			basic.Logger.Fatalln(err)
-		}
-	})
-}
 
 func GetSingleInstance() *gorm.DB {
-	Init()
 	return db
 }
 
@@ -40,39 +25,36 @@ db_name
 db_username
 db_password
 */
-func newDB() (*gorm.DB, *sql.DB, error) {
+func Init() error {
 
-	db_host, db_host_err := configuration.Config.GetString("db_host", "127.0.0.1")
-	if db_host_err != nil {
-		return nil, nil, errors.New("db_host [string] in config err," + db_host_err.Error())
+	db_host, err := configuration.Config.GetString("db_host", "127.0.0.1")
+	if err != nil {
+		return errors.New("db_host [string] in config err," + err.Error())
 	}
 
-	db_port, db_port_err := configuration.Config.GetInt("db_port", 3306)
-	if db_port_err != nil {
-		return nil, nil, errors.New("db_port [int] in config err," + db_port_err.Error())
+	db_port, err := configuration.Config.GetInt("db_port", 3306)
+	if err != nil {
+		return errors.New("db_port [int] in config err," + err.Error())
 	}
 
-	db_name, db_name_err := configuration.Config.GetString("db_name", "dbname")
-	if db_name_err != nil {
-		return nil, nil, errors.New("db_name [string] in config err," + db_name_err.Error())
+	db_name, err := configuration.Config.GetString("db_name", "dbname")
+	if err != nil {
+		return errors.New("db_name [string] in config err," + err.Error())
 	}
 
-	db_username, db_username_err := configuration.Config.GetString("db_username", "username")
-	if db_username_err != nil {
-		return nil, nil, errors.New("db_username [string] in config err," + db_username_err.Error())
+	db_username, err := configuration.Config.GetString("db_username", "username")
+	if err != nil {
+		return errors.New("db_username [string] in config err," + err.Error())
 	}
 
-	db_password, db_password_err := configuration.Config.GetString("db_password", "password")
-	if db_password_err != nil {
-		return nil, nil, errors.New("db_password [string] in config err," + db_password_err.Error())
+	db_password, err := configuration.Config.GetString("db_password", "password")
+	if err != nil {
+		return errors.New("db_password [string] in config err," + err.Error())
 	}
 
 	dsn := db_username + ":" + db_password + "@tcp(" + db_host + ":" + strconv.Itoa(db_port) + ")/" + db_name + "?charset=utf8mb4&loc=UTC"
 
-	var GormDB *gorm.DB
-	var errOpen error
-
-	GormDB, errOpen = gorm.Open(mysql.Open(dsn), &gorm.Config{
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: GormULog.New_gormLocalLogger(basic.Logger, GormULog.Config{
 			SlowThreshold:             500 * time.Millisecond,
 			IgnoreRecordNotFoundError: false,
@@ -80,17 +62,16 @@ func newDB() (*gorm.DB, *sql.DB, error) {
 		}),
 	})
 
-	if errOpen != nil {
-		return nil, nil, errOpen
+	if err != nil {
+		return err
 	}
 
-	sqlDB, errsql := GormDB.DB()
-	if errsql != nil {
-		return nil, nil, errsql
+	sqlDB, err := db.DB()
+	if err != nil {
+		return err
 	}
 	sqlDB.SetMaxIdleConns(5)
 	sqlDB.SetMaxOpenConns(20)
 
-	return GormDB, sqlDB, nil
-
+	return nil
 }
