@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -40,10 +41,6 @@ func ConfigCmd() *cli.App {
 	return &cli.App{
 		Action: func(clictx *cli.Context) error {
 			path_util.ExEPathPrintln()
-			logerr := setLoggerLevel()
-			if logerr != nil {
-				return logerr
-			}
 			default_.StartDefault(clictx)
 			return nil
 		},
@@ -68,10 +65,10 @@ func ConfigCmd() *cli.App {
 						Name:  "show",
 						Usage: "show configs",
 						Action: func(clictx *cli.Context) error {
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
+							fmt.Println("======== start of config ========")
+							configs, _ := configuration.Config.GetConfigAsString()
+							fmt.Println(configs)
+							fmt.Println("======== end  of  config ========")
 							return nil
 						},
 					},
@@ -82,10 +79,6 @@ func ConfigCmd() *cli.App {
 						Flags: config.GetFlags(),
 						Action: func(clictx *cli.Context) error {
 							path_util.ExEPathPrintln()
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							config.ConfigSetting(clictx)
 							return nil
 						},
@@ -101,10 +94,6 @@ func ConfigCmd() *cli.App {
 						Name:  "install",
 						Usage: "install meson node in service",
 						Action: func(clictx *cli.Context) error {
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							service.RunServiceCmd(clictx)
 							return nil
 						},
@@ -114,10 +103,6 @@ func ConfigCmd() *cli.App {
 						Name:  "remove",
 						Usage: "remove meson node from service",
 						Action: func(clictx *cli.Context) error {
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							service.RunServiceCmd(clictx)
 							return nil
 						},
@@ -127,10 +112,6 @@ func ConfigCmd() *cli.App {
 						Name:  "start",
 						Usage: "run",
 						Action: func(clictx *cli.Context) error {
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							service.RunServiceCmd(clictx)
 							return nil
 						},
@@ -140,10 +121,6 @@ func ConfigCmd() *cli.App {
 						Name:  "stop",
 						Usage: "stop",
 						Action: func(clictx *cli.Context) error {
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							service.RunServiceCmd(clictx)
 							return nil
 						},
@@ -153,10 +130,6 @@ func ConfigCmd() *cli.App {
 						Name:  "restart",
 						Usage: "restart",
 						Action: func(clictx *cli.Context) error {
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							service.RunServiceCmd(clictx)
 							return nil
 						},
@@ -166,10 +139,6 @@ func ConfigCmd() *cli.App {
 						Name:  "status",
 						Usage: "show process status",
 						Action: func(clictx *cli.Context) error {
-							logerr := setLoggerLevel()
-							if logerr != nil {
-								return logerr
-							}
 							service.RunServiceCmd(clictx)
 							return nil
 						},
@@ -209,11 +178,17 @@ func iniConfig(isDev bool) error {
 	if err != nil {
 		return err
 	}
+
+	configuration.Config = config
+	logerr := setLoggerLevel()
+	if logerr != nil {
+		return logerr
+	}
 	basic.Logger.Infoln("======== start of config ========")
 	configs, _ := config.GetConfigAsString()
 	basic.Logger.Infoln(configs)
 	basic.Logger.Infoln("======== end  of  config ========")
-	configuration.Config = config
+
 	return nil
 }
 
