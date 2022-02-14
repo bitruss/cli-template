@@ -31,6 +31,9 @@ http_port
 http_static_rel_folder
 */
 func Init() error {
+	if echoServer != nil {
+		return nil
+	}
 	http_port, err := configuration.Config.GetInt("http_port", 8080)
 	if err != nil {
 		return errors.New("http_port [int] in config error," + err.Error())

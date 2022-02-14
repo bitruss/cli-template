@@ -15,6 +15,9 @@ func GetSingleInstance() *RedisSpr.SprJobMgr {
 }
 
 func Init() error {
+	if spr != nil {
+		return nil
+	}
 	//////// ini spr job //////////////////////
 	redis_addr, err := configuration.Config.GetString("redis_addr", "127.0.0.1")
 	if err != nil {

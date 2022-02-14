@@ -23,6 +23,9 @@ func GetSingleInstance() *Service {
 }
 
 func Init() error {
+	if service != nil {
+		return nil
+	}
 	kind := daemon.SystemDaemon
 	if runtime.GOOS == "darwin" {
 		kind = daemon.UserAgent

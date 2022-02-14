@@ -16,6 +16,9 @@ func GetSingleInstance() *redis.ClusterClient {
 }
 
 func Init() error {
+	if r != nil {
+		return nil
+	}
 	redis_addr, err := configuration.Config.GetString("redis_addr", "127.0.0.1")
 	if err != nil {
 		return errors.New("redis_addr [string] in config err," + err.Error())

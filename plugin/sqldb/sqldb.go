@@ -26,7 +26,9 @@ db_username
 db_password
 */
 func Init() error {
-
+	if db != nil {
+		return nil
+	}
 	db_host, err := configuration.Config.GetString("db_host", "127.0.0.1")
 	if err != nil {
 		return errors.New("db_host [string] in config err," + err.Error())

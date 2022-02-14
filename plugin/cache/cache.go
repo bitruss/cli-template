@@ -11,5 +11,8 @@ func GetSingleInstance() *UCache.Cache {
 }
 
 func Init() {
+	if cache != nil {
+		return
+	}
 	cache = UCache.New()
 }

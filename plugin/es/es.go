@@ -29,6 +29,9 @@ func GetSingleInstance() *elasticSearch.Client {
 }
 
 func Init() error {
+	if es != nil {
+		return nil
+	}
 	elasticSearchAddr, err := configuration.Config.GetString("elasticsearch_addr", "")
 	if err != nil {
 		return errors.New("elasticsearch_addr [string] in config error," + err.Error())
