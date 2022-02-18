@@ -15,7 +15,7 @@ require (
 	github.com/universe-30/LogrusULog v0.1.17
 	github.com/universe-30/RedisSpr v0.1.13
 	github.com/universe-30/UCache v0.1.4
-	github.com/universe-30/UJob v0.1.3
+	github.com/universe-30/UJob v0.1.4
 	github.com/universe-30/ULog v0.1.15
 	github.com/universe-30/USafeGo v0.1.2
 	github.com/universe-30/UUtils v0.1.1

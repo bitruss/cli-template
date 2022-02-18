@@ -12,7 +12,7 @@ func StartLog(clictx *cli.Context) {
 		num = 20
 	}
 
-	onlyerr := clictx.Bool("onlyerr")
+	onlyerr := clictx.Bool("only_err")
 	if onlyerr {
 		basic.Logger.PrintLastN(num, []ULog.LogLevel{ULog.PanicLevel, ULog.FatalLevel, ULog.ErrorLevel})
 	} else {

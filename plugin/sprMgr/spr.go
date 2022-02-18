@@ -1,49 +1,55 @@
 package sprMgr
 
 import (
-	"errors"
+	"fmt"
 
 	"github.com/universe-30/CliAppTemplate/basic"
-	"github.com/universe-30/CliAppTemplate/configuration"
 	"github.com/universe-30/RedisSpr"
 )
 
-var spr *RedisSpr.SprJobMgr
+var instanceMap = map[string]*RedisSpr.SprJobMgr{}
 
-func GetSingleInstance() *RedisSpr.SprJobMgr {
-	return spr
+func GetDefaultInstance() *RedisSpr.SprJobMgr {
+	return instanceMap["default"]
 }
 
-func Init() error {
-	if spr != nil {
-		return nil
+func GetInstance(name string) *RedisSpr.SprJobMgr {
+	return instanceMap[name]
+}
+
+type Config struct {
+	Address  string
+	UserName string
+	Password string
+	Port     int
+}
+
+// Init a new instance.
+//  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
+//  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
+func Init(name string, redisConfig Config) error {
+	if name == "" {
+		name = "default"
+	}
+
+	_, exist := instanceMap[name]
+	if exist {
+		return fmt.Errorf("spr instance <%s> has already initialized", name)
+	}
+
+	if redisConfig.Address == "" {
+		redisConfig.Address = "127.0.0.1"
+	}
+	if redisConfig.Port == 0 {
+		redisConfig.Port = 6379
 	}
 	//////// ini spr job //////////////////////
-	redis_addr, err := configuration.Config.GetString("redis_addr", "127.0.0.1")
-	if err != nil {
-		return errors.New("redis_addr [string] in config.json err," + err.Error())
-	}
 
-	redis_username, err := configuration.Config.GetString("redis_username", "")
-	if err != nil {
-		return errors.New("redis_username [string] in config.json err," + err.Error())
-	}
-
-	redis_password, err := configuration.Config.GetString("redis_password", "")
-	if err != nil {
-		return errors.New("redis_password [string] in config.json err," + err.Error())
-	}
-
-	redis_port, err := configuration.Config.GetInt("redis_port", 6379)
-	if err != nil {
-		return errors.New("redis_port [int] in config.json err," + err.Error())
-	}
-
-	spr, err = RedisSpr.New(RedisSpr.RedisConfig{
-		Addr:     redis_addr,
-		Port:     redis_port,
-		Password: redis_password,
-		UserName: redis_username,
+	spr, err := RedisSpr.New(RedisSpr.RedisConfig{
+		Addr:     redisConfig.Address,
+		Port:     redisConfig.Port,
+		Password: redisConfig.Password,
+		UserName: redisConfig.UserName,
 	})
 
 	if err != nil {
@@ -51,6 +57,8 @@ func Init() error {
 	}
 
 	spr.SetULogger(basic.Logger)
+
+	instanceMap[name] = spr
 
 	return nil
 }

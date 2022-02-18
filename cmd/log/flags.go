@@ -8,6 +8,6 @@ import (
 func GetFlags() (allflags []cli.Flag) {
 	return []cli.Flag{
 		&cli.IntFlag{Name: "num", Required: false},
-		&cli.BoolFlag{Name: "onlyerr", Required: false},
+		&cli.BoolFlag{Name: "only_err", Required: false},
 	}
 }

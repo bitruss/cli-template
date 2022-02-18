@@ -17,7 +17,7 @@ import (
 )
 
 const CMD_NAME_DEFAULT = "default"
-const CMD_NAME_LOG = "logs"
+const CMD_NAME_LOG = "log"
 const CMD_NAME_SERVICE = "service"
 const CMD_NAME_CONFIG = "config"
 
@@ -27,9 +27,11 @@ func ConfigCmd() *cli.App {
 	isDev := false
 	for index, arg := range os.Args {
 		s := strings.ToLower(arg)
-		if s == "-dev=true" || s == "--dev=true" {
-			isDev = true
+		if strings.Contains(s, "-mode=") || strings.Contains(s, "--mode=") {
 			os.Args = append(os.Args[:index], os.Args[index+1:]...)
+			if s == "-mode=dev" || s == "--mode=dev" {
+				isDev = true
+			}
 			break
 		}
 	}

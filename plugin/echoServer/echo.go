@@ -1,13 +1,12 @@
 package echoServer
 
 import (
-	"errors"
+	"fmt"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/universe-30/CliAppTemplate/basic"
-	"github.com/universe-30/CliAppTemplate/configuration"
 	"github.com/universe-30/CliAppTemplate/tools"
 	"github.com/universe-30/EchoMiddleware"
 	"github.com/universe-30/EchoMiddleware/tool"
@@ -20,34 +19,46 @@ type EchoServer struct {
 	Http_static_abs_folder string
 }
 
-var echoServer *EchoServer
+var instanceMap = map[string]*EchoServer{}
 
-func GetSingleInstance() *EchoServer {
-	return echoServer
+func GetDefaultInstance() *EchoServer {
+	return instanceMap["default"]
+}
+
+func GetInstance(name string) *EchoServer {
+	return instanceMap[name]
 }
 
 /*
 http_port
 http_static_rel_folder
 */
-func Init() error {
-	if echoServer != nil {
-		return nil
-	}
-	http_port, err := configuration.Config.GetInt("http_port", 8080)
-	if err != nil {
-		return errors.New("http_port [int] in config error," + err.Error())
+type Config struct {
+	Port         int
+	StaticFolder string
+}
+
+// Init a new instance.
+//  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
+//  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
+func Init(name string, serverConfig Config) error {
+	if name == "" {
+		name = "default"
 	}
 
-	http_static_rel_folder, err := configuration.Config.GetString("http_static_rel_folder", "")
-	if err != nil {
-		return errors.New("http_static_rel_folder [string] in config error," + err.Error())
+	_, exist := instanceMap[name]
+	if exist {
+		return fmt.Errorf("echo server instance <%s> has already initialized", name)
 	}
 
-	echoServer = &EchoServer{
+	if serverConfig.Port == 0 {
+		serverConfig.Port = 8080
+	}
+
+	echoServer := &EchoServer{
 		echo.New(),
-		http_port,
-		path_util.GetAbsPath(http_static_rel_folder),
+		serverConfig.Port,
+		path_util.GetAbsPath(serverConfig.StaticFolder),
 	}
 
 	//cros
@@ -63,6 +74,7 @@ func Init() error {
 	}))
 	echoServer.JSONSerializer = tool.NewJsoniter()
 
+	instanceMap[name] = echoServer
 	return nil
 }
 

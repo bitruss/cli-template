@@ -2,12 +2,11 @@ package es
 
 import (
 	"context"
-	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
 	elasticSearch "github.com/olivere/elastic/v7"
-	"github.com/universe-30/CliAppTemplate/configuration"
 )
 
 type ElasticSRetrier struct {
@@ -17,39 +16,43 @@ func (r *ElasticSRetrier) Retry(ctx context.Context, retry int, req *http.Reques
 	return 120 * time.Second, true, nil //retry after 2mins
 }
 
+var instanceMap = map[string]*elasticSearch.Client{}
+
+func GetDefaultInstance() *elasticSearch.Client {
+	return instanceMap["default"]
+}
+
+func GetInstance(name string) *elasticSearch.Client {
+	return instanceMap[name]
+}
+
 /*
 elasticSearchAddr
 elasticSearchUserName
+elasticSearchPassword
 */
-
-var es *elasticSearch.Client
-
-func GetSingleInstance() *elasticSearch.Client {
-	return es
+type Config struct {
+	Address  string
+	UserName string
+	Password string
 }
 
-func Init() error {
-	if es != nil {
-		return nil
-	}
-	elasticSearchAddr, err := configuration.Config.GetString("elasticsearch_addr", "")
-	if err != nil {
-		return errors.New("elasticsearch_addr [string] in config error," + err.Error())
-	}
-
-	elasticSearchUserName, err := configuration.Config.GetString("elasticsearch_username", "")
-	if err != nil {
-		return errors.New("elasticsearch_username_err [string] in config error," + err.Error())
+// Init a new instance.
+//  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
+//  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
+func Init(name string, esConfig Config) error {
+	if name == "" {
+		name = "default"
 	}
 
-	elasticSearchPassword, err := configuration.Config.GetString("elasticsearch_password", "")
-	if err != nil {
-		return errors.New("elasticsearch_password [string] in config error," + err.Error())
+	_, exist := instanceMap[name]
+	if exist {
+		return fmt.Errorf("elasticSearch instance <%s> has already initialized", name)
 	}
 
-	es, err = elasticSearch.NewClient(
-		elasticSearch.SetURL(elasticSearchAddr),
-		elasticSearch.SetBasicAuth(elasticSearchUserName, elasticSearchPassword),
+	es, err := elasticSearch.NewClient(
+		elasticSearch.SetURL(esConfig.Address),
+		elasticSearch.SetBasicAuth(esConfig.UserName, esConfig.Password),
 		elasticSearch.SetSniff(false),
 		elasticSearch.SetHealthcheckInterval(30*time.Second),
 		elasticSearch.SetRetrier(&ElasticSRetrier{}),
@@ -58,5 +61,6 @@ func Init() error {
 	if err != nil {
 		return err
 	}
+	instanceMap[name] = es
 	return nil
 }

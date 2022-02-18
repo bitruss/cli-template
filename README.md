@@ -9,22 +9,24 @@ go build
 default_ is the main program
 
 1.1 run default program with dev mode
-./CliAppTemplate --dev=true
+./CliAppTemplate --mode=dev
 
 1.2 run default program with production mode
 ./CliAppTemplate  
 or 
-./CliAppTemplate --dev=false
+./CliAppTemplate --mode=pro
 
 
 2."config" application:
 config is the program used to show or set config file
 
 2.1 set dev.json config
-./CliAppTemplate --dev=true set ... 
+./CliAppTemplate --mode=dev set ... 
 
 2.1 set pro.json config
-./CliAppTemplate --dev=false set ... 
+./CliAppTemplate --mode=pro set ... 
+or 
+./CliAppTemplate set ...
 
 3.run log application 
 log is used to show the local log files
@@ -33,7 +35,7 @@ log is used to show the local log files
 ./CliAppTemplate log
 
 3.2 only show error logs : [error,panic,fatal]
-./CliAppTemplate log --onlyerr=true
+./CliAppTemplate log --only_err=true
  
 4."service" application:
 service is used to set application to OS service 

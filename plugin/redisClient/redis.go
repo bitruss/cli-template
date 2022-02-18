@@ -2,52 +2,59 @@ package redisClient
 
 import (
 	"context"
-	"errors"
+	"fmt"
 	"strconv"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/universe-30/CliAppTemplate/configuration"
 )
 
-var r *redis.ClusterClient
+var instanceMap = map[string]*redis.ClusterClient{}
 
-func GetSingleInstance() *redis.ClusterClient {
-	return r
+func GetDefaultInstance() *redis.ClusterClient {
+	return instanceMap["default"]
 }
 
-func Init() error {
-	if r != nil {
-		return nil
-	}
-	redis_addr, err := configuration.Config.GetString("redis_addr", "127.0.0.1")
-	if err != nil {
-		return errors.New("redis_addr [string] in config err," + err.Error())
+func GetInstance(name string) *redis.ClusterClient {
+	return instanceMap[name]
+}
+
+type Config struct {
+	Address  string
+	UserName string
+	Password string
+	Port     int
+}
+
+// Init a new instance.
+//  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
+//  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
+func Init(name string, redisConfig Config) error {
+	if name == "" {
+		name = "default"
 	}
 
-	redis_username, err := configuration.Config.GetString("redis_username", "")
-	if err != nil {
-		return errors.New("redis_username [string] in config err," + err.Error())
+	_, exist := instanceMap[name]
+	if exist {
+		return fmt.Errorf("redis instance <%s> has already initialized", name)
 	}
 
-	redis_password, err := configuration.Config.GetString("redis_password", "")
-	if err != nil {
-		return errors.New("redis_password [string] in config err," + err.Error())
+	if redisConfig.Address == "" {
+		redisConfig.Address = "127.0.0.1"
+	}
+	if redisConfig.Port == 0 {
+		redisConfig.Port = 6379
 	}
 
-	redis_port, err := configuration.Config.GetInt("redis_port", 6379)
-	if err != nil {
-		return errors.New("redis_port [int] in config err," + err.Error())
-	}
-
-	r = redis.NewClusterClient(&redis.ClusterOptions{
-		Addrs:    []string{redis_addr + ":" + strconv.Itoa(redis_port)},
-		Username: redis_username,
-		Password: redis_password,
+	r := redis.NewClusterClient(&redis.ClusterOptions{
+		Addrs:    []string{redisConfig.Address + ":" + strconv.Itoa(redisConfig.Port)},
+		Username: redisConfig.UserName,
+		Password: redisConfig.Password,
 	})
 
-	_, err = r.Ping(context.Background()).Result()
+	_, err := r.Ping(context.Background()).Result()
 	if err != nil {
 		return err
 	}
+	instanceMap[name] = r
 	return nil
 }
