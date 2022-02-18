@@ -39,6 +39,7 @@ func PanicHandler(panic_err interface{}) {
 func ScheduleUploadPanic() {
 	UJob.Start(
 		//job process
+		"uploadPanic",
 		scheduleUploadPanic,
 		//onPanic callback
 		PanicHandler,
