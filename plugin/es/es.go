@@ -18,11 +18,11 @@ func (r *ElasticSRetrier) Retry(ctx context.Context, retry int, req *http.Reques
 
 var instanceMap = map[string]*elasticSearch.Client{}
 
-func GetDefaultInstance() *elasticSearch.Client {
+func GetInstance() *elasticSearch.Client {
 	return instanceMap["default"]
 }
 
-func GetInstance(name string) *elasticSearch.Client {
+func GetInstance_(name string) *elasticSearch.Client {
 	return instanceMap[name]
 }
 
@@ -37,10 +37,14 @@ type Config struct {
 	Password string
 }
 
+func Init(esConfig Config) error {
+	return Init_("default", esConfig)
+}
+
 // Init a new instance.
 //  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
 //  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
-func Init(name string, esConfig Config) error {
+func Init_(name string, esConfig Config) error {
 	if name == "" {
 		name = "default"
 	}

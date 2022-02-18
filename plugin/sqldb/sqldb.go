@@ -13,11 +13,11 @@ import (
 
 var instanceMap = map[string]*gorm.DB{}
 
-func GetDefaultInstance() *gorm.DB {
+func GetInstance() *gorm.DB {
 	return instanceMap["default"]
 }
 
-func GetInstance(name string) *gorm.DB {
+func GetInstance_(name string) *gorm.DB {
 	return instanceMap[name]
 }
 
@@ -36,10 +36,14 @@ type Config struct {
 	Password string
 }
 
+func Init(dbConfig Config) error {
+	return Init_("default", dbConfig)
+}
+
 // Init a new instance.
 //  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
 //  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
-func Init(name string, dbConfig Config) error {
+func Init_(name string, dbConfig Config) error {
 	if name == "" {
 		name = "default"
 	}

@@ -19,18 +19,22 @@ type Service struct {
 
 var instanceMap = map[string]*Service{}
 
-func GetDefaultInstance() *Service {
+func GetInstance() *Service {
 	return instanceMap["default"]
 }
 
-func GetInstance(name string) *Service {
+func GetInstance_(name string) *Service {
 	return instanceMap[name]
+}
+
+func Init() error {
+	return Init_("default")
 }
 
 // Init a new instance.
 //  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
 //  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
-func Init(name string) error {
+func Init_(name string) error {
 	if name == "" {
 		name = "default"
 	}

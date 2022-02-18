@@ -21,11 +21,11 @@ type EchoServer struct {
 
 var instanceMap = map[string]*EchoServer{}
 
-func GetDefaultInstance() *EchoServer {
+func GetInstance() *EchoServer {
 	return instanceMap["default"]
 }
 
-func GetInstance(name string) *EchoServer {
+func GetInstance_(name string) *EchoServer {
 	return instanceMap[name]
 }
 
@@ -38,10 +38,14 @@ type Config struct {
 	StaticFolder string
 }
 
+func Init(serverConfig Config) error {
+	return Init_("default", serverConfig)
+}
+
 // Init a new instance.
 //  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
 //  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
-func Init(name string, serverConfig Config) error {
+func Init_(name string, serverConfig Config) error {
 	if name == "" {
 		name = "default"
 	}

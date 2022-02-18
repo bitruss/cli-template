@@ -17,7 +17,7 @@ func RunServiceCmd(clictx *cli.Context) {
 	}
 
 	action := subCmds[0]
-	err := daemon.Init("")
+	err := daemon.Init()
 	if err != nil {
 		basic.Logger.Fatalln("init daemon service error:", err)
 	}
@@ -26,24 +26,24 @@ func RunServiceCmd(clictx *cli.Context) {
 	var e error
 	switch action {
 	case "install":
-		status, e = daemon.GetDefaultInstance().Install()
+		status, e = daemon.GetInstance().Install()
 		basic.Logger.Debugln("cmd install")
 	case "remove":
-		daemon.GetDefaultInstance().Stop()
-		status, e = daemon.GetDefaultInstance().Remove()
+		daemon.GetInstance().Stop()
+		status, e = daemon.GetInstance().Remove()
 		basic.Logger.Debugln("cmd remove")
 	case "start":
-		status, e = daemon.GetDefaultInstance().Start()
+		status, e = daemon.GetInstance().Start()
 		basic.Logger.Debugln("cmd start")
 	case "stop":
-		status, e = daemon.GetDefaultInstance().Stop()
+		status, e = daemon.GetInstance().Stop()
 		basic.Logger.Debugln("cmd stop")
 	case "restart":
-		daemon.GetDefaultInstance().Stop()
-		status, e = daemon.GetDefaultInstance().Start()
+		daemon.GetInstance().Stop()
+		status, e = daemon.GetInstance().Start()
 		basic.Logger.Debugln("cmd restart")
 	case "status":
-		status, e = daemon.GetDefaultInstance().Status()
+		status, e = daemon.GetInstance().Status()
 		basic.Logger.Debugln("cmd status")
 	default:
 		basic.Logger.Debugln("no sub command")

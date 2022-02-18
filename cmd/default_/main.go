@@ -32,7 +32,7 @@ func initEchoServer() error {
 		return errors.New("http_static_rel_folder [string] in config error," + err.Error())
 	}
 
-	return echoServer.Init("", echoServer.Config{Port: http_port, StaticFolder: http_static_rel_folder})
+	return echoServer.Init(echoServer.Config{Port: http_port, StaticFolder: http_static_rel_folder})
 }
 
 func initElasticSearch() error {
@@ -51,7 +51,7 @@ func initElasticSearch() error {
 		return errors.New("elasticsearch_password [string] in config error," + err.Error())
 	}
 
-	return es.Init("", es.Config{
+	return es.Init(es.Config{
 		Address:  elasticSearchAddr,
 		UserName: elasticSearchUserName,
 		Password: elasticSearchPassword})
@@ -79,7 +79,7 @@ func initRedis() error {
 		return errors.New("redis_port [int] in config err," + err.Error())
 	}
 
-	return redisClient.Init("", redisClient.Config{
+	return redisClient.Init(redisClient.Config{
 		Address:  redis_addr,
 		UserName: redis_username,
 		Password: redis_password,
@@ -108,7 +108,7 @@ func initSpr() error {
 		return errors.New("redis_port [int] in config.json err," + err.Error())
 	}
 
-	return sprMgr.Init("", sprMgr.Config{
+	return sprMgr.Init(sprMgr.Config{
 		Address:  redis_addr,
 		UserName: redis_username,
 		Password: redis_password,
@@ -142,7 +142,7 @@ func initDB() error {
 		return errors.New("db_password [string] in config err," + err.Error())
 	}
 
-	return sqldb.Init("", sqldb.Config{
+	return sqldb.Init(sqldb.Config{
 		Host:     db_host,
 		Port:     db_port,
 		DbName:   db_name,
@@ -154,19 +154,19 @@ func initDB() error {
 //example 3 cache instance
 func initCache() error {
 	//default instance
-	err := cache.Init("")
+	err := cache.Init()
 	if err != nil {
 		return err
 	}
 
 	// cache1 instance
-	err = cache.Init("cache1")
+	err = cache.Init_("cache1")
 	if err != nil {
 		return err
 	}
 
 	// cache2 instance
-	err = cache.Init("cache2")
+	err = cache.Init_("cache2")
 	if err != nil {
 		return err
 	}
@@ -228,22 +228,22 @@ func StartDefault(clictx *cli.Context) {
 	}
 
 	//cache example
-	cache.GetInstance("cache1").Set("foo1", "bar1", 10)
-	v, _, exist := cache.GetInstance("cache1").Get("foo1")
+	cache.GetInstance_("cache1").Set("foo1", "bar1", 10)
+	v, _, exist := cache.GetInstance_("cache1").Get("foo1")
 	if exist {
 		basic.Logger.Debugln(v.(string))
 	}
 
-	cache.GetInstance("cache2").Set("foo2", "bar2", 10)
-	v, _, exist = cache.GetInstance("cache2").Get("foo2")
+	cache.GetInstance_("cache2").Set("foo2", "bar2", 10)
+	v, _, exist = cache.GetInstance_("cache2").Get("foo2")
 	if exist {
 		basic.Logger.Debugln(v.(string))
 	}
 
 	//redis example
-	//if redisClient.GetDefaultInstance() != nil {
-	//	redisClient.GetDefaultInstance().Set(context.Background(), "redis-foo", "redis-bar", 10*time.Second)
-	//	str, err := redisClient.GetDefaultInstance().Get(context.Background(), "redis-foo").Result()
+	//if redisClient.GetInstance() != nil {
+	//	redisClient.GetInstance().Set(context.Background(), "redis-foo", "redis-bar", 10*time.Second)
+	//	str, err := redisClient.GetInstance().Get(context.Background(), "redis-foo").Result()
 	//	if err != nil && err != goredis.Nil {
 	//		basic.Logger.Errorln(err)
 	//	}
@@ -294,7 +294,7 @@ func StartDefault(clictx *cli.Context) {
 	}
 
 	//httpServer example
-	httpServer := echoServer.GetDefaultInstance()
+	httpServer := echoServer.GetInstance()
 	httpServer.GET("/test", func(context echo.Context) error {
 		return context.String(200, "test success")
 	})

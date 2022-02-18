@@ -24,7 +24,7 @@ type UserModel struct {
 func GetUserById(userid int, forceupdate bool) (*UserModel, error) {
 	key := "finance:user:" + strconv.Itoa(userid)
 	if !forceupdate {
-		localvalue, _, syncOk := tools.LCR_Check(context.Background(), redisClient.GetDefaultInstance(), cache.GetDefaultInstance(), key)
+		localvalue, _, syncOk := tools.LCR_Check(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
 		if syncOk {
 			if localvalue == nil {
 				return nil, nil
@@ -33,7 +33,7 @@ func GetUserById(userid int, forceupdate bool) (*UserModel, error) {
 				if ok {
 					return result, nil
 				} else {
-					tools.LCR_Del(context.Background(), redisClient.GetDefaultInstance(), cache.GetDefaultInstance(), key)
+					tools.LCR_Del(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
 					basic.Logger.Errorln("GetUserById convert error")
 					return nil, errors.New("convert error")
 				}
@@ -43,17 +43,17 @@ func GetUserById(userid int, forceupdate bool) (*UserModel, error) {
 
 	//after cache miss ,try from remote database
 	var userList []*UserModel
-	err := sqldb.GetDefaultInstance().Table("user").Where("id = ?", userid).Find(&userList).Error
+	err := sqldb.GetInstance().Table("user").Where("id = ?", userid).Find(&userList).Error
 
 	if err != nil {
 		basic.Logger.Errorln("GetUserById err :", err)
 		return nil, err
 	} else {
 		if len(userList) == 0 {
-			tools.LCR_Set(context.Background(), redisClient.GetDefaultInstance(), cache.GetDefaultInstance(), key, nil, 300)
+			tools.LCR_Set(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key, nil, 300)
 			return nil, nil
 		} else {
-			tools.LCR_Set(context.Background(), redisClient.GetDefaultInstance(), cache.GetDefaultInstance(), key, userList[0], 300)
+			tools.LCR_Set(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key, userList[0], 300)
 			return userList[0], nil
 		}
 	}
