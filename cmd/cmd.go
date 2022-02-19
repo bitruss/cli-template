@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/universe-30/CliAppTemplate/basic"
@@ -154,17 +155,32 @@ func ConfigCmd() *cli.App {
 ////////end config to do app ///////////
 func readDefaultConfig(isDev bool) (*configuration.VConfig, string, error) {
 	var defaultConfigPath string
+
+	//if user run from root as working directory
+	var defaultConfigPath_ string
+	currDir, err := os.Getwd()
+	if err == nil {
+		defaultConfigPath_ = currDir
+	}
+
 	if isDev {
 		basic.Logger.Infoln("======== using dev mode ========")
 		defaultConfigPath = path_util.GetAbsPath("configs/dev.json")
+		defaultConfigPath_ = filepath.Join(defaultConfigPath_, "/configs/dev.json") //try for direct root folder running
 	} else {
 		basic.Logger.Infoln("======== using pro mode ========")
 		defaultConfigPath = path_util.GetAbsPath("configs/pro.json")
+		defaultConfigPath_ = filepath.Join(defaultConfigPath_, "/configs/pro.json") //try for direct root folder running
+	}
+
+	config, err := configuration.ReadConfig(defaultConfigPath)
+	if err != nil {
+		//try again
+		defaultConfigPath = defaultConfigPath_
+		config, err = configuration.ReadConfig(defaultConfigPath)
 	}
 
 	basic.Logger.Infoln("config file:", defaultConfigPath)
-
-	config, err := configuration.ReadConfig(defaultConfigPath)
 	if err != nil {
 		basic.Logger.Errorln("no pro.json under /configs folder , use --dev=true to run dev mode")
 		return nil, "", err
