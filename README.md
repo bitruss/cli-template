@@ -9,12 +9,18 @@ go build
 default_ is the main program
 
 1.1 run default program with dev mode
-./CliAppTemplate --mode=dev
+./CliAppTemplate --mode=dev 
+or 
+go run . --mode=dev 
 
 1.2 run default program with production mode
 ./CliAppTemplate  
 or 
 ./CliAppTemplate --mode=pro
+or
+go run .
+or
+go run . --mode=pro 
 
 
 2."config" application:
