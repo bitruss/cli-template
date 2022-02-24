@@ -9,7 +9,7 @@ import (
 
 const (
 	// name of the service
-	name        = "template"
+	serviceName = "template"
 	description = "app template"
 )
 
@@ -48,7 +48,7 @@ func Init_(name string) error {
 	if runtime.GOOS == "darwin" {
 		kind = daemon.UserAgent
 	}
-	srv, err := daemon.New(name, description, kind)
+	srv, err := daemon.New(serviceName, description, kind)
 	if err != nil {
 		return err
 	}
