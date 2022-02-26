@@ -5,8 +5,8 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/coreservice-io/UCache"
 	"github.com/go-redis/redis/v8"
-	"github.com/universe-30/UCache"
 )
 
 // check weather we need do refresh

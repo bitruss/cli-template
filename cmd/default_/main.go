@@ -3,17 +3,16 @@ package default_
 import (
 	"time"
 
+	"github.com/coreservice-io/CliAppTemplate/basic"
+	"github.com/coreservice-io/CliAppTemplate/configuration"
+	"github.com/coreservice-io/CliAppTemplate/plugin/cache"
+	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
+	"github.com/coreservice-io/CliAppTemplate/tools"
+	"github.com/coreservice-io/UJob"
+	"github.com/coreservice-io/USafeGo"
 	"github.com/fatih/color"
 	"github.com/labstack/echo/v4"
-	"github.com/universe-30/CliAppTemplate/basic"
-	"github.com/universe-30/CliAppTemplate/configuration"
-	"github.com/universe-30/CliAppTemplate/plugin/cache"
-	"github.com/universe-30/CliAppTemplate/plugin/echoServer"
-	"github.com/universe-30/CliAppTemplate/tools"
-	"github.com/universe-30/UJob"
 	"github.com/urfave/cli/v2"
-
-	"github.com/universe-30/USafeGo"
 )
 
 func StartDefault(clictx *cli.Context) {

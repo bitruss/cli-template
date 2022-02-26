@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/coreservice-io/CliAppTemplate/basic"
+	"github.com/coreservice-io/CliAppTemplate/tools"
+	"github.com/coreservice-io/EchoMiddleware"
+	"github.com/coreservice-io/EchoMiddleware/tool"
+	"github.com/coreservice-io/UUtils/path_util"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/universe-30/CliAppTemplate/basic"
-	"github.com/universe-30/CliAppTemplate/tools"
-	"github.com/universe-30/EchoMiddleware"
-	"github.com/universe-30/EchoMiddleware/tool"
-	"github.com/universe-30/UUtils/path_util"
 )
 
 type EchoServer struct {

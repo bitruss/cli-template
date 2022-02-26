@@ -3,14 +3,14 @@ package default_
 import (
 	"errors"
 
-	"github.com/universe-30/CliAppTemplate/basic"
-	"github.com/universe-30/CliAppTemplate/configuration"
-	"github.com/universe-30/CliAppTemplate/plugin/cache"
-	"github.com/universe-30/CliAppTemplate/plugin/echoServer"
-	"github.com/universe-30/CliAppTemplate/plugin/es"
-	"github.com/universe-30/CliAppTemplate/plugin/redisClient"
-	"github.com/universe-30/CliAppTemplate/plugin/sprMgr"
-	"github.com/universe-30/CliAppTemplate/plugin/sqldb"
+	"github.com/coreservice-io/CliAppTemplate/basic"
+	"github.com/coreservice-io/CliAppTemplate/configuration"
+	"github.com/coreservice-io/CliAppTemplate/plugin/cache"
+	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
+	"github.com/coreservice-io/CliAppTemplate/plugin/es"
+	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
+	"github.com/coreservice-io/CliAppTemplate/plugin/sprMgr"
+	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
 )
 
 func initEchoServer() error {

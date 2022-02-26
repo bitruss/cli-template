@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/universe-30/CliAppTemplate/basic"
-	"github.com/universe-30/CliAppTemplate/cmd"
+	"github.com/coreservice-io/CliAppTemplate/basic"
+	"github.com/coreservice-io/CliAppTemplate/cmd"
 )
 
 func main() {

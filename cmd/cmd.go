@@ -6,14 +6,14 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/universe-30/CliAppTemplate/basic"
-	"github.com/universe-30/CliAppTemplate/cmd/config"
-	"github.com/universe-30/CliAppTemplate/cmd/default_"
-	"github.com/universe-30/CliAppTemplate/cmd/log"
-	"github.com/universe-30/CliAppTemplate/cmd/service"
-	"github.com/universe-30/CliAppTemplate/configuration"
-	"github.com/universe-30/ULog"
-	"github.com/universe-30/UUtils/path_util"
+	"github.com/coreservice-io/CliAppTemplate/basic"
+	"github.com/coreservice-io/CliAppTemplate/cmd/config"
+	"github.com/coreservice-io/CliAppTemplate/cmd/default_"
+	"github.com/coreservice-io/CliAppTemplate/cmd/log"
+	"github.com/coreservice-io/CliAppTemplate/cmd/service"
+	"github.com/coreservice-io/CliAppTemplate/configuration"
+	"github.com/coreservice-io/ULog"
+	"github.com/coreservice-io/UUtils/path_util"
 	"github.com/urfave/cli/v2"
 )
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/daqnext/daemon"
+	"github.com/takama/daemon"
 )
 
 const (

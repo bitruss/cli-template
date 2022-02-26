@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/universe-30/CliAppTemplate/configuration"
+	"github.com/coreservice-io/CliAppTemplate/configuration"
 	"github.com/urfave/cli/v2"
 )
 

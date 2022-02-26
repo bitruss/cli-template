@@ -3,7 +3,7 @@ package cache
 import (
 	"fmt"
 
-	"github.com/universe-30/UCache"
+	"github.com/coreservice-io/UCache"
 )
 
 var instanceMap = map[string]*UCache.Cache{}

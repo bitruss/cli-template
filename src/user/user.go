@@ -5,11 +5,11 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/universe-30/CliAppTemplate/basic"
-	"github.com/universe-30/CliAppTemplate/plugin/cache"
-	"github.com/universe-30/CliAppTemplate/plugin/redisClient"
-	"github.com/universe-30/CliAppTemplate/plugin/sqldb"
-	"github.com/universe-30/CliAppTemplate/tools"
+	"github.com/coreservice-io/CliAppTemplate/basic"
+	"github.com/coreservice-io/CliAppTemplate/plugin/cache"
+	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
+	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
+	"github.com/coreservice-io/CliAppTemplate/tools"
 )
 
 //example for GormDB and tools cache

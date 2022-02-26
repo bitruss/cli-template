@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/universe-30/CliAppTemplate/basic"
-	"github.com/universe-30/GormULog"
+	"github.com/coreservice-io/CliAppTemplate/basic"
+	"github.com/coreservice-io/GormULog"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

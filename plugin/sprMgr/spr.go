@@ -3,8 +3,8 @@ package sprMgr
 import (
 	"fmt"
 
-	"github.com/universe-30/CliAppTemplate/basic"
-	"github.com/universe-30/RedisSpr"
+	"github.com/coreservice-io/CliAppTemplate/basic"
+	"github.com/coreservice-io/RedisSpr"
 )
 
 var instanceMap = map[string]*RedisSpr.SprJobMgr{}

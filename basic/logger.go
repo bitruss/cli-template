@@ -1,10 +1,10 @@
 package basic
 
 import (
+	"github.com/coreservice-io/LogrusULog"
+	"github.com/coreservice-io/ULog"
+	"github.com/coreservice-io/UUtils/path_util"
 	"github.com/fatih/color"
-	"github.com/universe-30/LogrusULog"
-	"github.com/universe-30/ULog"
-	"github.com/universe-30/UUtils/path_util"
 )
 
 var Logger ULog.Logger
