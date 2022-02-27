@@ -2,27 +2,35 @@ package redisClient
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/go-redis/redis/v8"
 )
 
-var instanceMap = map[string]*redis.ClusterClient{}
+var instanceMap = map[string]*RedisClient{}
 
-func GetInstance() *redis.ClusterClient {
+type RedisClient struct {
+	KeyPrefix string
+	*redis.ClusterClient
+}
+
+func GetInstance() *RedisClient {
 	return instanceMap["default"]
 }
 
-func GetInstance_(name string) *redis.ClusterClient {
+func GetInstance_(name string) *RedisClient {
 	return instanceMap[name]
 }
 
 type Config struct {
-	Address  string
-	UserName string
-	Password string
-	Port     int
+	Address   string
+	UserName  string
+	Password  string
+	Port      int
+	KeyPrefix string
 }
 
 func Init(redisConfig Config) error {
@@ -35,6 +43,12 @@ func Init(redisConfig Config) error {
 func Init_(name string, redisConfig Config) error {
 	if name == "" {
 		name = "default"
+	}
+
+	prefix := strings.TrimSuffix(redisConfig.KeyPrefix, ":")
+
+	if prefix == "" {
+		return errors.New("redis key prefix error")
 	}
 
 	_, exist := instanceMap[name]
@@ -59,6 +73,17 @@ func Init_(name string, redisConfig Config) error {
 	if err != nil {
 		return err
 	}
-	instanceMap[name] = r
+
+	instanceMap[name] = &RedisClient{
+		prefix + ":",
+		r,
+	}
 	return nil
+}
+
+func (rc *RedisClient) GenKey(keys ...string) string {
+	if len(keys) == 0 {
+		return rc.KeyPrefix + "emptyKey"
+	}
+	return rc.KeyPrefix + strings.Join(keys, ":")
 }

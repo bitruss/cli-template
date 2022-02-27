@@ -22,6 +22,7 @@ type Config struct {
 	UserName string
 	Password string
 	Port     int
+	Prefix   string
 }
 
 func Init(redisConfig Config) error {
@@ -54,6 +55,7 @@ func Init_(name string, redisConfig Config) error {
 		Port:     redisConfig.Port,
 		Password: redisConfig.Password,
 		UserName: redisConfig.UserName,
+		Prefix:   redisConfig.Prefix,
 	})
 
 	if err != nil {

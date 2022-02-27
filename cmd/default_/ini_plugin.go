@@ -71,11 +71,17 @@ func initRedis() error {
 		return errors.New("redis_port [int] in config err," + err.Error())
 	}
 
+	redis_prefix, err := configuration.Config.GetString("redis_prefix", "")
+	if err != nil {
+		return errors.New("redis_prefix [string] in config err," + err.Error())
+	}
+
 	return redisClient.Init(redisClient.Config{
-		Address:  redis_addr,
-		UserName: redis_username,
-		Password: redis_password,
-		Port:     redis_port,
+		Address:   redis_addr,
+		UserName:  redis_username,
+		Password:  redis_password,
+		Port:      redis_port,
+		KeyPrefix: redis_prefix,
 	})
 }
 
@@ -100,11 +106,17 @@ func initSpr() error {
 		return errors.New("redis_port [int] in config.json err," + err.Error())
 	}
 
+	redis_prefix, err := configuration.Config.GetString("redis_prefix", "")
+	if err != nil {
+		return errors.New("redis_prefix [string] in config err," + err.Error())
+	}
+
 	return sprMgr.Init(sprMgr.Config{
 		Address:  redis_addr,
 		UserName: redis_username,
 		Password: redis_password,
 		Port:     redis_port,
+		Prefix:   redis_prefix,
 	})
 }
 
@@ -178,10 +190,10 @@ func initComponent() {
 	//	basic.Logger.Fatalln(err)
 	//}
 	//
-	//err = initRedis()
-	//if err != nil {
-	//	basic.Logger.Fatalln(err)
-	//}
+	err = initRedis()
+	if err != nil {
+		basic.Logger.Fatalln(err)
+	}
 	//
 	//err = initSpr()
 	//if err != nil {

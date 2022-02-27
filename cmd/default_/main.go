@@ -1,16 +1,19 @@
 package default_
 
 import (
+	"context"
 	"time"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/configuration"
 	"github.com/coreservice-io/CliAppTemplate/plugin/cache"
 	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
+	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/tools"
 	"github.com/coreservice-io/UJob"
 	"github.com/coreservice-io/USafeGo"
 	"github.com/fatih/color"
+	goredis "github.com/go-redis/redis/v8"
 	"github.com/labstack/echo/v4"
 	"github.com/urfave/cli/v2"
 )
@@ -49,14 +52,15 @@ func StartDefault(clictx *cli.Context) {
 	}
 
 	//redis example
-	//if redisClient.GetInstance() != nil {
-	//	redisClient.GetInstance().Set(context.Background(), "redis-foo", "redis-bar", 10*time.Second)
-	//	str, err := redisClient.GetInstance().Get(context.Background(), "redis-foo").Result()
-	//	if err != nil && err != goredis.Nil {
-	//		basic.Logger.Errorln(err)
-	//	}
-	//	basic.Logger.Debugln(str)
-	//}
+	if redisClient.GetInstance() != nil {
+		key := redisClient.GetInstance().GenKey("foo")
+		redisClient.GetInstance().Set(context.Background(), key, "redis-bar", 100*time.Second)
+		str, err := redisClient.GetInstance().Get(context.Background(), "redis-foo").Result()
+		if err != nil && err != goredis.Nil {
+			basic.Logger.Errorln(err)
+		}
+		basic.Logger.Debugln(str)
+	}
 
 	//schedule job
 	count := 0

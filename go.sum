@@ -97,8 +97,8 @@ github.com/coreservice-io/GormULog v0.1.2 h1:VOzyo37aTpt3Zx+RryDIrvjS5UIB1vDUBOp
 github.com/coreservice-io/GormULog v0.1.2/go.mod h1:3tJxZw54rymn94KiJVuiGO10aywi5txoqvgU94uoTL8=
 github.com/coreservice-io/LogrusULog v0.1.18 h1:UvGpGEWi45GpUqGkp+iKELZTXCiMmQ7A/pvgTzC+XnM=
 github.com/coreservice-io/LogrusULog v0.1.18/go.mod h1:9ptUgo0PIKXv7L5y9TDDD6vUbt9VimYNT83mG6npZ9E=
-github.com/coreservice-io/RedisSpr v0.1.14 h1:D+OunCqIDZKF40WZijPFST393I3bR6Gs84eVDYIi/NE=
-github.com/coreservice-io/RedisSpr v0.1.14/go.mod h1:absPLrL4U4l452FEctr7t+qHrxUzoKDNZ2zKRH5/WH8=
+github.com/coreservice-io/RedisSpr v0.1.15 h1:B6Ljm6lUYbfDHdwiaKVAWbJUsFYW5MyCmFHgjHBfx7w=
+github.com/coreservice-io/RedisSpr v0.1.15/go.mod h1:absPLrL4U4l452FEctr7t+qHrxUzoKDNZ2zKRH5/WH8=
 github.com/coreservice-io/UCache v0.1.5 h1:WBPXXwdwTILi2aKd6mK2NuBHqO+pydOl8lANuvh6lg4=
 github.com/coreservice-io/UCache v0.1.5/go.mod h1:KGZEbGNqjoOj0PDQymDjnFsGhq9K9pNfbESFPg34lV8=
 github.com/coreservice-io/UJob v0.1.5 h1:y8CWCe4u/MQpMdntjN5+8IZz7KHO0eyu+Ppc6koOGd4=

@@ -4,9 +4,11 @@
   "db_password": "xxxxxx",
   "db_port": 3306,
   "db_username": "xxxxx",
+
   "elasticsearch_addr": "xxxxx",
   "elasticsearch_password": "xxxxx",
   "elasticsearch_username": "xxxxx",
+
   "eth_wallet_mnemonic": "xxxx",
   "http_port": 80,
   "http_static_rel_folder": "/assets/default_/web",
@@ -17,6 +19,7 @@
   "redis_password": "",
   "redis_port": 6379,
   "redis_username": "",
+  "redis_prefix": "template",
   "provide_folder": [
     {"abs_path":"/Users/1","size_GB":1},
     {"abs_path":"/Users/2","size_GB":3},
