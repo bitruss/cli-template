@@ -2,6 +2,7 @@ package redisClient
 
 import (
 	"context"
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"strconv"
@@ -67,6 +68,9 @@ func Init_(name string, redisConfig Config) error {
 		Addrs:    []string{redisConfig.Address + ":" + strconv.Itoa(redisConfig.Port)},
 		Username: redisConfig.UserName,
 		Password: redisConfig.Password,
+		TLSConfig: &tls.Config{
+			InsecureSkipVerify: true,
+		},
 	})
 
 	_, err := r.Ping(context.Background()).Result()
