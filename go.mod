@@ -6,7 +6,7 @@ require (
 	github.com/coreservice-io/EchoMiddleware v0.1.6
 	github.com/coreservice-io/GormULog v0.1.2
 	github.com/coreservice-io/LogrusULog v0.1.18
-	github.com/coreservice-io/RedisSpr v0.1.16
+	github.com/coreservice-io/RedisSpr v0.1.17
 	github.com/coreservice-io/UCache v0.1.5
 	github.com/coreservice-io/UJob v0.1.5
 	github.com/coreservice-io/ULog v0.1.16

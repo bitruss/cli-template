@@ -3,7 +3,6 @@ package redisClient
 import (
 	"context"
 	"crypto/tls"
-	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -46,12 +45,6 @@ func Init_(name string, redisConfig Config) error {
 		name = "default"
 	}
 
-	prefix := strings.TrimSuffix(redisConfig.KeyPrefix, ":")
-
-	if prefix == "" {
-		return errors.New("redis key prefix error")
-	}
-
 	_, exist := instanceMap[name]
 	if exist {
 		return fmt.Errorf("redis instance <%s> has already initialized", name)
@@ -78,8 +71,13 @@ func Init_(name string, redisConfig Config) error {
 		return err
 	}
 
+	prefix := redisConfig.KeyPrefix
+	if prefix != "" && !strings.HasSuffix(prefix, ":") {
+		prefix = prefix + ":"
+	}
+
 	instanceMap[name] = &RedisClient{
-		prefix + ":",
+		prefix,
 		r,
 	}
 	return nil
@@ -87,7 +85,7 @@ func Init_(name string, redisConfig Config) error {
 
 func (rc *RedisClient) GenKey(keys ...string) string {
 	if len(keys) == 0 {
-		return rc.KeyPrefix + "emptyKey"
+		return rc.KeyPrefix
 	}
 	return rc.KeyPrefix + strings.Join(keys, ":")
 }
