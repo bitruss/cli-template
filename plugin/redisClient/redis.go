@@ -31,6 +31,7 @@ type Config struct {
 	Password  string
 	Port      int
 	KeyPrefix string
+	UseTLS    bool
 }
 
 func Init(redisConfig Config) error {
@@ -57,14 +58,18 @@ func Init_(name string, redisConfig Config) error {
 		redisConfig.Port = 6379
 	}
 
-	r := redis.NewClusterClient(&redis.ClusterOptions{
+	config := &redis.ClusterOptions{
 		Addrs:    []string{redisConfig.Address + ":" + strconv.Itoa(redisConfig.Port)},
 		Username: redisConfig.UserName,
 		Password: redisConfig.Password,
-		TLSConfig: &tls.Config{
+	}
+	if redisConfig.UseTLS {
+		config.TLSConfig = &tls.Config{
 			InsecureSkipVerify: true,
-		},
-	})
+		}
+	}
+
+	r := redis.NewClusterClient(config)
 
 	_, err := r.Ping(context.Background()).Result()
 	if err != nil {

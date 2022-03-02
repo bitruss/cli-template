@@ -77,12 +77,18 @@ func initRedis() error {
 		return errors.New("redis_prefix [string] in config err," + err.Error())
 	}
 
+	redis_useTls, err := configuration.Config.GetBool("redis_useTls", false)
+	if err != nil {
+		return errors.New("redis_useTls [bool] in config err," + err.Error())
+	}
+
 	return redisClient.Init(redisClient.Config{
 		Address:   redis_addr,
 		UserName:  redis_username,
 		Password:  redis_password,
 		Port:      redis_port,
 		KeyPrefix: redis_prefix,
+		UseTLS:    redis_useTls,
 	})
 }
 
@@ -112,12 +118,18 @@ func initSpr() error {
 		return errors.New("redis_prefix [string] in config err," + err.Error())
 	}
 
+	redis_useTls, err := configuration.Config.GetBool("redis_useTls", false)
+	if err != nil {
+		return errors.New("redis_useTls [bool] in config err," + err.Error())
+	}
+
 	return sprMgr.Init(&RedisSpr.RedisConfig{
 		Addr:     redis_addr,
 		UserName: redis_username,
 		Password: redis_password,
 		Port:     redis_port,
 		Prefix:   redis_prefix,
+		UseTLS:   redis_useTls,
 	})
 }
 
