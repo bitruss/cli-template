@@ -17,22 +17,14 @@ func GetInstance_(name string) *RedisSpr.SprJobMgr {
 	return instanceMap[name]
 }
 
-type Config struct {
-	Address  string
-	UserName string
-	Password string
-	Port     int
-	Prefix   string
-}
-
-func Init(redisConfig Config) error {
+func Init(redisConfig *RedisSpr.RedisConfig) error {
 	return Init_("default", redisConfig)
 }
 
 // Init a new instance.
 //  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
 //  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
-func Init_(name string, redisConfig Config) error {
+func Init_(name string, redisConfig *RedisSpr.RedisConfig) error {
 	if name == "" {
 		name = "default"
 	}
@@ -42,8 +34,8 @@ func Init_(name string, redisConfig Config) error {
 		return fmt.Errorf("spr instance <%s> has already initialized", name)
 	}
 
-	if redisConfig.Address == "" {
-		redisConfig.Address = "127.0.0.1"
+	if redisConfig.Addr == "" {
+		redisConfig.Addr = "127.0.0.1"
 	}
 	if redisConfig.Port == 0 {
 		redisConfig.Port = 6379
@@ -51,7 +43,7 @@ func Init_(name string, redisConfig Config) error {
 	//////// ini spr job //////////////////////
 
 	spr, err := RedisSpr.New(RedisSpr.RedisConfig{
-		Addr:     redisConfig.Address,
+		Addr:     redisConfig.Addr,
 		Port:     redisConfig.Port,
 		Password: redisConfig.Password,
 		UserName: redisConfig.UserName,

@@ -11,6 +11,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sprMgr"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
+	"github.com/coreservice-io/RedisSpr"
 )
 
 func initEchoServer() error {
@@ -111,8 +112,8 @@ func initSpr() error {
 		return errors.New("redis_prefix [string] in config err," + err.Error())
 	}
 
-	return sprMgr.Init(sprMgr.Config{
-		Address:  redis_addr,
+	return sprMgr.Init(&RedisSpr.RedisConfig{
+		Addr:     redis_addr,
 		UserName: redis_username,
 		Password: redis_password,
 		Port:     redis_port,
