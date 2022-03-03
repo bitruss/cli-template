@@ -101,6 +101,8 @@ github.com/coreservice-io/RedisSpr v0.1.18 h1:ThbSak8rsRwexzuUChapQDadYBWnNbB2Xr
 github.com/coreservice-io/RedisSpr v0.1.18/go.mod h1:absPLrL4U4l452FEctr7t+qHrxUzoKDNZ2zKRH5/WH8=
 github.com/coreservice-io/UCache v0.1.5 h1:WBPXXwdwTILi2aKd6mK2NuBHqO+pydOl8lANuvh6lg4=
 github.com/coreservice-io/UCache v0.1.5/go.mod h1:KGZEbGNqjoOj0PDQymDjnFsGhq9K9pNfbESFPg34lV8=
+github.com/coreservice-io/UHub v0.0.0-20220303005837-06339df3ed0d h1:s/aiCXmzATg012Hk0fUXig0dsBXtgCiR/1yk9474dSk=
+github.com/coreservice-io/UHub v0.0.0-20220303005837-06339df3ed0d/go.mod h1:FNS+hGcf4v/oCZYjMntGJNko7u09kMZsUNnjS7uNagY=
 github.com/coreservice-io/UJob v0.1.5 h1:y8CWCe4u/MQpMdntjN5+8IZz7KHO0eyu+Ppc6koOGd4=
 github.com/coreservice-io/UJob v0.1.5/go.mod h1:/ZTM07jDA1yDF8ZaAT5+RnHsdL8Je/UHZ8y7HRuIZVY=
 github.com/coreservice-io/ULog v0.1.16 h1:igrNoT0xGeL32hgKPahoTCm9ifhRu32uH9VX+2fvw/k=

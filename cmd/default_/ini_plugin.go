@@ -8,11 +8,16 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/cache"
 	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
 	"github.com/coreservice-io/CliAppTemplate/plugin/es"
+	"github.com/coreservice-io/CliAppTemplate/plugin/hub"
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sprMgr"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
 	"github.com/coreservice-io/RedisSpr"
 )
+
+func iniHub() error {
+	return hub.Init()
+}
 
 func initEchoServer() error {
 	http_port, err := configuration.Config.GetInt("http_port", 8080)
@@ -193,7 +198,13 @@ func initCache() error {
 
 //todo: ---
 func initComponent() {
-	err := initEchoServer()
+
+	err := iniHub()
+	if err != nil {
+		basic.Logger.Fatalln(err)
+	}
+
+	err = initEchoServer()
 	if err != nil {
 		basic.Logger.Fatalln(err)
 	}
@@ -203,10 +214,10 @@ func initComponent() {
 	//	basic.Logger.Fatalln(err)
 	//}
 	//
-	err = initRedis()
-	if err != nil {
-		basic.Logger.Fatalln(err)
-	}
+	// err = initRedis()
+	// if err != nil {
+	// 	basic.Logger.Fatalln(err)
+	// }
 	//
 	//err = initSpr()
 	//if err != nil {
