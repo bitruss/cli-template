@@ -204,6 +204,11 @@ func initComponent() {
 		basic.Logger.Fatalln(err)
 	}
 
+	err = initCache()
+	if err != nil {
+		basic.Logger.Fatalln(err)
+	}
+
 	err = initEchoServer()
 	if err != nil {
 		basic.Logger.Fatalln(err)
@@ -228,9 +233,4 @@ func initComponent() {
 	//if err != nil {
 	//	basic.Logger.Fatalln(err)
 	//}
-
-	err = initCache()
-	if err != nil {
-		basic.Logger.Fatalln(err)
-	}
 }
