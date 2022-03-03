@@ -5,8 +5,8 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/UCache"
-	"github.com/go-redis/redis/v8"
 )
 
 // check weather we need do refresh
@@ -24,7 +24,7 @@ func CheckTtlRefresh(secleft int64) bool {
 //LCR == Local Cache Sync with Remote Redis
 
 // check local cache value is still available and sychronized with remote redis value
-func LCR_Check(ctx context.Context, Redis *redis.ClusterClient, localCache *UCache.Cache, keystr string) (interface{}, int64, bool) {
+func LCR_Check(ctx context.Context, Redis *redisClient.RedisClient, localCache *UCache.Cache, keystr string) (interface{}, int64, bool) {
 	localvalue, ttl, localexist := localCache.Get(keystr)
 	if !CheckTtlRefresh(ttl) && localexist {
 		randSyncStr := keystr + ":randsync"
@@ -37,7 +37,7 @@ func LCR_Check(ctx context.Context, Redis *redis.ClusterClient, localCache *UCac
 }
 
 // set both value to both local & remote redis
-func LCR_Set(ctx context.Context, Redis *redis.ClusterClient, localCache *UCache.Cache, keystr string, value interface{}, ttlSecond int64) {
+func LCR_Set(ctx context.Context, Redis *redisClient.RedisClient, localCache *UCache.Cache, keystr string, value interface{}, ttlSecond int64) {
 	localCache.Set(keystr, value, ttlSecond)
 	randSyncStr := keystr + ":randsync"
 	strsrc := localCache.SetRand(randSyncStr, ttlSecond+10)
@@ -45,7 +45,7 @@ func LCR_Set(ctx context.Context, Redis *redis.ClusterClient, localCache *UCache
 }
 
 //delete cache from both local and remote redis
-func LCR_Del(ctx context.Context, Redis *redis.ClusterClient, localCache *UCache.Cache, keystr string) {
+func LCR_Del(ctx context.Context, Redis *redisClient.RedisClient, localCache *UCache.Cache, keystr string) {
 	randSyncStr := keystr + ":randsync"
 	localCache.Delete(keystr)
 	localCache.Delete(randSyncStr)
