@@ -12,7 +12,7 @@ type RespBody struct {
 	Msg    string      `json:"msg" `
 }
 
-//status <-1
+//status <0
 func ErrorResp(c echo.Context, status int, msg string) error {
 	return c.JSON(http.StatusOK, RespBody{
 		Status: status,
@@ -20,7 +20,7 @@ func ErrorResp(c echo.Context, status int, msg string) error {
 	})
 }
 
-//status >=0
+//status >0
 func SuccessResp(c echo.Context, status int, data interface{}) error {
 	return c.JSON(http.StatusOK, RespBody{
 		Status: status,
