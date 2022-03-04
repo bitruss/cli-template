@@ -1,4 +1,4 @@
-package user
+package exampleUser
 
 import (
 	"context"
@@ -13,18 +13,18 @@ import (
 )
 
 //example for GormDB and tools cache
-type UserModel struct {
-	ID      int    `gorm:"primarykey"`
-	Status  string `gorm:"index"`
-	Name    string `gorm:"index"`
-	Email   string `gorm:"index"`
-	Updated int64  `gorm:"autoUpdateTime"`
-	Created int64  `gorm:"autoCreateTime"`
+type ExampleUserModel struct {
+	ID      int
+	Status  string
+	Name    string
+	Email   string
+	Updated int64 `gorm:"autoUpdateTime"`
+	Created int64 `gorm:"autoCreateTime"`
 }
 
-func InsertUser(userInfo *UserModel) (*UserModel, error) {
+func InsertUser(userInfo *ExampleUserModel) (*ExampleUserModel, error) {
 	//userInfo in param data
-	//&UserModel{
+	//&ExampleUserModel{
 	//	Status: "normal",
 	//	Name:"userName",
 	//	Email:"mail@email.com",
@@ -37,8 +37,8 @@ func InsertUser(userInfo *UserModel) (*UserModel, error) {
 }
 
 func DeleteUser(id int) error {
-	user := &UserModel{ID: id}
-	if err := sqldb.GetInstance().Unscoped().Delete(user).Error; err != nil {
+	user := &ExampleUserModel{ID: id}
+	if err := sqldb.GetInstance().Delete(user).Error; err != nil {
 		return err
 	}
 
@@ -50,7 +50,7 @@ func DeleteUser(id int) error {
 }
 
 func UpdateUser(newData map[string]interface{}, id int) error {
-	user := &UserModel{ID: id}
+	user := &ExampleUserModel{ID: id}
 
 	//newData in param data
 	//newData= map[string]interface{}{
@@ -67,14 +67,13 @@ func UpdateUser(newData map[string]interface{}, id int) error {
 		return errors.New("record not exist")
 	}
 
-	//delete cache
-	key := redisClient.GetInstance().GenKey("user", strconv.Itoa(id))
-	tools.LCR_Del(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
+	//refresh cache
+	GetUserById(id, true)
 
 	return nil
 }
 
-func GetUserById(userid int, forceupdate bool) (*UserModel, error) {
+func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 	key := redisClient.GetInstance().GenKey("user", strconv.Itoa(userid))
 	if !forceupdate {
 		localvalue, _, syncOk := tools.LCR_Check(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
@@ -82,7 +81,7 @@ func GetUserById(userid int, forceupdate bool) (*UserModel, error) {
 			if localvalue == nil {
 				return nil, nil
 			} else {
-				result, ok := localvalue.(*UserModel)
+				result, ok := localvalue.(*ExampleUserModel)
 				if ok {
 					return result, nil
 				} else {
@@ -95,8 +94,8 @@ func GetUserById(userid int, forceupdate bool) (*UserModel, error) {
 	}
 
 	//after cache miss ,try from remote database
-	var userList []*UserModel
-	err := sqldb.GetInstance().Model(&UserModel{}).Where("id = ?", userid).Find(&userList).Error
+	var userList []*ExampleUserModel
+	err := sqldb.GetInstance().Model(&ExampleUserModel{}).Where("id = ?", userid).Find(&userList).Error
 
 	if err != nil {
 		basic.Logger.Errorln("GetUserById err :", err)

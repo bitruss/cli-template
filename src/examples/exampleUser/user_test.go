@@ -1,4 +1,4 @@
-package user
+package exampleUser
 
 import (
 	"log"
@@ -18,11 +18,6 @@ func init() {
 		UserName: "root",
 		Password: "123456",
 	})
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	err = sqldb.GetInstance().AutoMigrate(&UserModel{})
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -51,7 +46,7 @@ func init() {
 func Test_UserDB(t *testing.T) {
 	//add
 	log.Println("---add user---")
-	newUser := &UserModel{
+	newUser := &ExampleUserModel{
 		Status: "normal",
 		Name:   "userName",
 		Email:  "mail@email.com",
