@@ -22,7 +22,7 @@ type ExampleUserModel struct {
 	Created int64 `gorm:"autoCreateTime"`
 }
 
-func InsertUser(userInfo *ExampleUserModel) (*ExampleUserModel, error) {
+func CreateUser(userInfo *ExampleUserModel) (*ExampleUserModel, error) {
 	//userInfo in param data
 	//&ExampleUserModel{
 	//	Status: "normal",

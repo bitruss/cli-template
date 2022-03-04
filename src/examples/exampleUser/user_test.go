@@ -44,6 +44,8 @@ func init() {
 }
 
 func Test_UserDB(t *testing.T) {
+	//important! Please create db table before you run this test.
+
 	//add
 	log.Println("---add user---")
 	newUser := &ExampleUserModel{
@@ -51,7 +53,7 @@ func Test_UserDB(t *testing.T) {
 		Name:   "userName",
 		Email:  "mail@email.com",
 	}
-	newUserInfo, err := InsertUser(newUser)
+	newUserInfo, err := CreateUser(newUser)
 	if err != nil {
 		log.Println("InsertUser error:", err)
 		return
