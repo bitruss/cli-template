@@ -48,6 +48,7 @@ func Init_(name string, redisConfig *RedisSpr.RedisConfig) error {
 		Password: redisConfig.Password,
 		UserName: redisConfig.UserName,
 		Prefix:   redisConfig.Prefix,
+		UseTLS:   redisConfig.UseTLS,
 	})
 
 	if err != nil {
