@@ -144,8 +144,9 @@ func job_safego_testrun() {
 //httpServer example
 func httpserver_testrun() {
 	httpServer := echoServer.GetInstance()
-	httpServer.GET("/test", func(context echo.Context) error {
-		return context.String(200, "test success")
+	//health api
+	httpServer.GET("/api/health", func(context echo.Context) error {
+		return echoServer.SuccessResp(context, 1, time.Now().Unix(), "")
 	})
 	httpServer.Start()
 }

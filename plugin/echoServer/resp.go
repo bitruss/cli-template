@@ -13,17 +13,19 @@ type RespBody struct {
 }
 
 //status <0
-func ErrorResp(c echo.Context, status int, msg string) error {
+func ErrorResp(c echo.Context, status int, data interface{}, msg string) error {
 	return c.JSON(http.StatusOK, RespBody{
 		Status: status,
+		Result: data,
 		Msg:    msg,
 	})
 }
 
 //status >0
-func SuccessResp(c echo.Context, status int, data interface{}) error {
+func SuccessResp(c echo.Context, status int, data interface{}, msg string) error {
 	return c.JSON(http.StatusOK, RespBody{
 		Status: status,
 		Result: data,
+		Msg:    msg,
 	})
 }
