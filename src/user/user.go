@@ -14,15 +14,68 @@ import (
 
 //example for GormDB and tools cache
 type UserModel struct {
-	Id               int
-	Status           string
-	Name             string
-	Email            string
-	Created_unixtime int64
+	ID      int    `gorm:"primarykey"`
+	Status  string `gorm:"index"`
+	Name    string `gorm:"index"`
+	Email   string `gorm:"index"`
+	Updated int64  `gorm:"autoUpdateTime"`
+	Created int64  `gorm:"autoCreateTime"`
+}
+
+func InsertUser(userInfo *UserModel) (*UserModel, error) {
+	//userInfo in param data
+	//&UserModel{
+	//	Status: "normal",
+	//	Name:"userName",
+	//	Email:"mail@email.com",
+	//}
+
+	if err := sqldb.GetInstance().Create(userInfo).Error; err != nil {
+		return nil, err
+	}
+	return userInfo, nil
+}
+
+func DeleteUser(id int) error {
+	user := &UserModel{ID: id}
+	if err := sqldb.GetInstance().Unscoped().Delete(user).Error; err != nil {
+		return err
+	}
+
+	//delete cache
+	key := redisClient.GetInstance().GenKey("user", strconv.Itoa(id))
+	tools.LCR_Del(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
+
+	return nil
+}
+
+func UpdateUser(newData map[string]interface{}, id int) error {
+	user := &UserModel{ID: id}
+
+	//newData in param data
+	//newData= map[string]interface{}{
+	//	"status":"error",
+	//	"name":"userName2",
+	//	"email":"mail2@email.com",
+	//}
+
+	result := sqldb.GetInstance().Model(user).Updates(newData)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return errors.New("record not exist")
+	}
+
+	//delete cache
+	key := redisClient.GetInstance().GenKey("user", strconv.Itoa(id))
+	tools.LCR_Del(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
+
+	return nil
 }
 
 func GetUserById(userid int, forceupdate bool) (*UserModel, error) {
-	key := "finance:user:" + strconv.Itoa(userid)
+	key := redisClient.GetInstance().GenKey("user", strconv.Itoa(userid))
 	if !forceupdate {
 		localvalue, _, syncOk := tools.LCR_Check(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
 		if syncOk {
@@ -43,7 +96,7 @@ func GetUserById(userid int, forceupdate bool) (*UserModel, error) {
 
 	//after cache miss ,try from remote database
 	var userList []*UserModel
-	err := sqldb.GetInstance().Table("user").Where("id = ?", userid).Find(&userList).Error
+	err := sqldb.GetInstance().Model(&UserModel{}).Where("id = ?", userid).Find(&userList).Error
 
 	if err != nil {
 		basic.Logger.Errorln("GetUserById err :", err)
