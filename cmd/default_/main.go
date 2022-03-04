@@ -2,14 +2,17 @@ package default_
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/configuration"
 	"github.com/coreservice-io/CliAppTemplate/plugin/cache"
 	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
+	"github.com/coreservice-io/CliAppTemplate/plugin/hub"
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/tools"
+	uhub "github.com/coreservice-io/UHub"
 	"github.com/coreservice-io/UJob"
 	"github.com/coreservice-io/USafeGo"
 	"github.com/fatih/color"
@@ -25,11 +28,37 @@ func StartDefault(clictx *cli.Context) {
 
 	//example
 	initComponent()
+
 	//defer func() {
 	//	//global.ReleaseResources()
 	//}()
 
-	//example get complex config
+	hub_testrun()
+	complexconfig_testrun()
+	cache_testrun()
+	redis_testrun()
+	job_safego_testrun()
+	httpserver_testrun()
+}
+
+//hub example
+const testKind uhub.Kind = 1
+
+type testEvent string
+
+func (e testEvent) Kind() uhub.Kind {
+	return testKind
+}
+func hub_testrun() {
+	hub.GetInstance().Subscribe(testKind, func(e uhub.Event) {
+		fmt.Println("hub callback")
+		fmt.Println(string(e.(testEvent)))
+	})
+	hub.GetInstance().Publish(testEvent("hub message"))
+}
+
+//example get complex config
+func complexconfig_testrun() {
 	provide_folder, err := configuration.Config.GetProvideFolders()
 	if err != nil {
 		basic.Logger.Errorln(err)
@@ -37,8 +66,10 @@ func StartDefault(clictx *cli.Context) {
 	for _, v := range provide_folder {
 		basic.Logger.Debugln("path:", v.AbsPath, "size:", v.SizeGB)
 	}
+}
 
-	//cache example
+//cache example
+func cache_testrun() {
 	cache.GetInstance_("cache1").Set("foo1", "bar1", 10)
 	v, _, exist := cache.GetInstance_("cache1").Get("foo1")
 	if exist {
@@ -50,8 +81,10 @@ func StartDefault(clictx *cli.Context) {
 	if exist {
 		basic.Logger.Debugln(v.(string))
 	}
+}
 
-	//redis example
+//redis example
+func redis_testrun() {
 	if redisClient.GetInstance() != nil {
 		key := redisClient.GetInstance().GenKey("foo")
 		redisClient.GetInstance().Set(context.Background(), key, "redis-bar", 100*time.Second)
@@ -61,8 +94,10 @@ func StartDefault(clictx *cli.Context) {
 		}
 		basic.Logger.Debugln(str)
 	}
+}
 
-	//schedule job
+//job and safego example
+func job_safego_testrun() {
 	count := 0
 	job := UJob.Start(
 		//job process
@@ -104,8 +139,10 @@ func StartDefault(clictx *cli.Context) {
 		basic.Logger.Infoln("running")
 		time.Sleep(1 * time.Second)
 	}
+}
 
-	//httpServer example
+//httpServer example
+func httpserver_testrun() {
 	httpServer := echoServer.GetInstance()
 	httpServer.GET("/test", func(context echo.Context) error {
 		return context.String(200, "test success")

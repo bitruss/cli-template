@@ -8,6 +8,7 @@ require (
 	github.com/coreservice-io/LogrusULog v0.1.18
 	github.com/coreservice-io/RedisSpr v0.1.18
 	github.com/coreservice-io/UCache v0.1.5
+	github.com/coreservice-io/UHub v0.0.0-20220303005837-06339df3ed0d
 	github.com/coreservice-io/UJob v0.1.5
 	github.com/coreservice-io/ULog v0.1.16
 	github.com/coreservice-io/USafeGo v0.1.3
