@@ -101,8 +101,10 @@ github.com/coreservice-io/RedisSpr v0.1.18 h1:ThbSak8rsRwexzuUChapQDadYBWnNbB2Xr
 github.com/coreservice-io/RedisSpr v0.1.18/go.mod h1:absPLrL4U4l452FEctr7t+qHrxUzoKDNZ2zKRH5/WH8=
 github.com/coreservice-io/UCache v0.1.5 h1:WBPXXwdwTILi2aKd6mK2NuBHqO+pydOl8lANuvh6lg4=
 github.com/coreservice-io/UCache v0.1.5/go.mod h1:KGZEbGNqjoOj0PDQymDjnFsGhq9K9pNfbESFPg34lV8=
-github.com/coreservice-io/UHub v0.0.0-20220303005837-06339df3ed0d h1:s/aiCXmzATg012Hk0fUXig0dsBXtgCiR/1yk9474dSk=
-github.com/coreservice-io/UHub v0.0.0-20220303005837-06339df3ed0d/go.mod h1:FNS+hGcf4v/oCZYjMntGJNko7u09kMZsUNnjS7uNagY=
+github.com/coreservice-io/UECSUploader v0.0.1 h1:OCpYVlkuyvYSPNW23dukpYLf4KZ0yXp1O0qmXpe6hT8=
+github.com/coreservice-io/UECSUploader v0.0.1/go.mod h1:1uFTLofHvR37uguXioe00jYAlreN12Ij409hOv+AbKU=
+github.com/coreservice-io/UHub v0.0.1 h1:Iwn3E7/wXuUEi0yvDZlssZo37VccYL9pZb3Rj5a1UnY=
+github.com/coreservice-io/UHub v0.0.1/go.mod h1:FNS+hGcf4v/oCZYjMntGJNko7u09kMZsUNnjS7uNagY=
 github.com/coreservice-io/UJob v0.1.5 h1:y8CWCe4u/MQpMdntjN5+8IZz7KHO0eyu+Ppc6koOGd4=
 github.com/coreservice-io/UJob v0.1.5/go.mod h1:/ZTM07jDA1yDF8ZaAT5+RnHsdL8Je/UHZ8y7HRuIZVY=
 github.com/coreservice-io/ULog v0.1.16 h1:igrNoT0xGeL32hgKPahoTCm9ifhRu32uH9VX+2fvw/k=
@@ -339,8 +341,8 @@ github.com/mwitkow/go-conntrack v0.0.0-20161129095857-cc309e4a2223/go.mod h1:qRW
 github.com/nxadm/tail v1.4.4/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=
 github.com/nxadm/tail v1.4.8 h1:nPr65rt6Y5JFSKQO7qToXr7pePgD6Gwiw05lkbyAQTE=
 github.com/nxadm/tail v1.4.8/go.mod h1:+ncqLTQzXmGhMZNUePPaPqPvBxHAIsmXswZKocGu+AU=
-github.com/olivere/elastic/v7 v7.0.30 h1:MyDWv+ZSn+56AOmqr69Sg4EFaBdGMpWFEK5zuqaL8AM=
-github.com/olivere/elastic/v7 v7.0.30/go.mod h1:idEQxe7Es+Wr4XAuNnJdKeMZufkA9vQprOIFck061vg=
+github.com/olivere/elastic/v7 v7.0.31 h1:VJu9/zIsbeiulwlRCfGQf6Tzsr++uo+FeUgj5oj+xKk=
+github.com/olivere/elastic/v7 v7.0.31/go.mod h1:idEQxe7Es+Wr4XAuNnJdKeMZufkA9vQprOIFck061vg=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.12.1/go.mod h1:zj2OWP4+oCPe1qIXoGWkgMRwljMUYCdkwsT2108oapk=
 github.com/onsi/ginkgo v1.16.4/go.mod h1:dX+/inL/fNMqNlz0e9LfyB9TswhZpCVdJM/Z6Vvnwo0=

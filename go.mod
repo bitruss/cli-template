@@ -8,7 +8,8 @@ require (
 	github.com/coreservice-io/LogrusULog v0.1.18
 	github.com/coreservice-io/RedisSpr v0.1.18
 	github.com/coreservice-io/UCache v0.1.5
-	github.com/coreservice-io/UHub v0.0.0-20220303005837-06339df3ed0d
+	github.com/coreservice-io/UECSUploader v0.0.1
+	github.com/coreservice-io/UHub v0.0.1
 	github.com/coreservice-io/UJob v0.1.5
 	github.com/coreservice-io/ULog v0.1.16
 	github.com/coreservice-io/USafeGo v0.1.3
@@ -17,7 +18,7 @@ require (
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/json-iterator/go v1.1.12
 	github.com/labstack/echo/v4 v4.6.1
-	github.com/olivere/elastic/v7 v7.0.30
+	github.com/olivere/elastic/v7 v7.0.31
 	github.com/spf13/cast v1.4.1
 	github.com/spf13/viper v1.10.1
 	github.com/takama/daemon v1.0.0

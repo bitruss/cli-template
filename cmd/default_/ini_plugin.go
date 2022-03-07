@@ -7,7 +7,8 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/configuration"
 	"github.com/coreservice-io/CliAppTemplate/plugin/cache"
 	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
-	"github.com/coreservice-io/CliAppTemplate/plugin/es"
+	"github.com/coreservice-io/CliAppTemplate/plugin/ecs"
+	"github.com/coreservice-io/CliAppTemplate/plugin/ecsUploader"
 	"github.com/coreservice-io/CliAppTemplate/plugin/hub"
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sprMgr"
@@ -49,7 +50,30 @@ func initElasticSearch() error {
 		return errors.New("elasticsearch_password [string] in config error," + err.Error())
 	}
 
-	return es.Init(es.Config{
+	return ecs.Init(ecs.Config{
+		Address:  elasticSearchAddr,
+		UserName: elasticSearchUserName,
+		Password: elasticSearchPassword})
+
+}
+
+func initEcsUploader() error {
+	elasticSearchAddr, err := configuration.Config.GetString("elasticsearch_addr", "")
+	if err != nil {
+		return errors.New("elasticsearch_addr [string] in config error," + err.Error())
+	}
+
+	elasticSearchUserName, err := configuration.Config.GetString("elasticsearch_username", "")
+	if err != nil {
+		return errors.New("elasticsearch_username_err [string] in config error," + err.Error())
+	}
+
+	elasticSearchPassword, err := configuration.Config.GetString("elasticsearch_password", "")
+	if err != nil {
+		return errors.New("elasticsearch_password [string] in config error," + err.Error())
+	}
+
+	return ecsUploader.Init(ecsUploader.Config{
 		Address:  elasticSearchAddr,
 		UserName: elasticSearchUserName,
 		Password: elasticSearchPassword})
@@ -213,6 +237,11 @@ func initComponent() {
 	if err != nil {
 		basic.Logger.Fatalln(err)
 	}
+
+	// err = initEcsUploader()
+	// if err != nil {
+	// 	basic.Logger.Fatalln(err)
+	// }
 
 	//err = initElasticSearch()
 	//if err != nil {
