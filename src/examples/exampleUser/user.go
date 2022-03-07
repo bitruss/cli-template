@@ -110,3 +110,36 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 		}
 	}
 }
+
+func GetUsers(username string, forceupdate bool) ([]*ExampleUserModel, error) {
+	key := redisClient.GetInstance().GenKey("getusers", username)
+	if !forceupdate {
+		localvalue, _, syncOk := tools.LCR_Check(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
+		if syncOk {
+			if localvalue == nil {
+				return nil, nil
+			} else {
+				result, ok := localvalue.([]*ExampleUserModel)
+				if ok {
+					return result, nil
+				} else {
+					tools.LCR_Del(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
+					basic.Logger.Errorln("GetUsers convert error")
+					return nil, errors.New("GetUsers convert error")
+				}
+			}
+		}
+	}
+
+	//after cache miss ,try from remote database
+	var userList []*ExampleUserModel
+	err := sqldb.GetInstance().Model(&ExampleUserModel{}).Where("name = ?", username).Find(&userList).Error
+
+	if err != nil {
+		basic.Logger.Errorln("GetUsers err :", err)
+		return nil, err
+	} else {
+		tools.LCR_Set(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key, userList, 300)
+		return userList, nil
+	}
+}
