@@ -11,7 +11,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
 	"github.com/coreservice-io/CliAppTemplate/plugin/hub"
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
-	"github.com/coreservice-io/CliAppTemplate/tools"
+	"github.com/coreservice-io/CliAppTemplate/tools/errors"
 	uhub "github.com/coreservice-io/UHub"
 	"github.com/coreservice-io/UJob"
 	"github.com/coreservice-io/USafeGo"
@@ -107,7 +107,7 @@ func job_safego_testrun() {
 			basic.Logger.Debugln("Schedule Job running,count", count)
 		},
 		//onPanic callback
-		tools.PanicHandler,
+		errors.PanicHandler,
 		2,
 		// job type
 		// UJob.TYPE_PANIC_REDO  auto restart if panic
@@ -133,7 +133,7 @@ func job_safego_testrun() {
 			job.SetToCancel()
 		},
 		//onPanic callback
-		tools.PanicHandler)
+		errors.PanicHandler)
 
 	for i := 0; i < 10; i++ {
 		basic.Logger.Infoln("running")

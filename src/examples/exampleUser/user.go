@@ -9,7 +9,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/cache"
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
-	"github.com/coreservice-io/CliAppTemplate/tools"
+	lrc "github.com/coreservice-io/CliAppTemplate/tools/cache"
 )
 
 //example for GormDB and tools cache
@@ -44,7 +44,7 @@ func DeleteUser(id int) error {
 
 	//delete cache
 	key := redisClient.GetInstance().GenKey("user", strconv.Itoa(id))
-	tools.LCR_Del(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
+	lrc.LRC_Del(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
 
 	return nil
 }
@@ -76,19 +76,15 @@ func UpdateUser(newData map[string]interface{}, id int) error {
 func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 	key := redisClient.GetInstance().GenKey("user", strconv.Itoa(userid))
 	if !forceupdate {
-		localvalue, _, syncOk := tools.LCR_Check(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
-		if syncOk {
-			if localvalue == nil {
-				return nil, nil
+		result := lrc.LRC_Get(context.Background(), redisClient.GetInstance(), cache.GetInstance(), true, key)
+		if result != nil {
+			result, ok := result.(*ExampleUserModel)
+			if ok {
+				return result, nil
 			} else {
-				result, ok := localvalue.(*ExampleUserModel)
-				if ok {
-					return result, nil
-				} else {
-					tools.LCR_Del(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
-					basic.Logger.Errorln("GetUserById convert error")
-					return nil, errors.New("convert error")
-				}
+				lrc.LRC_Del(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
+				basic.Logger.Errorln("GetUserById convert error, result:", result)
+				return nil, errors.New("GetUserById convert error")
 			}
 		}
 	}
@@ -102,10 +98,10 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 		return nil, err
 	} else {
 		if len(userList) == 0 {
-			tools.LCR_Set(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key, nil, 300)
+			lrc.LRC_Set(context.Background(), redisClient.GetInstance(), cache.GetInstance(), true, key, nil, 300)
 			return nil, nil
 		} else {
-			tools.LCR_Set(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key, userList[0], 300)
+			lrc.LRC_Set(context.Background(), redisClient.GetInstance(), cache.GetInstance(), true, key, userList[0], 300)
 			return userList[0], nil
 		}
 	}
@@ -114,19 +110,15 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 func GetUsers(username string, forceupdate bool) ([]*ExampleUserModel, error) {
 	key := redisClient.GetInstance().GenKey("getusers", username)
 	if !forceupdate {
-		localvalue, _, syncOk := tools.LCR_Check(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
-		if syncOk {
-			if localvalue == nil {
-				return nil, nil
+		result := lrc.LRC_Get(context.Background(), redisClient.GetInstance(), cache.GetInstance(), true, key)
+		if result != nil {
+			result, ok := result.([]*ExampleUserModel)
+			if ok {
+				return result, nil
 			} else {
-				result, ok := localvalue.([]*ExampleUserModel)
-				if ok {
-					return result, nil
-				} else {
-					tools.LCR_Del(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
-					basic.Logger.Errorln("GetUsers convert error")
-					return nil, errors.New("GetUsers convert error")
-				}
+				lrc.LRC_Del(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
+				basic.Logger.Errorln("GetUsers convert error, result:", result)
+				return nil, errors.New("GetUsers convert error")
 			}
 		}
 	}
@@ -139,7 +131,7 @@ func GetUsers(username string, forceupdate bool) ([]*ExampleUserModel, error) {
 		basic.Logger.Errorln("GetUsers err :", err)
 		return nil, err
 	} else {
-		tools.LCR_Set(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key, userList, 300)
+		lrc.LRC_Set(context.Background(), redisClient.GetInstance(), cache.GetInstance(), true, key, userList, 300)
 		return userList, nil
 	}
 }
