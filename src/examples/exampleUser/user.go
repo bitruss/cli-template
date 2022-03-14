@@ -9,7 +9,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/cache"
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
-	lrc "github.com/coreservice-io/CliAppTemplate/tools/cache"
+	lrc "github.com/coreservice-io/CliAppTemplate/tools/lrcache"
 )
 
 //example for GormDB and tools cache

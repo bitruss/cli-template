@@ -1,4 +1,4 @@
-package cache
+package lrcache
 
 import (
 	"github.com/coreservice-io/UCache"
