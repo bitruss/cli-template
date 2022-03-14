@@ -54,16 +54,16 @@ func LRC_Get(ctx context.Context, Redis *redisClient.RedisClient, localCache *UC
 
 // set both value to both local & remote redis
 func LRC_Set(ctx context.Context, Redis *redisClient.RedisClient, localCache *UCache.Cache, isJSON bool, keystr string, value interface{}, redis_ttl_second int64) error {
-	localCache.Set(keystr, value, LOCAL_CACHE_TIME)
-
 	if isJSON {
 		v_json, err := json.Marshal(value)
 		if err != nil {
 			return err
 		}
+		localCache.Set(keystr, value, LOCAL_CACHE_TIME)
 		Redis.Set(ctx, keystr, v_json, time.Duration(redis_ttl_second)*time.Second)
 		return nil
 	} else {
+		localCache.Set(keystr, value, LOCAL_CACHE_TIME)
 		Redis.Set(ctx, keystr, value, time.Duration(redis_ttl_second)*time.Second)
 		return nil
 	}
