@@ -78,13 +78,17 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 	if !forceupdate {
 		result := lrc.LRC_Get(context.Background(), redisClient.GetInstance(), cache.GetInstance(), true, key)
 		if result != nil {
-			result, ok := result.(*ExampleUserModel)
+			value, ok := result.(*ExampleUserModel)
 			if ok {
-				return result, nil
+				return value, nil
 			} else {
+				nullValue, ok := result.(string)
+				if ok && nullValue == lrc.TEMP_NULL {
+					return nil, nil
+				}
 				lrc.LRC_Del(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
-				basic.Logger.Errorln("GetUserById convert error, result:", result)
-				return nil, errors.New("GetUserById convert error")
+				basic.Logger.Errorln("GetUsers convert error, result:", result)
+				return nil, errors.New("GetUsers convert error")
 			}
 		}
 	}
@@ -98,7 +102,7 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 		return nil, err
 	} else {
 		if len(userList) == 0 {
-			lrc.LRC_Set(context.Background(), redisClient.GetInstance(), cache.GetInstance(), true, key, nil, 300)
+			lrc.LRC_Set(context.Background(), redisClient.GetInstance(), cache.GetInstance(), false, key, lrc.TEMP_NULL, 5)
 			return nil, nil
 		} else {
 			lrc.LRC_Set(context.Background(), redisClient.GetInstance(), cache.GetInstance(), true, key, userList[0], 300)
@@ -112,10 +116,14 @@ func GetUsers(username string, forceupdate bool) ([]*ExampleUserModel, error) {
 	if !forceupdate {
 		result := lrc.LRC_Get(context.Background(), redisClient.GetInstance(), cache.GetInstance(), true, key)
 		if result != nil {
-			result, ok := result.([]*ExampleUserModel)
+			value, ok := result.([]*ExampleUserModel)
 			if ok {
-				return result, nil
+				return value, nil
 			} else {
+				nullValue, ok := result.(string)
+				if ok && nullValue == lrc.TEMP_NULL {
+					return nil, nil
+				}
 				lrc.LRC_Del(context.Background(), redisClient.GetInstance(), cache.GetInstance(), key)
 				basic.Logger.Errorln("GetUsers convert error, result:", result)
 				return nil, errors.New("GetUsers convert error")
@@ -129,6 +137,7 @@ func GetUsers(username string, forceupdate bool) ([]*ExampleUserModel, error) {
 
 	if err != nil {
 		basic.Logger.Errorln("GetUsers err :", err)
+		lrc.LRC_Set(context.Background(), redisClient.GetInstance(), cache.GetInstance(), false, key, lrc.TEMP_NULL, 5)
 		return nil, err
 	} else {
 		lrc.LRC_Set(context.Background(), redisClient.GetInstance(), cache.GetInstance(), true, key, userList, 300)

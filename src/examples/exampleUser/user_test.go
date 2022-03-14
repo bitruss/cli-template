@@ -22,6 +22,8 @@ func init() {
 		log.Fatalln(err)
 	}
 
+	sqldb.GetInstance().AutoMigrate(&ExampleUserModel{})
+
 	//redis
 	err = redisClient.Init(redisClient.Config{
 		Address:   "127.0.0.1",
@@ -97,6 +99,13 @@ func Test_UserDB(t *testing.T) {
 		log.Println("DeleteUser error:", err)
 		return
 	}
+	userInfo, err = GetUserById(ID, false)
+	if err != nil {
+		log.Println("GetUserById error:", err)
+		return
+	}
+	log.Println("userInfo:", userInfo)
+
 	userInfo, err = GetUserById(ID, false)
 	if err != nil {
 		log.Println("GetUserById error:", err)

@@ -11,6 +11,7 @@ import (
 )
 
 const LOCAL_CACHE_TIME = 5 //don't change this number as 5 is the proper number
+const TEMP_NULL = "temp_null"
 
 // check weather we need do refresh
 // the probobility becomes lager when left seconds close to 0
