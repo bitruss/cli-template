@@ -1,4 +1,4 @@
-package errors
+package panicErr
 
 import (
 	"crypto/md5"
