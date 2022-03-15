@@ -1,4 +1,4 @@
-package example_run
+package examples
 
 import (
 	"github.com/coreservice-io/CliAppTemplate/basic"

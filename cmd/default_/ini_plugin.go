@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/cmd/default_/example_run"
+	"github.com/coreservice-io/CliAppTemplate/cmd/default_/examples"
 	"github.com/coreservice-io/CliAppTemplate/configuration"
 	"github.com/coreservice-io/CliAppTemplate/plugin/cache"
 	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
@@ -225,7 +225,7 @@ func initCache() error {
 func initComponent() {
 
 	////////////////////////////
-	example_run.ComplexConfig_run()
+	examples.ComplexConfig_run()
 
 	////////////////////////////
 	//example_run.Job_Safeo_run()
@@ -237,7 +237,7 @@ func initComponent() {
 		basic.Logger.Fatalln(err)
 	}
 
-	example_run.Hub_run()
+	examples.Hub_run()
 	/////////////////////////
 
 	err = initCache()
@@ -245,7 +245,7 @@ func initComponent() {
 		basic.Logger.Fatalln(err)
 	}
 
-	example_run.Cache_run()
+	examples.Cache_run()
 	/////////////////////////
 	err = initEchoServer()
 	if err != nil {
@@ -273,7 +273,7 @@ func initComponent() {
 	// 	basic.Logger.Fatalln(err)
 	// }
 
-	//example_run.Redis_run()
+	//examples.Redis_run()
 
 	////////////////////////////
 
