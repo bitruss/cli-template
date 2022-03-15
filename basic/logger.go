@@ -11,7 +11,7 @@ var Logger ULog.Logger
 
 func InitLogger() {
 	var llerr error
-	Logger, llerr = LogrusULog.New(path_util.GetAbsPath("logs"), 2, 20, 30)
+	Logger, llerr = LogrusULog.New(path_util.ExE_Path("logs"), 2, 20, 30)
 
 	if llerr != nil {
 		color.Set(color.FgRed)

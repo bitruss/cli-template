@@ -8,7 +8,6 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/tools/mistakes"
 	"github.com/coreservice-io/EchoMiddleware"
 	"github.com/coreservice-io/EchoMiddleware/tool"
-	"github.com/coreservice-io/UUtils/path_util"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -59,10 +58,14 @@ func Init_(name string, serverConfig Config) error {
 		serverConfig.Port = 8080
 	}
 
+	if serverConfig.StaticFolder != "" {
+		basic.Logger.Infoln("http server with static folder :", serverConfig.StaticFolder)
+	}
+
 	echoServer := &EchoServer{
 		echo.New(),
 		serverConfig.Port,
-		path_util.GetAbsPath(serverConfig.StaticFolder),
+		serverConfig.StaticFolder,
 	}
 
 	//cros
@@ -85,6 +88,11 @@ func Init_(name string, serverConfig Config) error {
 func (s *EchoServer) Start() error {
 	basic.Logger.Infoln("http server started on port :" + strconv.Itoa(s.Http_port))
 	return s.Echo.Start(":" + strconv.Itoa(s.Http_port))
+}
+
+func (s *EchoServer) StaticWeb() {
+	//static
+	s.Use(middleware.Static(s.Http_static_abs_folder))
 }
 
 func (s *EchoServer) Close() {

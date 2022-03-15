@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/cmd/default_/examples"
+	examples "github.com/coreservice-io/CliAppTemplate/cmd/default_/plugin_examples"
 	"github.com/coreservice-io/CliAppTemplate/configuration"
 	"github.com/coreservice-io/CliAppTemplate/plugin/cache"
 	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
@@ -15,6 +15,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/sprMgr"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
 	"github.com/coreservice-io/RedisSpr"
+	"github.com/coreservice-io/UUtils/path_util"
 )
 
 func iniHub() error {
@@ -28,11 +29,14 @@ func initEchoServer() error {
 	}
 
 	http_static_rel_folder, err := configuration.Config.GetString("http_static_rel_folder", "")
-	if err != nil {
-		return errors.New("http_static_rel_folder [string] in config error," + err.Error())
+	if err == nil {
+		absPath, err := path_util.SmartExistPath(http_static_rel_folder)
+		if err == nil {
+			return echoServer.Init(echoServer.Config{Port: http_port, StaticFolder: absPath})
+		}
 	}
 
-	return echoServer.Init(echoServer.Config{Port: http_port, StaticFolder: http_static_rel_folder})
+	return echoServer.Init(echoServer.Config{Port: http_port})
 }
 
 func initElasticSearch() error {

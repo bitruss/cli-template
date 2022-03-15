@@ -5,6 +5,12 @@
   "db_port": 3306,
   "db_username": "xxxxx",
 
+
+  "api_doc_gen_search_dir":"cmd/default_/api",
+  "api_doc_gen_mainfile":"api.go",
+  "api_doc_gen_output_dir":"cmd/default_/api_docs",
+
+
   "elasticsearch_addr": "xxxxx",
   "elasticsearch_password": "xxxxx",
   "elasticsearch_username": "xxxxx",
@@ -12,6 +18,7 @@
   "eth_wallet_mnemonic": "xxxx",
   "http_port": 80,
   "http_static_rel_folder": "/assets/default_/web",
+  "http_api":true,
   "infura1": "xxxx",
   "infura2": "xxxxx",
   "local_log_level": "INFO",

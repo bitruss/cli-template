@@ -13,7 +13,7 @@ require (
 	github.com/coreservice-io/UJob v0.1.5
 	github.com/coreservice-io/ULog v0.1.16
 	github.com/coreservice-io/USafeGo v0.1.3
-	github.com/coreservice-io/UUtils v0.1.4
+	github.com/coreservice-io/UUtils v0.1.5
 	github.com/fatih/color v1.13.0
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/json-iterator/go v1.1.12
@@ -21,6 +21,8 @@ require (
 	github.com/olivere/elastic/v7 v7.0.31
 	github.com/spf13/cast v1.4.1
 	github.com/spf13/viper v1.10.1
+	github.com/swaggo/echo-swagger v1.3.0
+	github.com/swaggo/swag v1.8.0
 	github.com/takama/daemon v1.0.0
 	github.com/urfave/cli/v2 v2.3.0
 	gorm.io/driver/mysql v1.2.2

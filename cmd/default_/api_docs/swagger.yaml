@@ -1,0 +1,31 @@
+definitions:
+  echoServer.RespBody:
+    properties:
+      msg:
+        type: string
+      result: {}
+      status:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /api/health:
+    get:
+      description: health check
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: result
+          schema:
+            allOf:
+            - $ref: '#/definitions/echoServer.RespBody'
+            - properties:
+                data:
+                  type: integer
+              type: object
+      summary: health check
+      tags:
+      - other
+swagger: "2.0"

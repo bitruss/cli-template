@@ -1,0 +1,54 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/api/health": {
+            "get": {
+                "description": "health check",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "other"
+                ],
+                "summary": "health check",
+                "responses": {
+                    "200": {
+                        "description": "result",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/echoServer.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "echoServer.RespBody": {
+            "type": "object",
+            "properties": {
+                "msg": {
+                    "type": "string"
+                },
+                "result": {},
+                "status": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

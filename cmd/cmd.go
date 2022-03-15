@@ -3,12 +3,12 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/cmd/config"
 	"github.com/coreservice-io/CliAppTemplate/cmd/default_"
+	"github.com/coreservice-io/CliAppTemplate/cmd/default_/api"
 	"github.com/coreservice-io/CliAppTemplate/cmd/log"
 	"github.com/coreservice-io/CliAppTemplate/cmd/service"
 	"github.com/coreservice-io/CliAppTemplate/configuration"
@@ -18,6 +18,7 @@ import (
 )
 
 const CMD_NAME_DEFAULT = "default"
+const CMD_NAME_GEN_API = "gen_api"
 const CMD_NAME_LOG = "log"
 const CMD_NAME_SERVICE = "service"
 const CMD_NAME_CONFIG = "config"
@@ -26,24 +27,44 @@ const CMD_NAME_CONFIG = "config"
 func ConfigCmd() *cli.App {
 	//check is dev or pro
 	isDev := false
-	for index, arg := range os.Args {
+	confShow := false
+	real_args := []string{}
+
+	for _, arg := range os.Args {
+
 		s := strings.ToLower(arg)
-		if strings.Contains(s, "-mode=") || strings.Contains(s, "--mode=") {
-			os.Args = append(os.Args[:index], os.Args[index+1:]...)
-			if s == "-mode=dev" || s == "--mode=dev" {
-				isDev = true
-			}
-			break
+		if strings.Contains(s, "-mode=dev") || strings.Contains(s, "--mode=dev") {
+			isDev = true
+			continue
 		}
+
+		if strings.Contains(s, "-mode=pro") || strings.Contains(s, "--mode=pro") {
+			isDev = false
+			continue
+		}
+
+		if strings.Contains(s, "-conf=show") || strings.Contains(s, "--conf=show") {
+			confShow = true
+			continue
+		}
+
+		if strings.Contains(s, "-conf=hide") || strings.Contains(s, "--conf=hide") {
+			confShow = false
+			continue
+		}
+
+		real_args = append(real_args, arg)
 	}
-	conferr := iniConfig(isDev)
+
+	os.Args = real_args
+
+	conferr := iniConfig(isDev, confShow)
 	if conferr != nil {
 		basic.Logger.Panicln(conferr)
 	}
 
 	return &cli.App{
 		Action: func(clictx *cli.Context) error {
-			path_util.ExEPathPrintln()
 			default_.StartDefault(clictx)
 			return nil
 		},
@@ -54,8 +75,15 @@ func ConfigCmd() *cli.App {
 				Usage: "print all logs",
 				Flags: log.GetFlags(),
 				Action: func(clictx *cli.Context) error {
-					path_util.ExEPathPrintln()
 					log.StartLog(clictx)
+					return nil
+				},
+			},
+			{
+				Name:  CMD_NAME_GEN_API,
+				Usage: "api command",
+				Action: func(clictx *cli.Context) error {
+					api.Gen_Api_Docs()
 					return nil
 				},
 			},
@@ -81,7 +109,6 @@ func ConfigCmd() *cli.App {
 						Usage: "set config",
 						Flags: config.GetFlags(),
 						Action: func(clictx *cli.Context) error {
-							path_util.ExEPathPrintln()
 							config.ConfigSetting(clictx)
 							return nil
 						},
@@ -153,46 +180,42 @@ func ConfigCmd() *cli.App {
 }
 
 ////////end config to do app ///////////
-func readDefaultConfig(isDev bool) (*configuration.VConfig, string, error) {
+func readDefaultConfig(isDev bool, confShow bool) (*configuration.VConfig, string, error) {
 	var defaultConfigPath string
-
-	//if user run from root as working directory
-	var defaultConfigPath_ string
-	currDir, err := os.Getwd()
-	if err == nil {
-		defaultConfigPath_ = currDir
-	}
-
+	var err error
 	if isDev {
 		basic.Logger.Infoln("======== using dev mode ========")
-		defaultConfigPath = path_util.GetAbsPath("configs/dev.json")
-		defaultConfigPath_ = filepath.Join(defaultConfigPath_, "/configs/dev.json") //try for direct root folder running
+		defaultConfigPath, err = path_util.SmartExistPath("configs/dev.json")
+		if err != nil {
+			basic.Logger.Errorln("no dev.json under /configs folder , use --mode=pro to run pro mode")
+			return nil, "", err
+		}
 	} else {
 		basic.Logger.Infoln("======== using pro mode ========")
-		defaultConfigPath = path_util.GetAbsPath("configs/pro.json")
-		defaultConfigPath_ = filepath.Join(defaultConfigPath_, "/configs/pro.json") //try for direct root folder running
+		defaultConfigPath, err = path_util.SmartExistPath("configs/pro.json")
+		if err != nil {
+			basic.Logger.Errorln("no pro.json under /configs folder , use --mode=dev to run dev mode")
+			return nil, "", err
+		}
+	}
+
+	if confShow {
+		basic.Logger.Infoln("using config:", defaultConfigPath)
 	}
 
 	config, err := configuration.ReadConfig(defaultConfigPath)
 	if err != nil {
-		//try again
-		defaultConfigPath = defaultConfigPath_
-		config, err = configuration.ReadConfig(defaultConfigPath)
+		basic.Logger.Errorln("config err", err)
+		return nil, "", err
 	}
 
-	basic.Logger.Infoln("config file:", defaultConfigPath)
-	if err != nil {
-		basic.Logger.Errorln("no pro.json under /configs folder , use --dev=true to run dev mode")
-		return nil, "", err
-	} else {
-		return config, defaultConfigPath, nil
-	}
+	return config, defaultConfigPath, nil
 }
 
-func iniConfig(isDev bool) error {
+func iniConfig(isDev bool, confShow bool) error {
 	//path_util.ExEPathPrintln()
 	////read default config
-	config, _, err := readDefaultConfig(isDev)
+	config, _, err := readDefaultConfig(isDev, confShow)
 	if err != nil {
 		return err
 	}
@@ -202,10 +225,13 @@ func iniConfig(isDev bool) error {
 	if logerr != nil {
 		return logerr
 	}
-	basic.Logger.Infoln("======== start of config ========")
-	configs, _ := config.GetConfigAsString()
-	basic.Logger.Infoln(configs)
-	basic.Logger.Infoln("======== end  of  config ========")
+
+	if confShow {
+		basic.Logger.Infoln("======== start of config ========")
+		configs, _ := config.GetConfigAsString()
+		basic.Logger.Infoln(configs)
+		basic.Logger.Infoln("======== end  of  config ========")
+	}
 
 	return nil
 }
