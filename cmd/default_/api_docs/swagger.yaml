@@ -7,8 +7,19 @@ definitions:
       status:
         type: integer
     type: object
+host: 127.0.0.1:80
 info:
-  contact: {}
+  contact:
+    email: contact@domain.com
+    name: Support
+    url: https://domain.com
+  description: api example
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://domain.com
+  title: api example
+  version: "1.0"
 paths:
   /api/health:
     get:
@@ -28,4 +39,6 @@ paths:
       summary: health check
       tags:
       - other
+schemes:
+- http
 swagger: "2.0"

@@ -1,8 +1,24 @@
 {
+    "schemes": [
+        "http"
+    ],
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "api example",
+        "title": "api example",
+        "termsOfService": "https://domain.com",
+        "contact": {
+            "name": "Support",
+            "url": "https://domain.com",
+            "email": "contact@domain.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
     },
+    "host": "127.0.0.1:80",
     "paths": {
         "/api/health": {
             "get": {
