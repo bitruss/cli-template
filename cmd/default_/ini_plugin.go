@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
+	"github.com/coreservice-io/CliAppTemplate/cmd/default_/example_run"
 	"github.com/coreservice-io/CliAppTemplate/configuration"
 	"github.com/coreservice-io/CliAppTemplate/plugin/cache"
 	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
@@ -223,41 +224,66 @@ func initCache() error {
 //todo: ---
 func initComponent() {
 
+	////////////////////////////
+	example_run.ComplexConfig_run()
+
+	////////////////////////////
+	//example_run.Job_Safeo_run()
+
+	///////////////////////////
+
 	err := iniHub()
 	if err != nil {
 		basic.Logger.Fatalln(err)
 	}
+
+	example_run.Hub_run()
+	/////////////////////////
 
 	err = initCache()
 	if err != nil {
 		basic.Logger.Fatalln(err)
 	}
 
+	example_run.Cache_run()
+	/////////////////////////
 	err = initEchoServer()
 	if err != nil {
 		basic.Logger.Fatalln(err)
 	}
+
+	//////////////////////////
 
 	// err = initEcsUploader()
 	// if err != nil {
 	// 	basic.Logger.Fatalln(err)
 	// }
 
+	///////////////////////////
+
 	//err = initElasticSearch()
 	//if err != nil {
 	//	basic.Logger.Fatalln(err)
 	//}
-	//
+
+	////////////////////////////
+
 	// err = initRedis()
 	// if err != nil {
 	// 	basic.Logger.Fatalln(err)
 	// }
-	//
+
+	//example_run.Redis_run()
+
+	////////////////////////////
+
 	//err = initSpr()
 	//if err != nil {
 	//	basic.Logger.Fatalln(err)
 	//}
-	//
+
+	/////////////////////////////
+
 	//err = initDB()
 	//if err != nil {
 	//	basic.Logger.Fatalln(err)

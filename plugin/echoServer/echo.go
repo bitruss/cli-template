@@ -84,11 +84,6 @@ func Init_(name string, serverConfig Config) error {
 
 func (s *EchoServer) Start() error {
 	basic.Logger.Infoln("http server started on port :" + strconv.Itoa(s.Http_port))
-	if s.Http_static_abs_folder != "" {
-		basic.Logger.Infoln("http server with static folder:" + s.Http_static_abs_folder)
-		s.Echo.Static("/", s.Http_static_abs_folder)
-	}
-
 	return s.Echo.Start(":" + strconv.Itoa(s.Http_port))
 }
 

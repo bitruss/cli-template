@@ -111,8 +111,8 @@ github.com/coreservice-io/ULog v0.1.16 h1:igrNoT0xGeL32hgKPahoTCm9ifhRu32uH9VX+2
 github.com/coreservice-io/ULog v0.1.16/go.mod h1:AUDPBWJxVLwVXzge/aAV4p9AFcpzn1YyWU+u5b8s9Pg=
 github.com/coreservice-io/USafeGo v0.1.3 h1:6sgX693pcl9YUNizO9d9urycegu3n6PxtDCh4CcEJdY=
 github.com/coreservice-io/USafeGo v0.1.3/go.mod h1:di1eGbMLo1BCzVRB5mqn8620hVCmUXQFtGDl1xmCv8I=
-github.com/coreservice-io/UUtils v0.1.3 h1:LGH52BQS+dUyk5oy3z9gL5A5wELByA1LBT6kZ6G9/nw=
-github.com/coreservice-io/UUtils v0.1.3/go.mod h1:os+FTw4PO7XonZwdSyfWGR44m5E0/evt5Z7/4pkcy2k=
+github.com/coreservice-io/UUtils v0.1.4 h1:/0LkKOb9ZfmjQ/Si5nIKlsokR/AfF7bPA4HjM+hAaSw=
+github.com/coreservice-io/UUtils v0.1.4/go.mod h1:os+FTw4PO7XonZwdSyfWGR44m5E0/evt5Z7/4pkcy2k=
 github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d h1:U+s90UTSYgptZMwQh2aRr3LuazLJIa+Pg3Kc1ylSYVY=
 github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d/go.mod h1:maD7wRr/U5Z6m/iR4s+kqSMx2CaBsrgA7czyZG/E6dU=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
