@@ -11,6 +11,22 @@ import (
 	"github.com/swaggo/swag/gen"
 )
 
+// for swagger
+// @title           api example
+// @version         1.0
+// @description     api example
+// @termsOfService  https://domain.com
+
+// @contact.name    Support
+// @contact.url     https://domain.com
+// @contact.email   contact@domain.com
+
+// @license.name    Apache 2.0
+// @license.url     http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host            127.0.0.1:9001
+// @schemes         http
+
 func DeclareApi(httpServer *echoServer.EchoServer) {
 	//health
 	httpServer.GET("/api/health", healthHandler)
