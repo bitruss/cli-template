@@ -60,5 +60,4 @@ run ./ gen_api
 6.--> go to cmd application "config"|"default_"|"log"|"service"
 
 
-
 ```
