@@ -9,18 +9,13 @@ go build
 default_ is the main program
 
 1.1 run default program with dev mode
-./CliAppTemplate --mode=dev 
-or 
-go run . --mode=dev 
+./CliAppTemplate --mode=dev or  go run . --mode=dev 
 
 1.2 run default program with production mode
-./CliAppTemplate  
-or 
-./CliAppTemplate --mode=pro
-or
-go run .
-or
-go run . --mode=pro 
+./CliAppTemplate or  go run . --mode=pro 
+
+1.3 if you want to see the config details
+ go run . --conf=show
 
 
 2."config" application:
@@ -45,6 +40,10 @@ log is used to show the local log files
  
 4."service" application:
 service is used to set application to OS service 
+
+5. "api" application:
+5.1 generate the api documents
+run ./ gen_api 
 
 
 ```

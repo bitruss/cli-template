@@ -1,8 +1,7 @@
 package examples
 
 import (
-	"fmt"
-
+	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/plugin/hub"
 	uhub "github.com/coreservice-io/UHub"
 )
@@ -17,8 +16,8 @@ func (e testEvent) Kind() uhub.Kind {
 }
 func Hub_run() {
 	hub.GetInstance().Subscribe(testKind, func(e uhub.Event) {
-		fmt.Println("hub callback")
-		fmt.Println(string(e.(testEvent)))
+		basic.Logger.Infoln("hub callback")
+		basic.Logger.Infoln(string(e.(testEvent)))
 	})
 	hub.GetInstance().Publish(testEvent("hub message"))
 }
