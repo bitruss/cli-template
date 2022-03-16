@@ -25,7 +25,7 @@ paths:
     get:
       description: health check
       produces:
-      - text/plain
+      - application/json
       responses:
         "200":
           description: result
@@ -38,7 +38,7 @@ paths:
               type: object
       summary: health check
       tags:
-      - other
+      - health
 schemes:
 - http
 swagger: "2.0"

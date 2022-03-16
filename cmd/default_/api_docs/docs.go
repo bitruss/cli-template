@@ -29,10 +29,10 @@ const docTemplate = `{
             "get": {
                 "description": "health check",
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
-                    "other"
+                    "health"
                 ],
                 "summary": "health check",
                 "responses": {

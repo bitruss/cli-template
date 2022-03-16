@@ -9,10 +9,15 @@ import (
 
 // @Summary      health check
 // @Description  health check
-// @Tags         other
-// @Produce      plain
+// @Tags         health
+// @Produce      json
 // @Success      200 {object} echoServer.RespBody{data=int64} "result"
 // @Router       /api/health [get]
-func healthHandler(ctx echo.Context) error {
+func healthCheck(ctx echo.Context) error {
 	return echoServer.SuccessResp(ctx, 1, time.Now().Unix(), "")
+}
+
+func config_health(httpServer *echoServer.EchoServer) {
+	//health
+	httpServer.GET("/api/health", healthCheck)
 }
