@@ -1,4 +1,4 @@
-package mistakes
+package errors
 
 import (
 	"crypto/md5"

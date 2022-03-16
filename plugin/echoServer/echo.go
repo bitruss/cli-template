@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/tools/mistakes"
+	"github.com/coreservice-io/CliAppTemplate/tools/errors"
 	"github.com/coreservice-io/EchoMiddleware"
 	"github.com/coreservice-io/EchoMiddleware/tool"
 	"github.com/labstack/echo/v4"
@@ -77,7 +77,7 @@ func Init_(name string, serverConfig Config) error {
 	}))
 	//recover and panicHandler
 	echoServer.Use(EchoMiddleware.RecoverWithConfig(EchoMiddleware.RecoverConfig{
-		OnPanic: mistakes.PanicHandler,
+		OnPanic: errors.PanicHandler,
 	}))
 	echoServer.JSONSerializer = tool.NewJsoniter()
 

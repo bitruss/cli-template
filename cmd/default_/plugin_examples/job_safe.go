@@ -4,7 +4,8 @@ import (
 	"time"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/tools/mistakes"
+	"github.com/coreservice-io/CliAppTemplate/tools/errors"
+
 	"github.com/coreservice-io/UJob"
 	"github.com/coreservice-io/USafeGo"
 )
@@ -20,7 +21,7 @@ func Job_Safeo_run() {
 			basic.Logger.Debugln("Schedule Job running,count", count)
 		},
 		//onPanic callback
-		mistakes.PanicHandler,
+		errors.PanicHandler,
 		2,
 		// job type
 		// UJob.TYPE_PANIC_REDO  auto restart if panic
@@ -46,7 +47,7 @@ func Job_Safeo_run() {
 			job.SetToCancel()
 		},
 		//onPanic callback
-		mistakes.PanicHandler)
+		errors.PanicHandler)
 
 	for i := 0; i < 10; i++ {
 		basic.Logger.Infoln("running")
