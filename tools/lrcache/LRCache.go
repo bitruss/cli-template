@@ -3,6 +3,7 @@ package lrcache
 import (
 	"context"
 	"math/rand"
+	"reflect"
 	"time"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
@@ -32,38 +33,138 @@ func LRC_Get(ctx context.Context, Redis *redisClient.RedisClient, localCache *UC
 
 	localvalue, ttl, localexist := localCache.Get(keystr)
 	if !CheckTtlRefresh(ttl) && localexist {
-		result = localvalue
+		reflect.ValueOf(result).Set(reflect.ValueOf(localvalue).)
+		//*result = localvalue
 		return
 	}
 
-	//try from remote redis
-	r_bytes, err := Redis.Get(ctx, keystr).Bytes()
-	if err != nil {
-		if err != redis.Nil {
-			basic.Logger.Errorln(err)
-		}
-		result = nil
-		return
-	} else {
-		if isJSON {
-			if string(r_bytes) == TEMP_NULL {
-				result = nil
-				return
-			}
-			err := json.Unmarshal(r_bytes, result)
-			if err == nil {
-				localCache.Set(keystr, result, LOCAL_CACHE_TIME)
-				return
-			} else {
-				basic.Logger.Errorln(err)
-				result = nil
-				return
-			}
-		} else {
-			localCache.Set(keystr, r_bytes, LOCAL_CACHE_TIME)
-			result = r_bytes
+	if isJSON {
+		r_bytes, err := Redis.Get(ctx, keystr).Bytes()
+		if err != nil && err == redis.Nil {
+			result = nil
 			return
 		}
+
+		if string(r_bytes) == TEMP_NULL {
+			result = nil
+			return
+		}
+
+		err = json.Unmarshal(r_bytes, result)
+		if err == nil {
+			localCache.Set(keystr, result, LOCAL_CACHE_TIME)
+			return
+		} else {
+			basic.Logger.Errorln(err)
+			result = nil
+			return
+		}
+	} else {
+		rCmd := Redis.Get(ctx, keystr)
+		switch result.(type) {
+		case *uint8:
+			r, err := rCmd.Uint64()
+			if err != nil {
+				basic.Logger.Errorln(err)
+				return
+			}
+			*result.(*uint8) = uint8(r)
+		case *uint16:
+			r, err := rCmd.Uint64()
+			if err != nil {
+				basic.Logger.Errorln(err)
+				return
+			}
+			*result.(*uint16) = uint16(r)
+		case *uint32:
+			r, err := rCmd.Uint64()
+			if err != nil {
+				basic.Logger.Errorln(err)
+				return
+			}
+			*result.(*uint32) = uint32(r)
+		case *uint64:
+			r, err := rCmd.Uint64()
+			if err != nil {
+				basic.Logger.Errorln(err)
+				return
+			}
+			*result.(*uint64) = r
+		case *uint:
+			r, err := rCmd.Uint64()
+			if err != nil {
+				basic.Logger.Errorln(err)
+				return
+			}
+			*result.(*uint) = uint(r)
+		case *int8:
+			r, err := rCmd.Int64()
+			if err != nil {
+				basic.Logger.Errorln(err)
+				return
+			}
+			*result.(*int8) = int8(r)
+		case *int16:
+			r, err := rCmd.Int64()
+			if err != nil {
+				basic.Logger.Errorln(err)
+				return
+			}
+			*result.(*int16) = int16(r)
+		case *int32:
+			r, err := rCmd.Int64()
+			if err != nil {
+				basic.Logger.Errorln(err)
+				return
+			}
+			*result.(*int32) = int32(r)
+		case *int64:
+			r, err := rCmd.Int64()
+			if err != nil {
+				basic.Logger.Errorln(err)
+				return
+			}
+			*result.(*int64) = r
+		case *int:
+			r, err := rCmd.Int()
+			if err != nil {
+				basic.Logger.Errorln(err)
+				return
+			}
+			*result.(*int) = r
+		case *float32:
+			r, err := rCmd.Float32()
+			if err != nil {
+				basic.Logger.Errorln(err)
+				return
+			}
+			*result.(*float32) = r
+		case *float64:
+			r, err := rCmd.Float64()
+			if err != nil {
+				basic.Logger.Errorln(err)
+				return
+			}
+			*result.(*float64) = r
+		case complex64, *complex64:
+
+		case complex128, *complex128:
+
+		case *bool:
+			r, err := rCmd.Bool()
+			if err != nil {
+				basic.Logger.Errorln(err)
+				return
+			}
+			*result.(*bool) = r
+		case *string:
+			r := rCmd.String()
+			*result.(*string) = r
+		default:
+			basic.Logger.Errorln("value type error")
+			return
+		}
+
 	}
 }
 
