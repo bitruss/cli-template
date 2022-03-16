@@ -46,6 +46,10 @@ func LRC_Get(ctx context.Context, Redis *redisClient.RedisClient, localCache *UC
 		return
 	} else {
 		if isJSON {
+			if string(r_bytes) == TEMP_NULL {
+				result = nil
+				return
+			}
 			err := json.Unmarshal(r_bytes, result)
 			if err == nil {
 				localCache.Set(keystr, result, LOCAL_CACHE_TIME)
