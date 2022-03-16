@@ -26,29 +26,37 @@ func CheckTtlRefresh(secleft int64) bool {
 }
 
 //first try from localcache if not found then try from remote redis cache
-func LRC_Get(ctx context.Context, Redis *redisClient.RedisClient, localCache *UCache.Cache, isJSON bool, keystr string) (result interface{}) {
+func LRC_Get(ctx context.Context, Redis *redisClient.RedisClient, localCache *UCache.Cache, isJSON bool, keystr string, result interface{}) {
 
 	localvalue, ttl, localexist := localCache.Get(keystr)
 	if !CheckTtlRefresh(ttl) && localexist {
-		return localvalue
+		result = localvalue
+		return
 	}
 
 	//try from remote redis
 	r_bytes, err := Redis.Get(ctx, keystr).Bytes()
 	if err != nil {
-		return nil
+		// if err != redis.Nil {
+		// 	basic.Logger.Errorln(err)
+		// }
+		result = nil
+		return
 	} else {
 		if isJSON {
 			err := json.Unmarshal(r_bytes, result)
 			if err == nil {
 				localCache.Set(keystr, result, LOCAL_CACHE_TIME)
-				return result
+				return
 			} else {
-				return nil
+				//basic.Logger.Errorln(err)
+				result = nil
+				return
 			}
 		} else {
 			localCache.Set(keystr, r_bytes, LOCAL_CACHE_TIME)
-			return r_bytes
+			result = r_bytes
+			return
 		}
 	}
 }
