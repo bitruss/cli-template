@@ -5,9 +5,11 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/tools/json"
 	"github.com/coreservice-io/UCache"
+	"github.com/go-redis/redis/v8"
 )
 
 const LOCAL_CACHE_TIME = 5 //don't change this number as 5 is the proper number
@@ -37,9 +39,9 @@ func LRC_Get(ctx context.Context, Redis *redisClient.RedisClient, localCache *UC
 	//try from remote redis
 	r_bytes, err := Redis.Get(ctx, keystr).Bytes()
 	if err != nil {
-		// if err != redis.Nil {
-		// 	basic.Logger.Errorln(err)
-		// }
+		if err != redis.Nil {
+			basic.Logger.Errorln(err)
+		}
 		result = nil
 		return
 	} else {
@@ -49,7 +51,7 @@ func LRC_Get(ctx context.Context, Redis *redisClient.RedisClient, localCache *UC
 				localCache.Set(keystr, result, LOCAL_CACHE_TIME)
 				return
 			} else {
-				//basic.Logger.Errorln(err)
+				basic.Logger.Errorln(err)
 				result = nil
 				return
 			}
