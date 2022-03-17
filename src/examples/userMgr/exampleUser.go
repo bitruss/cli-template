@@ -118,6 +118,5 @@ func GetUsersByStatus(status string, forceupdate bool) ([]*ExampleUserModel, err
 	} else {
 		smartCache.RR_Set(context.Background(), redisClient.GetInstance(), reference.GetInstance(), true, key, userList, 300)
 		return userList, nil
-
 	}
 }
