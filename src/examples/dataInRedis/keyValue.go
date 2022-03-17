@@ -35,7 +35,7 @@ func DeletePeer(tag string) {
 
 func GetPeer(tag string, forceUpdate bool) *PeerInfo {
 	key := redisClient.GetInstance().GenKey("peerInfo", tag)
-	if forceUpdate == false {
+	if !forceUpdate {
 		// try to get from reference
 		result := smartCache.Ref_Get(reference.GetInstance(), key)
 		if result != nil {
@@ -50,7 +50,7 @@ func GetPeer(tag string, forceUpdate bool) *PeerInfo {
 		return nil
 	}
 	if err == nil {
-		reference.GetInstance().Set(key, &redis_result, smartCache.LOCAL_REFERENCE_TIME)
+		smartCache.Ref_Set(reference.GetInstance(), key, &redis_result)
 		return &redis_result
 	}
 	return nil

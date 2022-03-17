@@ -13,7 +13,7 @@ import (
 )
 
 const temp_null = "temp_null"
-const LOCAL_REFERENCE_TIME = 5 //don't change this number as 5 is the proper number
+const local_reference_secs = 5 //don't change this number as 5 is the proper number
 
 // check weather we need do refresh
 // the probobility becomes lager when left seconds close to 0
@@ -35,6 +35,10 @@ func Ref_Get(localRef *UReference.Reference, keystr string) (result interface{})
 	return nil
 }
 
+func Ref_Set(localRef *UReference.Reference, keystr string, value interface{}) error {
+	return localRef.Set(keystr, value, local_reference_secs)
+}
+
 //first try from localRef if not found then try from remote redis
 func Redis_Get(ctx context.Context, Redis *redisClient.RedisClient, isJSON bool, keystr string, result interface{}) error {
 
@@ -44,7 +48,6 @@ func Redis_Get(ctx context.Context, Redis *redisClient.RedisClient, isJSON bool,
 		return err
 	}
 
-	//add length compar for efficiency
 	if string(r_bytes) == temp_null {
 		return redis.Nil
 	}
@@ -63,7 +66,7 @@ func RR_Set(ctx context.Context, Redis *redisClient.RedisClient, localRef *URefe
 		return Redis.Set(ctx, keystr, temp_null, time.Duration(redis_ttl_second)*time.Second).Err()
 	}
 	if isJSON {
-		err := localRef.Set(keystr, value, LOCAL_REFERENCE_TIME)
+		err := localRef.Set(keystr, value, local_reference_secs)
 		if err != nil {
 			return err
 		}
@@ -73,7 +76,7 @@ func RR_Set(ctx context.Context, Redis *redisClient.RedisClient, localRef *URefe
 		}
 		return Redis.Set(ctx, keystr, v_json, time.Duration(redis_ttl_second)*time.Second).Err()
 	} else {
-		err := localRef.Set(keystr, value, LOCAL_REFERENCE_TIME)
+		err := localRef.Set(keystr, value, local_reference_secs)
 		if err != nil {
 			return err
 		}
