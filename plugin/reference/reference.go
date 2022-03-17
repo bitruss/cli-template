@@ -1,18 +1,18 @@
-package cache
+package reference
 
 import (
 	"fmt"
 
-	"github.com/coreservice-io/UCache"
+	"github.com/coreservice-io/UReference"
 )
 
-var instanceMap = map[string]*UCache.Cache{}
+var instanceMap = map[string]*UReference.Reference{}
 
-func GetInstance() *UCache.Cache {
+func GetInstance() *UReference.Reference {
 	return instanceMap["default"]
 }
 
-func GetInstance_(name string) *UCache.Cache {
+func GetInstance_(name string) *UReference.Reference {
 	return instanceMap[name]
 }
 
@@ -30,8 +30,8 @@ func Init_(name string) error {
 
 	_, exist := instanceMap[name]
 	if exist {
-		return fmt.Errorf("cache instance <%s> has already initialized", name)
+		return fmt.Errorf("reference instance <%s> has already initialized", name)
 	}
-	instanceMap[name] = UCache.New()
+	instanceMap[name] = UReference.New()
 	return nil
 }

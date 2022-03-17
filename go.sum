@@ -107,8 +107,6 @@ github.com/coreservice-io/LogrusULog v0.1.18 h1:UvGpGEWi45GpUqGkp+iKELZTXCiMmQ7A
 github.com/coreservice-io/LogrusULog v0.1.18/go.mod h1:9ptUgo0PIKXv7L5y9TDDD6vUbt9VimYNT83mG6npZ9E=
 github.com/coreservice-io/RedisSpr v0.1.18 h1:ThbSak8rsRwexzuUChapQDadYBWnNbB2Xr1iK5UAUE0=
 github.com/coreservice-io/RedisSpr v0.1.18/go.mod h1:absPLrL4U4l452FEctr7t+qHrxUzoKDNZ2zKRH5/WH8=
-github.com/coreservice-io/UCache v0.1.5 h1:WBPXXwdwTILi2aKd6mK2NuBHqO+pydOl8lANuvh6lg4=
-github.com/coreservice-io/UCache v0.1.5/go.mod h1:KGZEbGNqjoOj0PDQymDjnFsGhq9K9pNfbESFPg34lV8=
 github.com/coreservice-io/UECSUploader v0.0.1 h1:OCpYVlkuyvYSPNW23dukpYLf4KZ0yXp1O0qmXpe6hT8=
 github.com/coreservice-io/UECSUploader v0.0.1/go.mod h1:1uFTLofHvR37uguXioe00jYAlreN12Ij409hOv+AbKU=
 github.com/coreservice-io/UHub v0.0.1 h1:Iwn3E7/wXuUEi0yvDZlssZo37VccYL9pZb3Rj5a1UnY=
@@ -117,6 +115,8 @@ github.com/coreservice-io/UJob v0.1.5 h1:y8CWCe4u/MQpMdntjN5+8IZz7KHO0eyu+Ppc6ko
 github.com/coreservice-io/UJob v0.1.5/go.mod h1:/ZTM07jDA1yDF8ZaAT5+RnHsdL8Je/UHZ8y7HRuIZVY=
 github.com/coreservice-io/ULog v0.1.16 h1:igrNoT0xGeL32hgKPahoTCm9ifhRu32uH9VX+2fvw/k=
 github.com/coreservice-io/ULog v0.1.16/go.mod h1:AUDPBWJxVLwVXzge/aAV4p9AFcpzn1YyWU+u5b8s9Pg=
+github.com/coreservice-io/UReference v0.0.4 h1:f9pxmJvjXys3QGKUcKVyzJNWY05e+0AJVkoCb8IWlVM=
+github.com/coreservice-io/UReference v0.0.4/go.mod h1:Wv98y4kGOJyTqz8t55zxk0M/aeZCEfz+WL4RmK/+JQQ=
 github.com/coreservice-io/USafeGo v0.1.3 h1:6sgX693pcl9YUNizO9d9urycegu3n6PxtDCh4CcEJdY=
 github.com/coreservice-io/USafeGo v0.1.3/go.mod h1:di1eGbMLo1BCzVRB5mqn8620hVCmUXQFtGDl1xmCv8I=
 github.com/coreservice-io/UUtils v0.1.5 h1:VF2BU31wl/1MIUwrNbMWXa6oyf3fXblyWMkqOg0IA0Q=

@@ -6,12 +6,12 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/basic"
 	examples "github.com/coreservice-io/CliAppTemplate/cmd/default_/plugin_examples"
 	"github.com/coreservice-io/CliAppTemplate/configuration"
-	"github.com/coreservice-io/CliAppTemplate/plugin/cache"
 	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
 	"github.com/coreservice-io/CliAppTemplate/plugin/ecs"
 	"github.com/coreservice-io/CliAppTemplate/plugin/ecsUploader"
 	"github.com/coreservice-io/CliAppTemplate/plugin/hub"
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
+	"github.com/coreservice-io/CliAppTemplate/plugin/reference"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sprMgr"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
 	"github.com/coreservice-io/RedisSpr"
@@ -203,21 +203,21 @@ func initDB() error {
 }
 
 //example 3 cache instance
-func initCache() error {
+func initReference() error {
 	//default instance
-	err := cache.Init()
+	err := reference.Init()
 	if err != nil {
 		return err
 	}
 
 	// cache1 instance
-	err = cache.Init_("cache1")
+	err = reference.Init_("ref1")
 	if err != nil {
 		return err
 	}
 
 	// cache2 instance
-	err = cache.Init_("cache2")
+	err = reference.Init_("ref2")
 	if err != nil {
 		return err
 	}
@@ -244,12 +244,12 @@ func initComponent() {
 	examples.Hub_run()
 	/////////////////////////
 
-	err = initCache()
+	err = initReference()
 	if err != nil {
 		basic.Logger.Fatalln(err)
 	}
 
-	examples.Cache_run()
+	examples.Reference_run()
 	/////////////////////////
 	err = initEchoServer()
 	if err != nil {
