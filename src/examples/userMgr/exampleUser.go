@@ -23,13 +23,6 @@ type ExampleUserModel struct {
 }
 
 func CreateUser(userInfo *ExampleUserModel) (*ExampleUserModel, error) {
-	//userInfo in param data
-	//&ExampleUserModel{
-	//	Status: "normal",
-	//	Name:"userName",
-	//	Email:"mail@email.com",
-	//}
-
 	if err := sqldb.GetInstance().Create(userInfo).Error; err != nil {
 		return nil, err
 	}
@@ -51,13 +44,6 @@ func DeleteUser(id int) error {
 }
 
 func UpdateUser(newData map[string]interface{}, id int) error {
-	//newData in param data
-	//newData= map[string]interface{}{
-	//	"status":"error",
-	//	"name":"userName2",
-	//	"email":"mail2@email.com",
-	//}
-
 	newData["updated"] = time.Now().UTC().Unix()
 	result := sqldb.GetInstance().Table("example_user_models").Where("id=?", id).Updates(newData)
 	if result.Error != nil {
@@ -82,9 +68,6 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 		// try to get from redis
 		redis_result := &ExampleUserModel{}
 		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), true, key, redis_result)
-		//if err == redis.Nil {
-		//	return nil, nil
-		//}
 		if err == nil {
 			smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
 			return redis_result, nil
