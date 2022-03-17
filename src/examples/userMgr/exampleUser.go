@@ -77,6 +77,7 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 		// try to get from reference
 		result := smartCache.Ref_Get(reference.GetInstance(), key)
 		if result != nil {
+			basic.Logger.Debugln("GetUserById local ref hit")
 			return result.(*ExampleUserModel), nil
 		}
 
@@ -87,6 +88,7 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 			return nil, nil
 		}
 		if err == nil {
+			basic.Logger.Debugln("GetUserById local redis hit")
 			return redis_result, nil
 		}
 	}
