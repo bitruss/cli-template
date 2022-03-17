@@ -9,7 +9,6 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/tools/json"
 	"github.com/coreservice-io/UReference"
-	"github.com/go-redis/redis/v8"
 )
 
 const temp_null = "temp_null"
@@ -49,7 +48,7 @@ func Redis_Get(ctx context.Context, Redis *redisClient.RedisClient, isJSON bool,
 	}
 
 	if string(r_bytes) == temp_null {
-		return redis.Nil
+		return nil
 	}
 
 	if isJSON {

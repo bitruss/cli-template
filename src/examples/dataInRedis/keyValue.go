@@ -44,14 +44,14 @@ func GetPeer(tag string, forceUpdate bool) *PeerInfo {
 	}
 
 	// try to get from redis
-	var redis_result PeerInfo
-	err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), true, key, &redis_result)
+	var redis_result *PeerInfo
+	err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), true, key, redis_result)
 	if err == redis.Nil {
 		return nil
 	}
 	if err == nil {
-		smartCache.Ref_Set(reference.GetInstance(), key, &redis_result)
-		return &redis_result
+		smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
+		return redis_result
 	}
 	return nil
 }

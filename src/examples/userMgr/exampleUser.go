@@ -10,7 +10,6 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/reference"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
 	"github.com/coreservice-io/CliAppTemplate/tools/smartCache"
-	"github.com/go-redis/redis/v8"
 )
 
 //example for GormDB and tools cache
@@ -83,10 +82,11 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 		// try to get from redis
 		redis_result := &ExampleUserModel{}
 		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), true, key, redis_result)
-		if err == redis.Nil {
-			return nil, nil
-		}
+		//if err == redis.Nil {
+		//	return nil, nil
+		//}
 		if err == nil {
+			smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
 			return redis_result, nil
 		}
 	}
@@ -105,5 +105,36 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 			smartCache.RR_Set(context.Background(), redisClient.GetInstance(), reference.GetInstance(), true, key, userList[0], 300)
 			return userList[0], nil
 		}
+	}
+}
+
+func GetUsersByStatus(status string, forceupdate bool) ([]*ExampleUserModel, error) {
+	key := redisClient.GetInstance().GenKey("users", "status", status)
+	if !forceupdate {
+		// try to get from reference
+		result := smartCache.Ref_Get(reference.GetInstance(), key)
+		if result != nil {
+			return result.([]*ExampleUserModel), nil
+		}
+
+		// try to get from redis
+		redis_result := []*ExampleUserModel{}
+		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), true, key, &redis_result)
+		if err == nil {
+			smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
+			return redis_result, nil
+		}
+	}
+
+	//after cache miss ,try from remote database
+	var userList []*ExampleUserModel
+	err := sqldb.GetInstance().Table("example_user_models").Where("status = ?", status).Find(&userList).Error
+	if err != nil {
+		basic.Logger.Errorln("GetUserByStatus err :", err)
+		return nil, err
+	} else {
+		smartCache.RR_Set(context.Background(), redisClient.GetInstance(), reference.GetInstance(), true, key, userList, 300)
+		return userList, nil
+
 	}
 }

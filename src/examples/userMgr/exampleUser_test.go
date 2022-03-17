@@ -48,7 +48,6 @@ func init() {
 
 func Test_UserDB(t *testing.T) {
 	//important! Please create db table before you run this test.
-
 	//add
 	log.Println("---add user---")
 	newUser := &ExampleUserModel{
@@ -113,4 +112,37 @@ func Test_UserDB(t *testing.T) {
 		return
 	}
 	log.Println("userInfo:", userInfo)
+}
+
+func Test_UserArray(t *testing.T) {
+	// user array
+	//for i := 0; i < 10; i++ {
+	//	newUser := &ExampleUserModel{
+	//		Status: "normal",
+	//		Name:   "userName" + strconv.Itoa(i),
+	//		Email:  "mail@email.com",
+	//	}
+	//	if i > 5 {
+	//		newUser.Status = "forbidden"
+	//	}
+	//	_, err := CreateUser(newUser)
+	//	if err != nil {
+	//		log.Println("InsertUser error:", err)
+	//		return
+	//	}
+	//}
+
+	userList, err := GetUsersByStatus("forbidden", false)
+	if err != nil {
+		log.Println("GetUsersByStatus error:", err)
+		return
+	}
+	log.Println(userList)
+
+	userList, err = GetUsersByStatus("forbidden", false)
+	if err != nil {
+		log.Println("GetUsersByStatus error:", err)
+		return
+	}
+	log.Println(userList)
 }
