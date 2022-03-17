@@ -50,7 +50,7 @@ func Job_Safeo_run() {
 		errors.PanicHandler)
 
 	for i := 0; i < 10; i++ {
-		basic.Logger.Infoln("running")
+		basic.Logger.Debugln("running")
 		time.Sleep(1 * time.Second)
 	}
 }

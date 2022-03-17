@@ -16,8 +16,8 @@ func (e testEvent) Kind() uhub.Kind {
 }
 func Hub_run() {
 	hub.GetInstance().Subscribe(testKind, func(e uhub.Event) {
-		basic.Logger.Infoln("hub callback")
-		basic.Logger.Infoln(string(e.(testEvent)))
+		basic.Logger.Debugln("hub callback")
+		basic.Logger.Debugln(string(e.(testEvent)))
 	})
 	hub.GetInstance().Publish(testEvent("hub message"))
 }

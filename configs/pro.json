@@ -21,7 +21,7 @@
   "http_api":true,
   "infura1": "xxxx",
   "infura2": "xxxxx",
-  "local_log_level": "INFO",
+  "local_log_level": "DEBUG",
 
   "redis_addr": "127.0.0.1",
   "redis_password": "",
