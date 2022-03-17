@@ -3,6 +3,7 @@ package dataInRedis
 import (
 	"context"
 
+	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/plugin/reference"
 	"github.com/coreservice-io/CliAppTemplate/tools/smartCache"
@@ -38,6 +39,7 @@ func GetPeer(tag string, forceUpdate bool) *PeerInfo {
 		// try to get from reference
 		result := smartCache.Ref_Get(reference.GetInstance(), key)
 		if result != nil {
+			basic.Logger.Debugln("GetPeer hit from reference")
 			return result.(*PeerInfo)
 		}
 	}
@@ -46,6 +48,7 @@ func GetPeer(tag string, forceUpdate bool) *PeerInfo {
 	var redis_result *PeerInfo
 	err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), true, key, redis_result)
 	if err == nil {
+		basic.Logger.Debugln("GetPeer hit from redis")
 		smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
 		return redis_result
 	}

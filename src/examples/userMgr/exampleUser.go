@@ -62,6 +62,7 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 		// try to get from reference
 		result := smartCache.Ref_Get(reference.GetInstance(), key)
 		if result != nil {
+			basic.Logger.Debugln("GetUserById hit from reference")
 			return result.(*ExampleUserModel), nil
 		}
 
@@ -69,12 +70,14 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 		redis_result := &ExampleUserModel{}
 		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), true, key, redis_result)
 		if err == nil {
+			basic.Logger.Debugln("GetUserById hit from redis")
 			smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
 			return redis_result, nil
 		}
 	}
 
 	//after cache miss ,try from remote database
+	basic.Logger.Debugln("GetUserById try from db")
 	var userList []*ExampleUserModel
 	err := sqldb.GetInstance().Table("example_user_models").Where("id = ?", userid).Find(&userList).Error
 	if err != nil {
@@ -97,6 +100,7 @@ func GetUsersByStatus(status string, forceupdate bool) ([]*ExampleUserModel, err
 		// try to get from reference
 		result := smartCache.Ref_Get(reference.GetInstance(), key)
 		if result != nil {
+			basic.Logger.Debugln("GetUsersByStatus hit from reference")
 			return result.([]*ExampleUserModel), nil
 		}
 
@@ -104,16 +108,18 @@ func GetUsersByStatus(status string, forceupdate bool) ([]*ExampleUserModel, err
 		redis_result := []*ExampleUserModel{}
 		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), true, key, &redis_result)
 		if err == nil {
+			basic.Logger.Debugln("GetUsersByStatus hit from redis")
 			smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
 			return redis_result, nil
 		}
 	}
 
 	//after cache miss ,try from remote database
+	basic.Logger.Debugln("GetUsersByStatus try from database")
 	var userList []*ExampleUserModel
 	err := sqldb.GetInstance().Table("example_user_models").Where("status = ?", status).Find(&userList).Error
 	if err != nil {
-		basic.Logger.Errorln("GetUserByStatus err :", err)
+		basic.Logger.Errorln("GetUsersByStatus err :", err)
 		return nil, err
 	} else {
 		smartCache.RR_Set(context.Background(), redisClient.GetInstance(), reference.GetInstance(), true, key, userList, 300)
