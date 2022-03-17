@@ -25,16 +25,10 @@ type ExampleUserModel struct {
 
 func CreateUser(userInfo *ExampleUserModel) (*ExampleUserModel, error) {
 	//userInfo in param data
-	//&ExampleUserModel{
-	//	Status: "normal",
-	//	Name:"userName",
-	//	Email:"mail@email.com",
-	//}
-
 	if err := sqldb.GetInstance().Create(userInfo).Error; err != nil {
 		return nil, err
 	}
-	//GetUserById(userInfo.ID, true)
+	GetUserById(userInfo.ID, true)
 	return userInfo, nil
 }
 
@@ -43,31 +37,21 @@ func DeleteUser(id int) error {
 	if err := sqldb.GetInstance().Table("example_user_models").Delete(user).Error; err != nil {
 		return err
 	}
-
 	//delete cache
 	key := redisClient.GetInstance().GenKey("user", strconv.Itoa(id))
 	smartCache.RR_Del(context.Background(), redisClient.GetInstance(), reference.GetInstance(), key)
-
 	return nil
 }
 
 func UpdateUser(newData map[string]interface{}, id int) error {
 	//newData in param data
-	//newData= map[string]interface{}{
-	//	"status":"error",
-	//	"name":"userName2",
-	//	"email":"mail2@email.com",
-	//}
-
 	newData["updated"] = time.Now().UTC().Unix()
 	result := sqldb.GetInstance().Table("example_user_models").Where("id=?", id).Updates(newData)
 	if result.Error != nil {
 		return result.Error
 	}
-
 	//refresh cache
 	GetUserById(id, true)
-
 	return nil
 }
 
@@ -80,7 +64,6 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 			basic.Logger.Debugln("GetUserById local ref hit")
 			return result.(*ExampleUserModel), nil
 		}
-
 		// try to get from redis
 		redis_result := &ExampleUserModel{}
 		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), true, key, redis_result)
