@@ -126,3 +126,42 @@ func GetUsersByStatus(status string, forceupdate bool) ([]*ExampleUserModel, err
 		return userList, nil
 	}
 }
+
+// not recommended usage
+func GetUserNameById(userid int, forceupdate bool) (string, error) {
+	key := redisClient.GetInstance().GenKey("user", "name", strconv.Itoa(userid))
+	if !forceupdate {
+		// try to get from reference
+		result := smartCache.Ref_Get(reference.GetInstance(), key)
+		if result != nil {
+			basic.Logger.Debugln("GetUserNameById hit from reference")
+			return *result.(*string), nil
+		}
+
+		// try to get from redis
+		var redis_result string
+		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), false, key, &redis_result)
+		if err == nil {
+			basic.Logger.Debugln("GetUserNameById hit from redis")
+			smartCache.Ref_Set(reference.GetInstance(), key, &redis_result)
+			return redis_result, nil
+		}
+	}
+
+	//after cache miss ,try from remote database
+	basic.Logger.Debugln("GetUserNameById try from db")
+	var userName []string
+	err := sqldb.GetInstance().Table("example_user_models").Select("name").Where("id = ?", userid).Find(&userName).Error
+	if err != nil {
+		basic.Logger.Errorln("GetUserById err :", err)
+		return "", err
+	} else {
+		if len(userName) == 0 {
+			smartCache.RR_Set(context.Background(), redisClient.GetInstance(), reference.GetInstance(), false, key, nil, 300)
+			return "", nil
+		} else {
+			smartCache.RR_Set(context.Background(), redisClient.GetInstance(), reference.GetInstance(), false, key, &userName[0], 300)
+			return userName[0], nil
+		}
+	}
+}

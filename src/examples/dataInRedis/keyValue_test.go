@@ -4,11 +4,14 @@ import (
 	"log"
 	"testing"
 
+	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/plugin/reference"
 )
 
 func init() {
+	basic.InitLogger()
+
 	//redis
 	err := redisClient.Init(redisClient.Config{
 		Address:   "127.0.0.1",

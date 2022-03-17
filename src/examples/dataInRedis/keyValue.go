@@ -45,7 +45,7 @@ func GetPeer(tag string, forceUpdate bool) *PeerInfo {
 	}
 
 	// try to get from redis
-	var redis_result *PeerInfo
+	redis_result := &PeerInfo{}
 	err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), true, key, redis_result)
 	if err == nil {
 		basic.Logger.Debugln("GetPeer hit from redis")

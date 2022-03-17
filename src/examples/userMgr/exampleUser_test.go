@@ -4,12 +4,15 @@ import (
 	"log"
 	"testing"
 
+	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/plugin/reference"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
 )
 
 func init() {
+	basic.InitLogger()
+
 	//db
 	err := sqldb.Init(sqldb.Config{
 		Host:     "127.0.0.1",
@@ -112,6 +115,7 @@ func Test_UserDB(t *testing.T) {
 		return
 	}
 	log.Println("userInfo:", userInfo)
+
 }
 
 func Test_UserArray(t *testing.T) {
@@ -145,4 +149,37 @@ func Test_UserArray(t *testing.T) {
 		return
 	}
 	log.Println(userList)
+}
+
+func Test_UserName(t *testing.T) {
+	// user array
+	//for i := 0; i < 10; i++ {
+	//	newUser := &ExampleUserModel{
+	//		Status: "normal",
+	//		Name:   "userName" + strconv.Itoa(i),
+	//		Email:  "mail@email.com",
+	//	}
+	//	if i > 5 {
+	//		newUser.Status = "forbidden"
+	//	}
+	//	_, err := CreateUser(newUser)
+	//	if err != nil {
+	//		log.Println("InsertUser error:", err)
+	//		return
+	//	}
+	//}
+
+	userName, err := GetUserNameById(5, false)
+	if err != nil {
+		log.Println("GetUserNameById error:", err)
+		return
+	}
+	log.Println(userName)
+
+	userName, err = GetUserNameById(5, false)
+	if err != nil {
+		log.Println("GetUsersByStatus error:", err)
+		return
+	}
+	log.Println(userName)
 }
