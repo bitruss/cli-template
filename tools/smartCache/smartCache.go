@@ -2,7 +2,6 @@ package smartCache
 
 import (
 	"context"
-	"errors"
 	"math/rand"
 	"reflect"
 	"time"
@@ -13,7 +12,7 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-const TEMP_NULL = "TEMP_NULL"
+const temp_null = "temp_null"
 const LOCAL_REFERENCE_TIME = 5 //don't change this number as 5 is the proper number
 
 // check weather we need do refresh
@@ -46,7 +45,7 @@ func Redis_Get(ctx context.Context, Redis *redisClient.RedisClient, isJSON bool,
 	}
 
 	//add length compar for efficiency
-	if string(r_bytes) == TEMP_NULL {
+	if string(r_bytes) == temp_null {
 		return redis.Nil
 	}
 
@@ -61,17 +60,23 @@ func Redis_Get(ctx context.Context, Redis *redisClient.RedisClient, isJSON bool,
 // set both value to both local reference & remote redis
 func RR_Set(ctx context.Context, Redis *redisClient.RedisClient, localRef *UReference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64) error {
 	if value == nil {
-		return errors.New("nil value not supported")
+		return Redis.Set(ctx, keystr, temp_null, time.Duration(redis_ttl_second)*time.Second).Err()
 	}
 	if isJSON {
-		localRef.Set(keystr, value, LOCAL_REFERENCE_TIME)
+		err := localRef.Set(keystr, value, LOCAL_REFERENCE_TIME)
+		if err != nil {
+			return err
+		}
 		v_json, err := json.Marshal(value)
 		if err != nil {
 			return err
 		}
 		return Redis.Set(ctx, keystr, v_json, time.Duration(redis_ttl_second)*time.Second).Err()
 	} else {
-		localRef.Set(keystr, value, LOCAL_REFERENCE_TIME)
+		err := localRef.Set(keystr, value, LOCAL_REFERENCE_TIME)
+		if err != nil {
+			return err
+		}
 		tp := reflect.TypeOf(value).Kind()
 		if tp == reflect.Ptr {
 			return Redis.Set(ctx, keystr, reflect.ValueOf(value).Elem().Interface(), time.Duration(redis_ttl_second)*time.Second).Err()
