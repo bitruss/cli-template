@@ -10,6 +10,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/reference"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
 	"github.com/coreservice-io/CliAppTemplate/tools/smartCache"
+	"github.com/go-redis/redis/v8"
 )
 
 //example for GormDB and tools cache
@@ -52,7 +53,6 @@ func UpdateUser(newData map[string]interface{}, id int) error {
 
 	//refresh cache
 	GetUserById(id, true)
-
 	return nil
 }
 
@@ -73,6 +73,13 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 			basic.Logger.Debugln("GetUserById hit from redis")
 			smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
 			return redis_result, nil
+		} else if err == smartCache.TempNil {
+			return nil, nil
+		} else if err == redis.Nil {
+			//continue to get from db part
+		} else {
+			//redis may broken, just return to keep db safe
+			return nil, err
 		}
 	}
 
@@ -111,6 +118,11 @@ func GetUsersByStatus(status string, forceupdate bool) ([]*ExampleUserModel, err
 			basic.Logger.Debugln("GetUsersByStatus hit from redis")
 			smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
 			return redis_result, nil
+		} else if err == redis.Nil {
+			//continue to get from db part
+		} else {
+			//redis may broken, just return to keep db safe
+			return nil, err
 		}
 	}
 
@@ -143,8 +155,15 @@ func GetUserNameById(userid int, forceupdate bool) (string, error) {
 		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), false, key, &redis_result)
 		if err == nil {
 			basic.Logger.Debugln("GetUserNameById hit from redis")
-			smartCache.Ref_Set(reference.GetInstance(), key, &redis_result)
+			smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
 			return redis_result, nil
+		} else if err == smartCache.TempNil {
+			return "", nil
+		} else if err == redis.Nil {
+			//continue to get from db part
+		} else {
+			//redis may broken, just return to keep db safe
+			return "", err
 		}
 	}
 

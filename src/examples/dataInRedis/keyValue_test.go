@@ -46,11 +46,11 @@ func Test_peer(t *testing.T) {
 		log.Fatalln("SetPeer err", err, "tag", tag)
 	}
 
-	pp := GetPeer(tag, false)
-	log.Println(pp)
+	pp, err := GetPeer(tag, false)
+	log.Println(pp, err)
 
 	DeletePeer(tag)
 
-	pp = GetPeer(tag, false)
-	log.Println(pp)
+	pp, err = GetPeer(tag, false)
+	log.Println(pp, err)
 }
