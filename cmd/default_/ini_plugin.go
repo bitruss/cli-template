@@ -16,6 +16,8 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
 	"github.com/coreservice-io/RedisSpr"
 	"github.com/coreservice-io/UUtils/path_util"
+
+	tool_errors "github.com/coreservice-io/CliAppTemplate/tools/errors"
 )
 
 func iniHub() error {
@@ -32,11 +34,11 @@ func initEchoServer() error {
 	if err == nil {
 		absPath, err := path_util.SmartExistPath(http_static_rel_folder)
 		if err == nil {
-			return echoServer.Init(echoServer.Config{Port: http_port, StaticFolder: absPath}, basic.Logger)
+			return echoServer.Init(echoServer.Config{Port: http_port, StaticFolder: absPath}, tool_errors.PanicHandler, basic.Logger)
 		}
 	}
 
-	return echoServer.Init(echoServer.Config{Port: http_port}, basic.Logger)
+	return echoServer.Init(echoServer.Config{Port: http_port}, tool_errors.PanicHandler, basic.Logger)
 }
 
 func initElasticSearch() error {

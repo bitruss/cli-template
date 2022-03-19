@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/coreservice-io/CliAppTemplate/tools/errors"
 	"github.com/coreservice-io/EchoMiddleware"
 	"github.com/coreservice-io/EchoMiddleware/tool"
 	"github.com/coreservice-io/ULog"
@@ -38,14 +37,14 @@ type Config struct {
 	StaticFolder string
 }
 
-func Init(serverConfig Config, logger ULog.Logger) error {
-	return Init_("default", serverConfig, logger)
+func Init(serverConfig Config, OnPanicHanlder func(panic_err interface{}), logger ULog.Logger) error {
+	return Init_("default", serverConfig, OnPanicHanlder, logger)
 }
 
 // Init a new instance.
 //  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
 //  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
-func Init_(name string, serverConfig Config, logger ULog.Logger) error {
+func Init_(name string, serverConfig Config, OnPanicHanlder func(panic_err interface{}), logger ULog.Logger) error {
 	if name == "" {
 		name = "default"
 	}
@@ -79,7 +78,7 @@ func Init_(name string, serverConfig Config, logger ULog.Logger) error {
 	}))
 	//recover and panicHandler
 	echoServer.Use(EchoMiddleware.RecoverWithConfig(EchoMiddleware.RecoverConfig{
-		OnPanic: errors.PanicHandler,
+		OnPanic: OnPanicHanlder,
 	}))
 	echoServer.JSONSerializer = tool.NewJsoniter()
 
