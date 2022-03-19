@@ -10,7 +10,6 @@ import (
 // @Summary      health check
 // @Description  health check
 // @Tags         health
-// @Security     ApiKeyAuth
 // @Produce      json
 // @Success      200 {object} echoServer.RespBody{data=int64} "result"
 // @Router       /api/health [get]

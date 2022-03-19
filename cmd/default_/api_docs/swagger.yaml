@@ -1,10 +1,43 @@
 definitions:
+  api.CreateUserMsg:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+  api.UpdateUserMsg:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      status:
+        type: string
+    type: object
   echoServer.RespBody:
     properties:
       msg:
         type: string
       result: {}
       status:
+        type: integer
+    type: object
+  userMgr.ExampleUserModel:
+    properties:
+      created:
+        type: integer
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      status:
+        type: string
+      updated:
         type: integer
     type: object
 host: 127.0.0.1:80
@@ -36,11 +69,88 @@ paths:
                 data:
                   type: integer
               type: object
-      security:
-      - ApiKeyAuth: []
       summary: health check
       tags:
       - health
+  /api/user/create:
+    post:
+      consumes:
+      - application/json
+      description: creat user
+      parameters:
+      - description: new user info
+        in: body
+        name: msg
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateUserMsg'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: result
+          schema:
+            allOf:
+            - $ref: '#/definitions/echoServer.RespBody'
+            - properties:
+                result:
+                  $ref: '#/definitions/userMgr.ExampleUserModel'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: creat user
+      tags:
+      - user
+  /api/user/get/{id}:
+    get:
+      description: get user
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: result
+          schema:
+            allOf:
+            - $ref: '#/definitions/echoServer.RespBody'
+            - properties:
+                result:
+                  $ref: '#/definitions/userMgr.ExampleUserModel'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get user
+      tags:
+      - user
+  /api/user/update:
+    post:
+      consumes:
+      - application/json
+      description: update user
+      parameters:
+      - description: update user info
+        in: body
+        name: msg
+        required: true
+        schema:
+          $ref: '#/definitions/api.UpdateUserMsg'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: result
+          schema:
+            $ref: '#/definitions/echoServer.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update user
+      tags:
+      - user
 schemes:
 - http
 securityDefinitions:

@@ -27,11 +27,6 @@ const docTemplate = `{
     "paths": {
         "/api/health": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "health check",
                 "produces": [
                     "application/json"
@@ -61,9 +56,173 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/user/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "creat user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "creat user",
+                "parameters": [
+                    {
+                        "description": "new user info",
+                        "name": "msg",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.CreateUserMsg"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "result",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/echoServer.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/userMgr.ExampleUserModel"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/get/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "get user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "result",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/echoServer.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/userMgr.ExampleUserModel"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/update": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "update user",
+                "parameters": [
+                    {
+                        "description": "update user info",
+                        "name": "msg",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.UpdateUserMsg"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "result",
+                        "schema": {
+                            "$ref": "#/definitions/echoServer.RespBody"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "api.CreateUserMsg": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.UpdateUserMsg": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "echoServer.RespBody": {
             "type": "object",
             "properties": {
@@ -72,6 +231,29 @@ const docTemplate = `{
                 },
                 "result": {},
                 "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "userMgr.ExampleUserModel": {
+            "type": "object",
+            "properties": {
+                "created": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated": {
                     "type": "integer"
                 }
             }
