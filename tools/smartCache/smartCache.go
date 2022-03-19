@@ -9,6 +9,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/tools/json"
 	"github.com/coreservice-io/UReference"
+	"github.com/go-redis/redis/v8"
 )
 
 type temp_nil_error string
@@ -44,7 +45,7 @@ func Ref_Set(localRef *UReference.Reference, keystr string, value interface{}) e
 }
 
 // //first try from localRef if not found then try from remote redis
-func Redis_Get(ctx context.Context, Redis *redisClient.RedisClient, isJSON bool, keystr string, result interface{}) error {
+func Redis_Get(ctx context.Context, Redis *redis.ClusterClient, isJSON bool, keystr string, result interface{}) error {
 
 	scmd := Redis.Get(ctx, keystr) //trigger remote redis get
 	r_bytes, err := scmd.Bytes()
@@ -65,7 +66,7 @@ func Redis_Get(ctx context.Context, Redis *redisClient.RedisClient, isJSON bool,
 
 // reference set && redis set
 // set both value to both local reference & remote redis
-func RR_Set(ctx context.Context, Redis *redisClient.RedisClient, localRef *UReference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64) error {
+func RR_Set(ctx context.Context, Redis *redis.ClusterClient, localRef *UReference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64) error {
 	if value == nil {
 		return Redis.Set(ctx, keystr, temp_nil, time.Duration(redis_ttl_second)*time.Second).Err()
 	}

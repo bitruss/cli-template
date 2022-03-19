@@ -1,4 +1,4 @@
-package dataInRedis
+package test
 
 import (
 	"log"
@@ -7,6 +7,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/plugin/reference"
+	"github.com/coreservice-io/CliAppTemplate/src/examples/dataInRedis"
 )
 
 func init() {
@@ -34,23 +35,23 @@ func init() {
 
 func Test_peer(t *testing.T) {
 	//
-	p := &PeerInfo{
+	p := &dataInRedis.PeerInfo{
 		Tag:      "abcd",
 		Location: "USA",
 		IP:       "127.0.0.1",
 	}
 	tag := "abcd"
 
-	err := SetPeer(p, tag)
+	err := dataInRedis.SetPeer(p, tag)
 	if err != nil {
 		log.Fatalln("SetPeer err", err, "tag", tag)
 	}
 
-	pp, err := GetPeer(tag, false)
+	pp, err := dataInRedis.GetPeer(tag, false)
 	log.Println(pp, err)
 
-	DeletePeer(tag)
+	dataInRedis.DeletePeer(tag)
 
-	pp, err = GetPeer(tag, false)
+	pp, err = dataInRedis.GetPeer(tag, false)
 	log.Println(pp, err)
 }

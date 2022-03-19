@@ -1,4 +1,4 @@
-package userMgr
+package test
 
 import (
 	"log"
@@ -8,6 +8,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/plugin/reference"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
+	"github.com/coreservice-io/CliAppTemplate/src/examples/userMgr"
 )
 
 func init() {
@@ -27,7 +28,7 @@ func init() {
 
 	// auto migrate table in db
 	// please create table by yourself in real project
-	sqldb.GetInstance().AutoMigrate(&ExampleUserModel{})
+	sqldb.GetInstance().AutoMigrate(&userMgr.ExampleUserModel{})
 
 	//redis
 	err = redisClient.Init(redisClient.Config{
@@ -53,12 +54,12 @@ func Test_UserDB(t *testing.T) {
 	//important! Please create db table before you run this test.
 	//add
 	log.Println("---add user---")
-	newUser := &ExampleUserModel{
+	newUser := &userMgr.ExampleUserModel{
 		Status: "normal",
 		Name:   "userName",
 		Email:  "mail@email.com",
 	}
-	newUserInfo, err := CreateUser(newUser)
+	newUserInfo, err := userMgr.CreateUser(newUser)
 	if err != nil {
 		log.Println("InsertUser error:", err)
 		return
@@ -68,7 +69,7 @@ func Test_UserDB(t *testing.T) {
 
 	//get
 	log.Println("---get user---")
-	userInfo, err := GetUserById(ID, false)
+	userInfo, err := userMgr.GetUserById(ID, false)
 	if err != nil {
 		log.Println("GetUserById error:", err)
 		return
@@ -82,13 +83,13 @@ func Test_UserDB(t *testing.T) {
 		"name":   "userName2",
 		"email":  "mail2@email.com",
 	}
-	err = UpdateUser(newData, ID)
+	err = userMgr.UpdateUser(newData, ID)
 	if err != nil {
 		log.Println("UpdateUser error:", err)
 		return
 	}
 	//get
-	userInfo, err = GetUserById(ID, false)
+	userInfo, err = userMgr.GetUserById(ID, false)
 	if err != nil {
 		log.Println("GetUserById error:", err)
 		return
@@ -97,19 +98,19 @@ func Test_UserDB(t *testing.T) {
 
 	//delete
 	log.Println("---delete user---")
-	err = DeleteUser(ID)
+	err = userMgr.DeleteUser(ID)
 	if err != nil {
 		log.Println("DeleteUser error:", err)
 		return
 	}
-	userInfo, err = GetUserById(ID, false)
+	userInfo, err = userMgr.GetUserById(ID, false)
 	if err != nil {
 		log.Println("GetUserById error:", err)
 		return
 	}
 	log.Println("userInfo:", userInfo)
 
-	userInfo, err = GetUserById(ID, false)
+	userInfo, err = userMgr.GetUserById(ID, false)
 	if err != nil {
 		log.Println("GetUserById error:", err)
 		return
@@ -136,14 +137,14 @@ func Test_UserArray(t *testing.T) {
 	//	}
 	//}
 
-	userList, err := GetUsersByStatus("forbidden", false)
+	userList, err := userMgr.GetUsersByStatus("forbidden", false)
 	if err != nil {
 		log.Println("GetUsersByStatus error:", err)
 		return
 	}
 	log.Println(userList)
 
-	userList, err = GetUsersByStatus("forbidden", false)
+	userList, err = userMgr.GetUsersByStatus("forbidden", false)
 	if err != nil {
 		log.Println("GetUsersByStatus error:", err)
 		return
@@ -169,14 +170,14 @@ func Test_UserName(t *testing.T) {
 	//	}
 	//}
 
-	userName, err := GetUserNameById(5, false)
+	userName, err := userMgr.GetUserNameById(5, false)
 	if err != nil {
 		log.Println("GetUserNameById error:", err)
 		return
 	}
 	log.Println(userName)
 
-	userName, err = GetUserNameById(5, false)
+	userName, err = userMgr.GetUserNameById(5, false)
 	if err != nil {
 		log.Println("GetUsersByStatus error:", err)
 		return

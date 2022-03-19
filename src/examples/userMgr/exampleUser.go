@@ -68,7 +68,7 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 
 		// try to get from redis
 		redis_result := &ExampleUserModel{}
-		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), true, key, redis_result)
+		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance().ClusterClient, true, key, redis_result)
 		if err == nil {
 			basic.Logger.Debugln("GetUserById hit from redis")
 			smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
@@ -92,10 +92,10 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 		return nil, err
 	} else {
 		if len(userList) == 0 {
-			smartCache.RR_Set(context.Background(), redisClient.GetInstance(), reference.GetInstance(), false, key, nil, 300)
+			smartCache.RR_Set(context.Background(), redisClient.GetInstance().ClusterClient, reference.GetInstance(), false, key, nil, 300)
 			return nil, nil
 		} else {
-			smartCache.RR_Set(context.Background(), redisClient.GetInstance(), reference.GetInstance(), true, key, userList[0], 300)
+			smartCache.RR_Set(context.Background(), redisClient.GetInstance().ClusterClient, reference.GetInstance(), true, key, userList[0], 300)
 			return userList[0], nil
 		}
 	}
@@ -113,7 +113,7 @@ func GetUsersByStatus(status string, forceupdate bool) ([]*ExampleUserModel, err
 
 		// try to get from redis
 		redis_result := []*ExampleUserModel{}
-		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), true, key, &redis_result)
+		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance().ClusterClient, true, key, &redis_result)
 		if err == nil {
 			basic.Logger.Debugln("GetUsersByStatus hit from redis")
 			smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
@@ -134,7 +134,7 @@ func GetUsersByStatus(status string, forceupdate bool) ([]*ExampleUserModel, err
 		basic.Logger.Errorln("GetUsersByStatus err :", err)
 		return nil, err
 	} else {
-		smartCache.RR_Set(context.Background(), redisClient.GetInstance(), reference.GetInstance(), true, key, userList, 300)
+		smartCache.RR_Set(context.Background(), redisClient.GetInstance().ClusterClient, reference.GetInstance(), true, key, userList, 300)
 		return userList, nil
 	}
 }
@@ -152,7 +152,7 @@ func GetUserNameById(userid int, forceupdate bool) (string, error) {
 
 		// try to get from redis
 		var redis_result string
-		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance(), false, key, &redis_result)
+		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance().ClusterClient, false, key, &redis_result)
 		if err == nil {
 			basic.Logger.Debugln("GetUserNameById hit from redis")
 			smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
@@ -176,10 +176,10 @@ func GetUserNameById(userid int, forceupdate bool) (string, error) {
 		return "", err
 	} else {
 		if len(userName) == 0 {
-			smartCache.RR_Set(context.Background(), redisClient.GetInstance(), reference.GetInstance(), false, key, nil, 300)
+			smartCache.RR_Set(context.Background(), redisClient.GetInstance().ClusterClient, reference.GetInstance(), false, key, nil, 300)
 			return "", nil
 		} else {
-			smartCache.RR_Set(context.Background(), redisClient.GetInstance(), reference.GetInstance(), false, key, &userName[0], 300)
+			smartCache.RR_Set(context.Background(), redisClient.GetInstance().ClusterClient, reference.GetInstance(), false, key, &userName[0], 300)
 			return userName[0], nil
 		}
 	}
