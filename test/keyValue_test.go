@@ -10,7 +10,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/src/examples/dataInRedis"
 )
 
-func init() {
+func initialize_kv() {
 	basic.InitLogger()
 
 	//redis
@@ -34,6 +34,7 @@ func init() {
 }
 
 func Test_peer(t *testing.T) {
+	initialize_kv()
 	//
 	p := &dataInRedis.PeerInfo{
 		Tag:      "abcd",

@@ -10,7 +10,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/tools/smartCache"
 )
 
-func init() {
+func initialize_smc() {
 	//redis
 	err := redisClient.Init(redisClient.Config{
 		Address:   "127.0.0.1",
@@ -37,6 +37,7 @@ type person struct {
 }
 
 func Test_BuildInType(t *testing.T) {
+	initialize_smc()
 	key := "test:111"
 	v := 7
 	err := smartCache.RR_Set(context.Background(), redisClient.GetInstance().ClusterClient, reference.GetInstance(), false, key, &v, 300)
@@ -51,6 +52,7 @@ func Test_BuildInType(t *testing.T) {
 }
 
 func Test_Struct(t *testing.T) {
+	initialize_smc()
 	key := "test:111"
 	v := &person{
 		Name: "Jack",

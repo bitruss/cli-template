@@ -11,7 +11,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/src/examples/userMgr"
 )
 
-func init() {
+func initialize_exampleuser() {
 	basic.InitLogger()
 
 	//db
@@ -51,6 +51,7 @@ func init() {
 }
 
 func Test_UserDB(t *testing.T) {
+	initialize_exampleuser()
 	//important! Please create db table before you run this test.
 	//add
 	log.Println("---add user---")
@@ -120,6 +121,7 @@ func Test_UserDB(t *testing.T) {
 }
 
 func Test_UserArray(t *testing.T) {
+	initialize_exampleuser()
 	// user array
 	//for i := 0; i < 10; i++ {
 	//	newUser := &ExampleUserModel{
@@ -153,6 +155,7 @@ func Test_UserArray(t *testing.T) {
 }
 
 func Test_UserName(t *testing.T) {
+	initialize_exampleuser()
 	// user array
 	//for i := 0; i < 10; i++ {
 	//	newUser := &ExampleUserModel{
