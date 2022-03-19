@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/GormULog"
+	"github.com/coreservice-io/ULog"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -36,14 +36,14 @@ type Config struct {
 	Password string
 }
 
-func Init(dbConfig Config) error {
-	return Init_("default", dbConfig)
+func Init(dbConfig Config, logger ULog.Logger) error {
+	return Init_("default", dbConfig, logger)
 }
 
 // Init a new instance.
 //  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
 //  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
-func Init_(name string, dbConfig Config) error {
+func Init_(name string, dbConfig Config, logger ULog.Logger) error {
 	if name == "" {
 		name = "default"
 	}
@@ -56,7 +56,7 @@ func Init_(name string, dbConfig Config) error {
 	dsn := dbConfig.UserName + ":" + dbConfig.Password + "@tcp(" + dbConfig.Host + ":" + strconv.Itoa(dbConfig.Port) + ")/" + dbConfig.DbName + "?charset=utf8mb4&loc=UTC"
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		Logger: GormULog.New_gormLocalLogger(basic.Logger, GormULog.Config{
+		Logger: GormULog.New_gormLocalLogger(logger, GormULog.Config{
 			SlowThreshold:             500 * time.Millisecond,
 			IgnoreRecordNotFoundError: false,
 			LogLevel:                  GormULog.Warn, //Level: Silent Error Warn Info. Info logs all record. Silent turns off log.

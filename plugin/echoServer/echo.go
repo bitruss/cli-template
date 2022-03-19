@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/tools/errors"
 	"github.com/coreservice-io/EchoMiddleware"
 	"github.com/coreservice-io/EchoMiddleware/tool"
+	"github.com/coreservice-io/ULog"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -16,6 +16,7 @@ type EchoServer struct {
 	*echo.Echo
 	Http_port              int
 	Http_static_abs_folder string
+	Logger                 ULog.Logger
 }
 
 var instanceMap = map[string]*EchoServer{}
@@ -37,14 +38,14 @@ type Config struct {
 	StaticFolder string
 }
 
-func Init(serverConfig Config) error {
-	return Init_("default", serverConfig)
+func Init(serverConfig Config, logger ULog.Logger) error {
+	return Init_("default", serverConfig, logger)
 }
 
 // Init a new instance.
 //  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
 //  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
-func Init_(name string, serverConfig Config) error {
+func Init_(name string, serverConfig Config, logger ULog.Logger) error {
 	if name == "" {
 		name = "default"
 	}
@@ -59,20 +60,21 @@ func Init_(name string, serverConfig Config) error {
 	}
 
 	if serverConfig.StaticFolder != "" {
-		basic.Logger.Infoln("http server with static folder :", serverConfig.StaticFolder)
+		logger.Infoln("http server with static folder :", serverConfig.StaticFolder)
 	}
 
 	echoServer := &EchoServer{
 		echo.New(),
 		serverConfig.Port,
 		serverConfig.StaticFolder,
+		logger,
 	}
 
 	//cros
 	echoServer.Use(middleware.CORS())
 	//logger
 	echoServer.Use(EchoMiddleware.LoggerWithConfig(EchoMiddleware.LoggerConfig{
-		Logger:            basic.Logger,
+		Logger:            logger,
 		RecordFailRequest: false,
 	}))
 	//recover and panicHandler
@@ -86,7 +88,7 @@ func Init_(name string, serverConfig Config) error {
 }
 
 func (s *EchoServer) Start() error {
-	basic.Logger.Infoln("http server started on port :" + strconv.Itoa(s.Http_port))
+	s.Logger.Infoln("http server started on port :" + strconv.Itoa(s.Http_port))
 	return s.Echo.Start(":" + strconv.Itoa(s.Http_port))
 }
 

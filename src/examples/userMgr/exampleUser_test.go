@@ -20,7 +20,7 @@ func init() {
 		DbName:   "testdb",
 		UserName: "root",
 		Password: "123456",
-	})
+	}, basic.Logger)
 	if err != nil {
 		log.Fatalln("db init err", err)
 	}

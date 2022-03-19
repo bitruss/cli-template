@@ -32,11 +32,11 @@ func initEchoServer() error {
 	if err == nil {
 		absPath, err := path_util.SmartExistPath(http_static_rel_folder)
 		if err == nil {
-			return echoServer.Init(echoServer.Config{Port: http_port, StaticFolder: absPath})
+			return echoServer.Init(echoServer.Config{Port: http_port, StaticFolder: absPath}, basic.Logger)
 		}
 	}
 
-	return echoServer.Init(echoServer.Config{Port: http_port})
+	return echoServer.Init(echoServer.Config{Port: http_port}, basic.Logger)
 }
 
 func initElasticSearch() error {
@@ -81,7 +81,7 @@ func initEcsUploader() error {
 	return ecsUploader.Init(ecsUploader.Config{
 		Address:  elasticSearchAddr,
 		UserName: elasticSearchUserName,
-		Password: elasticSearchPassword})
+		Password: elasticSearchPassword}, basic.Logger)
 
 }
 
@@ -164,7 +164,7 @@ func initSpr() error {
 		Port:     redis_port,
 		Prefix:   redis_prefix,
 		UseTLS:   redis_useTls,
-	})
+	}, basic.Logger)
 }
 
 func initDB() error {
@@ -199,7 +199,7 @@ func initDB() error {
 		DbName:   db_name,
 		UserName: db_username,
 		Password: db_password,
-	})
+	}, basic.Logger)
 }
 
 //example 3 cache instance

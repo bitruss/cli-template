@@ -3,8 +3,8 @@ package sprMgr
 import (
 	"fmt"
 
-	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/RedisSpr"
+	"github.com/coreservice-io/ULog"
 )
 
 var instanceMap = map[string]*RedisSpr.SprJobMgr{}
@@ -17,14 +17,14 @@ func GetInstance_(name string) *RedisSpr.SprJobMgr {
 	return instanceMap[name]
 }
 
-func Init(redisConfig *RedisSpr.RedisConfig) error {
-	return Init_("default", redisConfig)
+func Init(redisConfig *RedisSpr.RedisConfig, logger ULog.Logger) error {
+	return Init_("default", redisConfig, logger)
 }
 
 // Init a new instance.
 //  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
 //  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
-func Init_(name string, redisConfig *RedisSpr.RedisConfig) error {
+func Init_(name string, redisConfig *RedisSpr.RedisConfig, logger ULog.Logger) error {
 	if name == "" {
 		name = "default"
 	}
@@ -55,7 +55,7 @@ func Init_(name string, redisConfig *RedisSpr.RedisConfig) error {
 		return err
 	}
 
-	spr.SetULogger(basic.Logger)
+	spr.SetULogger(logger)
 
 	instanceMap[name] = spr
 
