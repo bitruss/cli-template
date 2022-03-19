@@ -40,7 +40,6 @@ definitions:
       updated:
         type: integer
     type: object
-host: 127.0.0.1:80
 info:
   contact:
     email: contact@domain.com
