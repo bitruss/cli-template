@@ -39,7 +39,7 @@ func DeleteUser(id int) error {
 
 	//delete cache
 	key := redisClient.GetInstance().GenKey("user", strconv.Itoa(id))
-	smartCache.RR_Del(context.Background(), redisClient.GetInstance(), reference.GetInstance(), key)
+	smartCache.RR_Del(context.Background(), redisClient.GetInstance().ClusterClient, reference.GetInstance(), key)
 
 	return nil
 }

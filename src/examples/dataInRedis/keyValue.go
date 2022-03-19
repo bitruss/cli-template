@@ -31,7 +31,7 @@ func SetPeer(peerInfo *PeerInfo, tag string) error {
 
 func DeletePeer(tag string) {
 	key := redisClient.GetInstance().GenKey("peerInfo", tag)
-	smartCache.RR_Del(context.Background(), redisClient.GetInstance(), reference.GetInstance(), key)
+	smartCache.RR_Del(context.Background(), redisClient.GetInstance().ClusterClient, reference.GetInstance(), key)
 }
 
 func GetPeer(tag string, forceUpdate bool) (*PeerInfo, error) {

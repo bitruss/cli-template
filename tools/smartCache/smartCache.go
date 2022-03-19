@@ -6,7 +6,6 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
 	"github.com/coreservice-io/CliAppTemplate/tools/json"
 	"github.com/coreservice-io/UReference"
 	"github.com/go-redis/redis/v8"
@@ -94,7 +93,7 @@ func RR_Set(ctx context.Context, Redis *redis.ClusterClient, localRef *UReferenc
 	}
 }
 
-func RR_Del(ctx context.Context, Redis *redisClient.RedisClient, localRef *UReference.Reference, keystr string) {
+func RR_Del(ctx context.Context, Redis *redis.ClusterClient, localRef *UReference.Reference, keystr string) {
 	localRef.Delete(keystr)
 	Redis.Del(ctx, keystr)
 }
