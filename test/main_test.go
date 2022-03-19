@@ -1,4 +1,4 @@
-package default_
+package test
 
 import (
 	"log"
