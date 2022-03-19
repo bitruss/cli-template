@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func userApi(httpServer *echoServer.EchoServer) {
+func config_user(httpServer *echoServer.EchoServer) {
 	//create
 	httpServer.POST("/api/user/create", createUser, CheckToken)
 
@@ -35,16 +35,13 @@ func createUser(ctx echo.Context) error {
 	}
 
 	//todo create user in db
-	//fake data
+	//mock db action
 	r := userMgr.ExampleUserModel{
-		ID:      1,
-		Status:  "normal",
-		Name:    "jack",
-		Email:   "jsck@email.com",
-		Updated: 1647609300,
-		Created: 1647609300,
+		ID:     1,
+		Status: "normal",
+		Name:   msg.Name,
+		Email:  msg.Email,
 	}
-
 	return echoServer.SuccessResp(ctx, 1, r, "")
 }
 
@@ -67,7 +64,7 @@ func getUser(ctx echo.Context) error {
 	}
 
 	//todo get user info from db
-	//fake data
+	//mock db action
 	r := userMgr.ExampleUserModel{
 		ID:      1,
 		Status:  "normal",

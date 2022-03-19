@@ -33,9 +33,8 @@ import (
 func DeclareApi(httpServer *echoServer.EchoServer) {
 	//health
 	config_health(httpServer)
-
 	//user
-	userApi(httpServer)
+	config_user(httpServer)
 }
 
 func ConfigApi(httpServer *echoServer.EchoServer) {
