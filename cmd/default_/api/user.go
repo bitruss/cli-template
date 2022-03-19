@@ -10,13 +10,13 @@ import (
 
 func config_user(httpServer *echoServer.EchoServer) {
 	//create
-	httpServer.POST("/api/user/create", createUser, CheckToken)
+	httpServer.POST("/api/user/create", createUser, MidToken)
 
 	//get
-	httpServer.GET("/api/user/get/:id", getUser, CheckToken)
+	httpServer.GET("/api/user/get/:id", getUser, MidToken)
 
 	//update
-	httpServer.POST("/api/user/update", updateUser, CheckToken)
+	httpServer.POST("/api/user/update", updateUser, MidToken)
 }
 
 // @Summary      creat user
