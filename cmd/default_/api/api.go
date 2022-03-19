@@ -19,10 +19,17 @@ import (
 // @contact.name    Support
 // @contact.url     https://domain.com
 // @contact.email   contact@domain.com
+
 // @license.name    Apache 2.0
 // @license.url     http://www.apache.org/licenses/LICENSE-2.0.html
+
 // @host            127.0.0.1:80
 // @schemes         http
+
+// @securityDefinitions.apikey  ApiKeyAuth
+// @in                          header
+// @name                        Authorization
+
 func DeclareApi(httpServer *echoServer.EchoServer) {
 	//health
 	config_health(httpServer)
