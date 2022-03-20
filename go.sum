@@ -107,8 +107,8 @@ github.com/coreservice-io/LogrusULog v0.1.18 h1:UvGpGEWi45GpUqGkp+iKELZTXCiMmQ7A
 github.com/coreservice-io/LogrusULog v0.1.18/go.mod h1:9ptUgo0PIKXv7L5y9TDDD6vUbt9VimYNT83mG6npZ9E=
 github.com/coreservice-io/RedisSpr v0.1.18 h1:ThbSak8rsRwexzuUChapQDadYBWnNbB2Xr1iK5UAUE0=
 github.com/coreservice-io/RedisSpr v0.1.18/go.mod h1:absPLrL4U4l452FEctr7t+qHrxUzoKDNZ2zKRH5/WH8=
-github.com/coreservice-io/UECSUploader v0.0.1 h1:OCpYVlkuyvYSPNW23dukpYLf4KZ0yXp1O0qmXpe6hT8=
-github.com/coreservice-io/UECSUploader v0.0.1/go.mod h1:1uFTLofHvR37uguXioe00jYAlreN12Ij409hOv+AbKU=
+github.com/coreservice-io/UECSUploader v0.0.2 h1:nIbfa171YG9IKxGK/qrLOwlCDtDFQHVYtAisr3IVpAY=
+github.com/coreservice-io/UECSUploader v0.0.2/go.mod h1:1uFTLofHvR37uguXioe00jYAlreN12Ij409hOv+AbKU=
 github.com/coreservice-io/UHub v0.0.1 h1:Iwn3E7/wXuUEi0yvDZlssZo37VccYL9pZb3Rj5a1UnY=
 github.com/coreservice-io/UHub v0.0.1/go.mod h1:FNS+hGcf4v/oCZYjMntGJNko7u09kMZsUNnjS7uNagY=
 github.com/coreservice-io/UJob v0.1.5 h1:y8CWCe4u/MQpMdntjN5+8IZz7KHO0eyu+Ppc6koOGd4=
