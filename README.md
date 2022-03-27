@@ -61,3 +61,10 @@ run ./ gen_api
 
 
 ```
+
+
+## API 
+```
+After running default_ main program, you can go directly to your browser to 
+check and invoke the api swagger docs
+```
