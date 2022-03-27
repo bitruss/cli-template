@@ -40,7 +40,11 @@ func Ref_Get(localRef *UReference.Reference, keystr string) (result interface{})
 }
 
 func Ref_Set(localRef *UReference.Reference, keystr string, value interface{}) error {
-	return localRef.Set(keystr, value, local_reference_secs)
+	return Ref_Set_RTTL(localRef, keystr, value, local_reference_secs)
+}
+
+func Ref_Set_RTTL(localRef *UReference.Reference, keystr string, value interface{}, ref_ttl_second int64) error {
+	return localRef.Set(keystr, value, ref_ttl_second)
 }
 
 // //first try from localRef if not found then try from remote redis
@@ -63,14 +67,18 @@ func Redis_Get(ctx context.Context, Redis *redis.ClusterClient, isJSON bool, key
 	}
 }
 
+func RR_Set(ctx context.Context, Redis *redis.ClusterClient, localRef *UReference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64) error {
+	return RR_Set_RTTL(ctx, Redis, localRef, isJSON, keystr, value, redis_ttl_second, local_reference_secs)
+}
+
 // reference set && redis set
 // set both value to both local reference & remote redis
-func RR_Set(ctx context.Context, Redis *redis.ClusterClient, localRef *UReference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64) error {
+func RR_Set_RTTL(ctx context.Context, Redis *redis.ClusterClient, localRef *UReference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64, ref_ttl_second int64) error {
 	if value == nil {
 		return Redis.Set(ctx, keystr, temp_nil, time.Duration(redis_ttl_second)*time.Second).Err()
 	}
 	if isJSON {
-		err := localRef.Set(keystr, value, local_reference_secs)
+		err := localRef.Set(keystr, value, ref_ttl_second)
 		if err != nil {
 			return err
 		}
@@ -80,7 +88,7 @@ func RR_Set(ctx context.Context, Redis *redis.ClusterClient, localRef *UReferenc
 		}
 		return Redis.Set(ctx, keystr, v_json, time.Duration(redis_ttl_second)*time.Second).Err()
 	} else {
-		err := localRef.Set(keystr, value, local_reference_secs)
+		err := localRef.Set(keystr, value, ref_ttl_second)
 		if err != nil {
 			return err
 		}

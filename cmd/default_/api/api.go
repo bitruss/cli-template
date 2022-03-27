@@ -23,7 +23,7 @@ import (
 // @license.name    Apache 2.0
 // @license.url     http://www.apache.org/licenses/LICENSE-2.0.html
 
-//// @host            127.0.0.1:80
+//// @host           127.0.0.1:80
 // @schemes         http
 
 // @securityDefinitions.apikey  ApiKeyAuth

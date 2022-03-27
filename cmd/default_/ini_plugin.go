@@ -15,7 +15,6 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/sprMgr"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
 	"github.com/coreservice-io/RedisSpr"
-	"github.com/coreservice-io/UUtils/path_util"
 
 	tool_errors "github.com/coreservice-io/CliAppTemplate/tools/errors"
 )
@@ -28,14 +27,6 @@ func initEchoServer() error {
 	http_port, err := configuration.Config.GetInt("http_port", 8080)
 	if err != nil {
 		return errors.New("http_port [int] in config error," + err.Error())
-	}
-
-	http_static_rel_folder, err := configuration.Config.GetString("http_static_rel_folder", "")
-	if err == nil {
-		absPath, err := path_util.SmartExistPath(http_static_rel_folder)
-		if err == nil {
-			return echoServer.Init(echoServer.Config{Port: http_port, StaticFolder: absPath}, tool_errors.PanicHandler, basic.Logger)
-		}
 	}
 
 	return echoServer.Init(echoServer.Config{Port: http_port}, tool_errors.PanicHandler, basic.Logger)

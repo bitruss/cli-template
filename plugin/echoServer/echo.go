@@ -13,9 +13,8 @@ import (
 
 type EchoServer struct {
 	*echo.Echo
-	Http_port              int
-	Http_static_abs_folder string
-	Logger                 ULog.Logger
+	Http_port int
+	Logger    ULog.Logger
 }
 
 var instanceMap = map[string]*EchoServer{}
@@ -30,11 +29,9 @@ func GetInstance_(name string) *EchoServer {
 
 /*
 http_port
-http_static_rel_folder
 */
 type Config struct {
-	Port         int
-	StaticFolder string
+	Port int
 }
 
 func Init(serverConfig Config, OnPanicHanlder func(panic_err interface{}), logger ULog.Logger) error {
@@ -58,14 +55,9 @@ func Init_(name string, serverConfig Config, OnPanicHanlder func(panic_err inter
 		serverConfig.Port = 8080
 	}
 
-	if serverConfig.StaticFolder != "" {
-		logger.Infoln("http server with static folder :", serverConfig.StaticFolder)
-	}
-
 	echoServer := &EchoServer{
 		echo.New(),
 		serverConfig.Port,
-		serverConfig.StaticFolder,
 		logger,
 	}
 
@@ -89,11 +81,6 @@ func Init_(name string, serverConfig Config, OnPanicHanlder func(panic_err inter
 func (s *EchoServer) Start() error {
 	s.Logger.Infoln("http server started on port :" + strconv.Itoa(s.Http_port))
 	return s.Echo.Start(":" + strconv.Itoa(s.Http_port))
-}
-
-func (s *EchoServer) StaticWeb() {
-	//static
-	s.Use(middleware.Static(s.Http_static_abs_folder))
 }
 
 func (s *EchoServer) Close() {

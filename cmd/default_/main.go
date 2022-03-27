@@ -3,7 +3,6 @@ package default_
 import (
 	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/cmd/default_/api"
-	"github.com/coreservice-io/CliAppTemplate/configuration"
 	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
@@ -27,11 +26,6 @@ func StartDefault(clictx *cli.Context) {
 func start_http_sever() {
 	httpServer := echoServer.GetInstance()
 	api.DeclareApi(httpServer)
-	http_api, _ := configuration.Config.GetBool("http_api", false)
-	if http_api {
-		api.ConfigApi(httpServer)
-	} else {
-		httpServer.StaticWeb()
-	}
+	api.ConfigApi(httpServer)
 	httpServer.Start()
 }

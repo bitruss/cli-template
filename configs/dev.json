@@ -17,8 +17,6 @@
 
   "eth_wallet_mnemonic": "xxxx",
   "http_port": 80,
-  "http_api":true,
-  "http_static_rel_folder": "/assets/default_/web",
   
   "infura1": "xxxx",
   "infura2": "xxxxx",
