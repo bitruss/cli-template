@@ -18,43 +18,43 @@ const post = "POST"
 const get = "GET"
 const API_TIMEOUT_SECS = 10
 
-type ApiResult struct {
+type ApiRequest struct {
 	Err            error
 	HttpStatusCode int
+	Body           interface{}
 }
 
-func (err *ApiResult) Ok() bool {
+func (err *ApiRequest) Ok() bool {
 	return err.Err == nil && err.HttpStatusCode != 200
 }
 
-func (err *ApiResult) IsHttpError() bool {
+func (err *ApiRequest) IsHttpError() bool {
 	return err.HttpStatusCode != 200
 }
 
-func Get(url string, token string, respResult interface{}) ApiResult {
-	return request(get, url, token, nil, API_TIMEOUT_SECS, respResult)
+func Get(url string, token string, apiq *ApiRequest) {
+	request(get, url, token, nil, API_TIMEOUT_SECS, apiq)
 }
 
-func Get_(url string, token string, timeOutSec int, respResult interface{}) ApiResult {
-	return request(get, url, token, nil, timeOutSec, respResult)
+func Get_(url string, token string, timeOutSec int, apiq *ApiRequest) {
+	request(get, url, token, nil, timeOutSec, apiq)
 }
 
-func POST(url string, token string, postData interface{}, respResult interface{}) ApiResult {
-	return request(post, url, token, postData, API_TIMEOUT_SECS, respResult)
+func POST(url string, token string, postData interface{}, apiq *ApiRequest) {
+	request(post, url, token, postData, API_TIMEOUT_SECS, apiq)
 }
 
-func POST_(url string, token string, postData interface{}, timeOutSec int, respResult interface{}) ApiResult {
-	return request(post, url, token, postData, timeOutSec, respResult)
+func POST_(url string, token string, postData interface{}, timeOutSec int, apiq *ApiRequest) {
+	request(post, url, token, postData, timeOutSec, apiq)
 }
 
-func request(method string, url string, token string, postData interface{}, timeOutSec int, respResult interface{}) ApiResult {
-	if respResult != nil {
-		t := reflect.TypeOf(respResult).Kind()
+func request(method string, url string, token string, postData interface{}, timeOutSec int, apiq *ApiRequest) {
+	if apiq.Body != nil {
+		t := reflect.TypeOf(apiq.Body).Kind()
 		if t != reflect.Ptr && t != reflect.Slice && t != reflect.Map {
-			return ApiResult{
-				Err:            errors.New("value only support Pointer Slice and Map"),
-				HttpStatusCode: 200,
-			}
+			apiq.Err = errors.New("value only support Pointer Slice and Map")
+			apiq.HttpStatusCode = 200
+			return
 		}
 	}
 
@@ -82,38 +82,33 @@ func request(method string, url string, token string, postData interface{}, time
 	}
 
 	if err != nil {
-		return ApiResult{
-			Err:            err,
-			HttpStatusCode: 200,
-		}
+		apiq.Err = err
+		apiq.HttpStatusCode = 200
+		return
 	}
 
 	if resp.Response().StatusCode != 200 {
-		return ApiResult{
-			Err:            errors.New("network error"),
-			HttpStatusCode: resp.Response().StatusCode,
-		}
+		apiq.Err = errors.New("network error")
+		apiq.HttpStatusCode = resp.Response().StatusCode
+		return
 	}
 
 	respData := &RespBody{
-		Result: respResult,
+		Result: apiq.Body,
 	}
 	err = resp.ToJSON(&respData)
 	if err != nil {
-		return ApiResult{
-			Err:            err,
-			HttpStatusCode: 200,
-		}
-	}
-	if respData.Status <= 0 {
-		return ApiResult{
-			Err:            errors.New(respData.Msg),
-			HttpStatusCode: 200,
-		}
+		apiq.Err = err
+		apiq.HttpStatusCode = 200
+		return
 	}
 
-	return ApiResult{
-		Err:            nil,
-		HttpStatusCode: 200,
+	if respData.Status <= 0 {
+		apiq.Err = errors.New(respData.Msg)
+		apiq.HttpStatusCode = 200
+		return
 	}
+
+	apiq.Err = nil
+	apiq.HttpStatusCode = 200
 }
