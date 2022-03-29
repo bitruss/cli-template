@@ -81,17 +81,17 @@ func request(method string, url string, token string, postData interface{}, time
 		// imposssible
 	}
 
-	if resp.Response().StatusCode != 200 {
-		return &ApiError{
-			Err:            errors.New("network error"),
-			HttpStatusCode: resp.Response().StatusCode,
-		}
-	}
-
 	if err != nil {
 		return &ApiError{
 			Err:            err,
 			HttpStatusCode: 200,
+		}
+	}
+
+	if resp.Response().StatusCode != 200 {
+		return &ApiError{
+			Err:            errors.New("network error"),
+			HttpStatusCode: resp.Response().StatusCode,
 		}
 	}
 
