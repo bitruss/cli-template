@@ -67,7 +67,7 @@ func request(method string, url string, token string, postData interface{}, time
 	}
 
 	r := req.New()
-	r.SetTimeout(time.Duration(API_TIMEOUT_SECS) * time.Second)
+	r.SetTimeout(time.Duration(timeOutSec) * time.Second)
 
 	var resp *req.Resp
 	var err error
