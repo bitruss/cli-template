@@ -2,7 +2,6 @@ package http
 
 import (
 	"errors"
-	"fmt"
 	"reflect"
 	"time"
 
@@ -79,10 +78,11 @@ func request(method string, url string, token string, postData interface{}, time
 	case post:
 		resp, err = r.Post(url, authHeader, req.BodyJSON(postData))
 	default:
-		return &ApiError{
-			Err:            fmt.Errorf("unsupported request method:%s", method),
-			HttpStatusCode: 200,
-		}
+		// imposssible
+		// return &ApiError{
+		// 	Err:            fmt.Errorf("unsupported request method:%s", method),
+		// 	HttpStatusCode: 200,
+		// }
 	}
 
 	if resp.Response().StatusCode != 200 {
