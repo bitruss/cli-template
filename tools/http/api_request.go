@@ -21,7 +21,7 @@ const API_TIMEOUT_SECS = 10
 type ApiRequest struct {
 	Err            error
 	HttpStatusCode int
-	Body           interface{}
+	Result         interface{}
 }
 
 func (err *ApiRequest) Ok() bool {
@@ -49,8 +49,8 @@ func POST_(url string, token string, postData interface{}, timeOutSec int, apiq 
 }
 
 func request(method string, url string, token string, postData interface{}, timeOutSec int, apiq *ApiRequest) {
-	if apiq.Body != nil {
-		t := reflect.TypeOf(apiq.Body).Kind()
+	if apiq.Result != nil {
+		t := reflect.TypeOf(apiq.Result).Kind()
 		if t != reflect.Ptr && t != reflect.Slice && t != reflect.Map {
 			apiq.Err = errors.New("value only support Pointer Slice and Map")
 			apiq.HttpStatusCode = 200
@@ -94,7 +94,7 @@ func request(method string, url string, token string, postData interface{}, time
 	}
 
 	respData := &RespBody{
-		Result: apiq.Body,
+		Result: apiq.Result,
 	}
 	err = resp.ToJSON(&respData)
 	if err != nil {
