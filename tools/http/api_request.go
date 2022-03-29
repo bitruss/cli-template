@@ -33,19 +33,19 @@ func (err *ApiError) IsHttpError() bool {
 }
 
 func Get(url string, token string, respResult interface{}) *ApiError {
-	return request("GET", url, token, nil, API_TIMEOUT_SECS, respResult)
+	return request(get, url, token, nil, API_TIMEOUT_SECS, respResult)
 }
 
 func Get_(url string, token string, timeOutSec int, respResult interface{}) *ApiError {
-	return request("GET", url, token, nil, timeOutSec, respResult)
+	return request(get, url, token, nil, timeOutSec, respResult)
 }
 
 func POST(url string, token string, postData interface{}, respResult interface{}) *ApiError {
-	return request("POST", url, token, postData, API_TIMEOUT_SECS, respResult)
+	return request(post, url, token, postData, API_TIMEOUT_SECS, respResult)
 }
 
 func POST_(url string, token string, postData interface{}, timeOutSec int, respResult interface{}) *ApiError {
-	return request("POST", url, token, postData, timeOutSec, respResult)
+	return request(post, url, token, postData, timeOutSec, respResult)
 }
 
 func request(method string, url string, token string, postData interface{}, timeOutSec int, respResult interface{}) *ApiError {
