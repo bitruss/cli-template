@@ -16,6 +16,7 @@ require (
 	github.com/coreservice-io/UUtils v0.1.5
 	github.com/fatih/color v1.13.0
 	github.com/go-redis/redis/v8 v8.11.4
+	github.com/imroc/req v0.3.2
 	github.com/json-iterator/go v1.1.12
 	github.com/labstack/echo/v4 v4.6.1
 	github.com/olivere/elastic/v7 v7.0.31
