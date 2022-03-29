@@ -25,7 +25,7 @@ type ApiRequest struct {
 }
 
 func (err *ApiRequest) Ok() bool {
-	return err.Err == nil && err.HttpStatusCode != 200
+	return err.Err == nil && err.HttpStatusCode == 200
 }
 
 func (err *ApiRequest) IsHttpError() bool {
