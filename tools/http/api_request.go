@@ -79,10 +79,6 @@ func request(method string, url string, token string, postData interface{}, time
 		resp, err = r.Post(url, authHeader, req.BodyJSON(postData))
 	default:
 		// imposssible
-		// return &ApiError{
-		// 	Err:            fmt.Errorf("unsupported request method:%s", method),
-		// 	HttpStatusCode: 200,
-		// }
 	}
 
 	if resp.Response().StatusCode != 200 {
