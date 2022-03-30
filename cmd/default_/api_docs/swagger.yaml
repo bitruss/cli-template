@@ -1,34 +1,13 @@
 definitions:
-  api.CreateUserMsg:
+  api.MSG_REQ_CREATE_USER:
     properties:
       email:
         type: string
       name:
         type: string
     type: object
-  api.UpdateUserMsg:
+  api.MSG_REQ_UPDATE_USER:
     properties:
-      email:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      status:
-        type: string
-    type: object
-  echoServer.RespBody:
-    properties:
-      msg:
-        type: string
-      result: {}
-      status:
-        type: integer
-    type: object
-  userMgr.ExampleUserModel:
-    properties:
-      created:
-        type: integer
       email:
         type: string
       id:
@@ -37,8 +16,44 @@ definitions:
         type: string
       status:
         type: string
-      updated:
+    type: object
+  api.MSG_RESP_CREATE_USER:
+    properties:
+      email:
+        type: string
+      meta_message:
+        type: string
+      meta_status:
         type: integer
+      name:
+        type: string
+    type: object
+  api.MSG_RESP_GET_USER:
+    properties:
+      email:
+        type: string
+      meta_message:
+        type: string
+      meta_status:
+        type: integer
+      name:
+        type: string
+    type: object
+  api.MSG_RESP_HEALTH:
+    properties:
+      unixtime:
+        type: integer
+    type: object
+  api.MSG_RESP_UPDATE_USER:
+    properties:
+      email:
+        type: string
+      meta_message:
+        type: string
+      meta_status:
+        type: integer
+      name:
+        type: string
     type: object
 info:
   contact:
@@ -60,15 +75,10 @@ paths:
       - application/json
       responses:
         "200":
-          description: result
+          description: server unix time
           schema:
-            allOf:
-            - $ref: '#/definitions/echoServer.RespBody'
-            - properties:
-                data:
-                  type: integer
-              type: object
-      summary: health check
+            $ref: '#/definitions/api.MSG_RESP_HEALTH'
+      summary: /api/health
       tags:
       - health
   /api/user/create:
@@ -82,19 +92,14 @@ paths:
         name: msg
         required: true
         schema:
-          $ref: '#/definitions/api.CreateUserMsg'
+          $ref: '#/definitions/api.MSG_REQ_CREATE_USER'
       produces:
       - application/json
       responses:
         "200":
           description: result
           schema:
-            allOf:
-            - $ref: '#/definitions/echoServer.RespBody'
-            - properties:
-                result:
-                  $ref: '#/definitions/userMgr.ExampleUserModel'
-              type: object
+            $ref: '#/definitions/api.MSG_RESP_CREATE_USER'
       security:
       - ApiKeyAuth: []
       summary: creat user
@@ -115,12 +120,7 @@ paths:
         "200":
           description: result
           schema:
-            allOf:
-            - $ref: '#/definitions/echoServer.RespBody'
-            - properties:
-                result:
-                  $ref: '#/definitions/userMgr.ExampleUserModel'
-              type: object
+            $ref: '#/definitions/api.MSG_RESP_GET_USER'
       security:
       - ApiKeyAuth: []
       summary: get user
@@ -137,14 +137,14 @@ paths:
         name: msg
         required: true
         schema:
-          $ref: '#/definitions/api.UpdateUserMsg'
+          $ref: '#/definitions/api.MSG_REQ_UPDATE_USER'
       produces:
       - application/json
       responses:
         "200":
           description: result
           schema:
-            $ref: '#/definitions/echoServer.RespBody'
+            $ref: '#/definitions/api.MSG_RESP_UPDATE_USER'
       security:
       - ApiKeyAuth: []
       summary: update user

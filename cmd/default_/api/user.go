@@ -1,10 +1,11 @@
 package api
 
 import (
+	"net/http"
 	"strconv"
 
 	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
-	"github.com/coreservice-io/CliAppTemplate/src/examples/userMgr"
+	"github.com/coreservice-io/CliAppTemplate/tools/http/api"
 	"github.com/labstack/echo/v4"
 )
 
@@ -19,30 +20,45 @@ func config_user(httpServer *echoServer.EchoServer) {
 	httpServer.POST("/api/user/update", updateUser, MidToken)
 }
 
+type MSG_REQ_CREATE_USER struct {
+	Name  string
+	Email string
+}
+
+type MSG_RESP_CREATE_USER struct {
+	api.API_META_STATUS
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
+
 // @Summary      creat user
 // @Description  creat user
 // @Tags         user
 // @Security     ApiKeyAuth
 // @Accept       json
-// @Param        msg  body  CreateUserMsg true  "new user info"
+// @Param        msg  body  MSG_REQ_CREATE_USER true  "new user info"
 // @Produce      json
-// @Success      200 {object} echoServer.RespBody{result=userMgr.ExampleUserModel} "result"
+// @Success      200 {object} MSG_RESP_CREATE_USER "result"
 // @Router       /api/user/create [post]
 func createUser(ctx echo.Context) error {
-	var msg CreateUserMsg
-	if err := ctx.Bind(&msg); err != nil {
-		return echoServer.ErrorResp(ctx, -1, nil, "post data error")
-	}
 
+	var msg MSG_REQ_CREATE_USER
+	res := &MSG_RESP_CREATE_USER{}
+
+	if err := ctx.Bind(&msg); err != nil {
+		res.MetaStatus(-1, "bad request data")
+		return ctx.JSON(http.StatusOK, res)
+	}
 	//todo create user in db
 	//mock db action
-	r := userMgr.ExampleUserModel{
-		ID:     1,
-		Status: "normal",
-		Name:   msg.Name,
-		Email:  msg.Email,
-	}
-	return echoServer.SuccessResp(ctx, 1, r, "")
+	res.MetaStatus(1, "success")
+	return ctx.JSON(http.StatusOK, res)
+}
+
+type MSG_RESP_GET_USER struct {
+	api.API_META_STATUS
+	Name  string
+	Email string
 }
 
 // @Summary      get user
@@ -51,30 +67,42 @@ func createUser(ctx echo.Context) error {
 // @Security     ApiKeyAuth
 // @Param        id  path  integer true  "user id"
 // @Produce      json
-// @Success      200 {object} echoServer.RespBody{result=userMgr.ExampleUserModel} "result"
+// @Success      200 {object} MSG_RESP_GET_USER "result"
 // @Router       /api/user/get/{id} [get]
 func getUser(ctx echo.Context) error {
+
+	res := &MSG_RESP_GET_USER{}
+
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
 	if err != nil {
-		return echoServer.ErrorResp(ctx, -1, nil, "id error")
+		res.MetaStatus(-1, "id error")
+		return ctx.JSON(http.StatusOK, res)
 	}
 	if id == 0 {
-		return echoServer.ErrorResp(ctx, -1, nil, "id error")
+		res.MetaStatus(-1, "id 0 bad ")
+		return ctx.JSON(http.StatusOK, res)
 	}
 
 	//todo get user info from db
 	//mock db action
-	r := userMgr.ExampleUserModel{
-		ID:      1,
-		Status:  "normal",
-		Name:    "jack",
-		Email:   "jsck@email.com",
-		Updated: 1647609300,
-		Created: 1647609300,
-	}
+	res.MetaStatus(1, "success")
+	res.Name = "jack"
+	res.Email = "jsck@email.com"
+	return ctx.JSON(http.StatusOK, res)
+}
 
-	return echoServer.SuccessResp(ctx, 1, r, "")
+type MSG_REQ_UPDATE_USER struct {
+	ID     *int
+	Status *string
+	Name   *string
+	Email  *string
+}
+
+type MSG_RESP_UPDATE_USER struct {
+	api.API_META_STATUS
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
 // @Summary      update user
@@ -82,45 +110,28 @@ func getUser(ctx echo.Context) error {
 // @Tags         user
 // @Security     ApiKeyAuth
 // @Accept       json
-// @Param        msg  body  UpdateUserMsg true  "update user info"
+// @Param        msg  body  MSG_REQ_UPDATE_USER true  "update user info"
 // @Produce      json
-// @Success      200 {object} echoServer.RespBody "result"
+// @Success      200 {object} MSG_RESP_UPDATE_USER "result"
 // @Router       /api/user/update [post]
 func updateUser(ctx echo.Context) error {
-	var msg UpdateUserMsg
+	var res MSG_RESP_UPDATE_USER
+	var msg MSG_REQ_UPDATE_USER
 	if err := ctx.Bind(&msg); err != nil {
-		return echoServer.ErrorResp(ctx, -1, nil, "post data error")
+		res.MetaStatus(-1, "post data error")
+		return ctx.JSON(http.StatusOK, res)
 	}
 
 	//update user
-	updateData := map[string]interface{}{}
 	if msg.ID == nil {
-		return echoServer.ErrorResp(ctx, -1, nil, "user id is required")
+		res.MetaStatus(-1, "user id is required")
+		return ctx.JSON(http.StatusOK, res)
 	}
-	if msg.Name != nil {
-		updateData["name"] = *msg.Name
-	}
-	if msg.Email != nil {
-		updateData["email"] = *msg.Email
-	}
-	if msg.Status != nil {
-		updateData["status"] = *msg.Status
-	}
-
+	//mock update
 	//todo update user info in db
+	res.MetaStatus(1, "success")
+	res.Name = "mock_update_name"
+	res.Email = "mock_update_email"
 
-	return echoServer.SuccessResp(ctx, 1, nil, "")
-}
-
-//example msg
-type CreateUserMsg struct {
-	Name  string
-	Email string
-}
-
-type UpdateUserMsg struct {
-	ID     *int
-	Status *string
-	Name   *string
-	Email  *string
+	return ctx.JSON(http.StatusOK, res)
 }

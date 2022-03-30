@@ -34,24 +34,12 @@ const docTemplate = `{
                 "tags": [
                     "health"
                 ],
-                "summary": "health check",
+                "summary": "/api/health",
                 "responses": {
                     "200": {
-                        "description": "result",
+                        "description": "server unix time",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/echoServer.RespBody"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "integer"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/api.MSG_RESP_HEALTH"
                         }
                     }
                 }
@@ -82,7 +70,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.CreateUserMsg"
+                            "$ref": "#/definitions/api.MSG_REQ_CREATE_USER"
                         }
                     }
                 ],
@@ -90,19 +78,7 @@ const docTemplate = `{
                     "200": {
                         "description": "result",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/echoServer.RespBody"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "result": {
-                                            "$ref": "#/definitions/userMgr.ExampleUserModel"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/api.MSG_RESP_CREATE_USER"
                         }
                     }
                 }
@@ -136,19 +112,7 @@ const docTemplate = `{
                     "200": {
                         "description": "result",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/echoServer.RespBody"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "result": {
-                                            "$ref": "#/definitions/userMgr.ExampleUserModel"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/api.MSG_RESP_GET_USER"
                         }
                     }
                 }
@@ -179,7 +143,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.UpdateUserMsg"
+                            "$ref": "#/definitions/api.MSG_REQ_UPDATE_USER"
                         }
                     }
                 ],
@@ -187,7 +151,7 @@ const docTemplate = `{
                     "200": {
                         "description": "result",
                         "schema": {
-                            "$ref": "#/definitions/echoServer.RespBody"
+                            "$ref": "#/definitions/api.MSG_RESP_UPDATE_USER"
                         }
                     }
                 }
@@ -195,7 +159,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "api.CreateUserMsg": {
+        "api.MSG_REQ_CREATE_USER": {
             "type": "object",
             "properties": {
                 "email": {
@@ -206,41 +170,9 @@ const docTemplate = `{
                 }
             }
         },
-        "api.UpdateUserMsg": {
+        "api.MSG_REQ_UPDATE_USER": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "echoServer.RespBody": {
-            "type": "object",
-            "properties": {
-                "msg": {
-                    "type": "string"
-                },
-                "result": {},
-                "status": {
-                    "type": "integer"
-                }
-            }
-        },
-        "userMgr.ExampleUserModel": {
-            "type": "object",
-            "properties": {
-                "created": {
-                    "type": "integer"
-                },
                 "email": {
                     "type": "string"
                 },
@@ -252,9 +184,65 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "string"
+                }
+            }
+        },
+        "api.MSG_RESP_CREATE_USER": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
                 },
-                "updated": {
+                "meta_message": {
+                    "type": "string"
+                },
+                "meta_status": {
                     "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.MSG_RESP_GET_USER": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "meta_message": {
+                    "type": "string"
+                },
+                "meta_status": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.MSG_RESP_HEALTH": {
+            "type": "object",
+            "properties": {
+                "unixtime": {
+                    "type": "integer"
+                }
+            }
+        },
+        "api.MSG_RESP_UPDATE_USER": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "meta_message": {
+                    "type": "string"
+                },
+                "meta_status": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         }
