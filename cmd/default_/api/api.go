@@ -72,10 +72,10 @@ func Gen_Api_Docs() {
 		OutputTypes:     []string{"go", "json", "yaml"},
 		ParseDependency: true,
 	}
-	
-	err:=gen.New().Build(config)
-	if(err!=nil){
-		basic.Logger.Errorln("Gen_Api_Docs",err)
+
+	err := gen.New().Build(config)
+	if err != nil {
+		basic.Logger.Errorln("Gen_Api_Docs", err)
 	}
-}
+
 }
