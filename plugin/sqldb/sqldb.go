@@ -53,13 +53,19 @@ func Init_(name string, dbConfig Config, logger ULog.Logger) error {
 		return fmt.Errorf("db instance <%s> has already initialized", name)
 	}
 
+	//Level: Silent Error Warn Info. Info logs all record. Silent turns off log.
+	db_log_level := GormULog.Warn
+	if logger.GetLevel() >= ULog.TraceLevel {
+		db_log_level = GormULog.Info
+	}
+
 	dsn := dbConfig.UserName + ":" + dbConfig.Password + "@tcp(" + dbConfig.Host + ":" + strconv.Itoa(dbConfig.Port) + ")/" + dbConfig.DbName + "?charset=utf8mb4&loc=UTC"
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: GormULog.New_gormLocalLogger(logger, GormULog.Config{
 			SlowThreshold:             500 * time.Millisecond,
 			IgnoreRecordNotFoundError: false,
-			LogLevel:                  GormULog.Warn, //Level: Silent Error Warn Info. Info logs all record. Silent turns off log.
+			LogLevel:                  db_log_level,
 		}),
 	})
 
