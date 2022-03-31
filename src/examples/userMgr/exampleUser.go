@@ -85,7 +85,7 @@ func GetUserById(userid int, forceupdate bool) (*ExampleUserModel, error) {
 
 	//after cache miss ,try from remote database
 	basic.Logger.Debugln("GetUserById try from db")
-	var userList []*ExampleUserModel
+	userList := []*ExampleUserModel{}
 	err := sqldb.GetInstance().Table("example_user_models").Where("id = ?", userid).Find(&userList).Error
 	if err != nil {
 		basic.Logger.Errorln("GetUserById err :", err)
@@ -122,17 +122,17 @@ func GetUsersByStatus(status string, forceupdate bool) ([]*ExampleUserModel, err
 			//continue to get from db part
 		} else {
 			//redis may broken, just return to keep db safe
-			return nil, err
+			return redis_result, err
 		}
 	}
 
 	//after cache miss ,try from remote database
 	basic.Logger.Debugln("GetUsersByStatus try from database")
-	var userList []*ExampleUserModel
+	userList := []*ExampleUserModel{}
 	err := sqldb.GetInstance().Table("example_user_models").Where("status = ?", status).Find(&userList).Error
 	if err != nil {
 		basic.Logger.Errorln("GetUsersByStatus err :", err)
-		return nil, err
+		return userList, err
 	} else {
 		smartCache.RR_Set(context.Background(), redisClient.GetInstance().ClusterClient, reference.GetInstance(), true, key, userList, 300)
 		return userList, nil
@@ -169,7 +169,7 @@ func GetUserNameById(userid int, forceupdate bool) (string, error) {
 
 	//after cache miss ,try from remote database
 	basic.Logger.Debugln("GetUserNameById try from db")
-	var userName []string
+	userName := []string{}
 	err := sqldb.GetInstance().Table("example_user_models").Select("name").Where("id = ?", userid).Find(&userName).Error
 	if err != nil {
 		basic.Logger.Errorln("GetUserById err :", err)
