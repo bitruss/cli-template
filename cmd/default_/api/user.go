@@ -159,8 +159,8 @@ func updateUser(ctx echo.Context) error {
 	//pass qmap and tomap to your code inside your manager
 
 	//do your work here
-	basic.Logger.Panicln(qmap)
-	basic.Logger.Panicln(tomap)
+	basic.Logger.Debugln(qmap)
+	basic.Logger.Debugln(tomap)
 
 	//
 
