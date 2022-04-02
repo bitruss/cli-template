@@ -15,6 +15,7 @@ require (
 	github.com/coreservice-io/USafeGo v0.1.3
 	github.com/coreservice-io/UUtils v0.1.5
 	github.com/fatih/color v1.13.0
+	github.com/fatih/structs v1.1.0
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/imroc/req v0.3.2
 	github.com/json-iterator/go v1.1.12

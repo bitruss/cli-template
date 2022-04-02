@@ -2,10 +2,11 @@ package api
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
+	"github.com/coreservice-io/CliAppTemplate/tools/data"
 	"github.com/coreservice-io/CliAppTemplate/tools/http/api"
+	"github.com/fatih/structs"
 	"github.com/labstack/echo/v4"
 )
 
@@ -14,7 +15,7 @@ func config_user(httpServer *echoServer.EchoServer) {
 	httpServer.POST("/api/user/create", createUser, MidToken)
 
 	//get
-	httpServer.GET("/api/user/get/:id", getUser, MidToken)
+	httpServer.GET("/api/user/search", searchUser, MidToken)
 
 	//update
 	httpServer.POST("/api/user/update", updateUser, MidToken)
@@ -55,40 +56,56 @@ func createUser(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, res)
 }
 
-type MSG_RESP_GET_USER struct {
+type MSG_REQ_SEARCH_USER struct {
 	api.API_META_STATUS
+	Id         *[]int  //sql : id in (...) //optional
+	Name       *string //optional
+	Email_like *string //optional
+}
+
+type MSG_USER struct {
+	Id    int
 	Name  string
 	Email string
 }
 
-// @Summary      get user
-// @Description  get user
+type MSG_RESP_SEARCH_USER struct {
+	api.API_META_STATUS
+	Result []*MSG_USER
+}
+
+// @Summary      search user
+// @Description  search user
 // @Tags         user
 // @Security     ApiKeyAuth
-// @Param        id  path  integer true  "user id"
+// @Param        msg  body  MSG_REQ_SEARCH_USER true  "user search param"
 // @Produce      json
 // @Success      200 {object} MSG_RESP_GET_USER "result"
-// @Router       /api/user/get/{id} [get]
-func getUser(ctx echo.Context) error {
+// @Router       /api/user/search [post]
+func searchUser(ctx echo.Context) error {
 
-	res := &MSG_RESP_GET_USER{}
+	var msg MSG_REQ_SEARCH_USER
+	res := &MSG_RESP_SEARCH_USER{}
 
-	idStr := ctx.Param("id")
-	id, err := strconv.ParseUint(idStr, 10, 32)
-	if err != nil {
-		res.MetaStatus(-1, "id error")
+	if err := ctx.Bind(&msg); err != nil {
+		res.MetaStatus(-1, "bad request data")
 		return ctx.JSON(http.StatusOK, res)
 	}
-	if id == 0 {
-		res.MetaStatus(-1, "id 0 bad ")
+
+	qmap := data.MapRemoveNil(structs.Map(msg))
+
+	//do this part in your manager code
+	if len(qmap) == 0 {
+		res.MetaStatus(-1, "no query condition ")
 		return ctx.JSON(http.StatusOK, res)
 	}
+
+	//fill your res ,mock db action
+
+	//end of manager code
 
 	//todo get user info from db
-	//mock db action
 	res.MetaStatus(1, "success")
-	res.Name = "jack"
-	res.Email = "jsck@email.com"
 	return ctx.JSON(http.StatusOK, res)
 }
 
