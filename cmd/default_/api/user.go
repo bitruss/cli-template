@@ -59,11 +59,11 @@ func createUser(ctx echo.Context) error {
 
 type MSG_REQ_SEARCH_USER struct {
 	api.API_META_STATUS
-	Id         *[]int  //sql : id in (...) //optional
-	Name       *string //optional
-	Email_like *string //optional
-	Offset     int     //required
-	Limit      int     //required
+	Id     *[]int  //sql : id in (...) //optional
+	Name   *string //optional
+	Email  *string //optional  email can be like condition e.g " LIKE `%jack%` "
+	Offset int     //required
+	Limit  int     //required
 }
 
 type MSG_USER struct {
