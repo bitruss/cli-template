@@ -78,35 +78,37 @@
                 }
             }
         },
-        "/api/user/get/{id}": {
-            "get": {
+        "/api/user/search": {
+            "post": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "get user",
+                "description": "search user",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "user"
                 ],
-                "summary": "get user",
+                "summary": "search user",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "user id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
+                        "description": "user search param",
+                        "name": "msg",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.MSG_REQ_SEARCH_USER"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "result",
                         "schema": {
-                            "$ref": "#/definitions/api.MSG_RESP_GET_USER"
+                            "$ref": "#/definitions/api.MSG_RESP_SEARCH_USER"
                         }
                     }
                 }
@@ -132,7 +134,7 @@
                 "summary": "update user",
                 "parameters": [
                     {
-                        "description": "update user info",
+                        "description": "update user",
                         "name": "msg",
                         "in": "body",
                         "required": true,
@@ -164,7 +166,66 @@
                 }
             }
         },
+        "api.MSG_REQ_SEARCH_USER": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "optional  email can be like condition e.g \" LIKE `%jack%` \"",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "sql : id in (...) //optional",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "limit": {
+                    "description": "required",
+                    "type": "integer"
+                },
+                "meta_message": {
+                    "type": "string"
+                },
+                "meta_status": {
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "optional",
+                    "type": "string"
+                },
+                "offset": {
+                    "description": "required",
+                    "type": "integer"
+                }
+            }
+        },
+        "api.MSG_REQ_UPDATE_TO_USER": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "api.MSG_REQ_UPDATE_USER": {
+            "type": "object",
+            "properties": {
+                "to": {
+                    "$ref": "#/definitions/api.MSG_REQ_UPDATE_TO_USER"
+                },
+                "where": {
+                    "$ref": "#/definitions/api.MSG_REQ_UPDATE_WHERE_USER"
+                }
+            }
+        },
+        "api.MSG_REQ_UPDATE_WHERE_USER": {
             "type": "object",
             "properties": {
                 "email": {
@@ -198,7 +259,32 @@
                 }
             }
         },
-        "api.MSG_RESP_GET_USER": {
+        "api.MSG_RESP_HEALTH": {
+            "type": "object",
+            "properties": {
+                "unixtime": {
+                    "type": "integer"
+                }
+            }
+        },
+        "api.MSG_RESP_SEARCH_USER": {
+            "type": "object",
+            "properties": {
+                "meta_message": {
+                    "type": "string"
+                },
+                "meta_status": {
+                    "type": "integer"
+                },
+                "result": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.MSG_USER"
+                    }
+                }
+            }
+        },
+        "api.MSG_RESP_UPDATE_USER": {
             "type": "object",
             "properties": {
                 "email": {
@@ -215,24 +301,13 @@
                 }
             }
         },
-        "api.MSG_RESP_HEALTH": {
-            "type": "object",
-            "properties": {
-                "unixtime": {
-                    "type": "integer"
-                }
-            }
-        },
-        "api.MSG_RESP_UPDATE_USER": {
+        "api.MSG_USER": {
             "type": "object",
             "properties": {
                 "email": {
                     "type": "string"
                 },
-                "meta_message": {
-                    "type": "string"
-                },
-                "meta_status": {
+                "id": {
                     "type": "integer"
                 },
                 "name": {

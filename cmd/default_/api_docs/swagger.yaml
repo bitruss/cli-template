@@ -6,7 +6,47 @@ definitions:
       name:
         type: string
     type: object
+  api.MSG_REQ_SEARCH_USER:
+    properties:
+      email:
+        description: optional  email can be like condition e.g " LIKE `%jack%` "
+        type: string
+      id:
+        description: 'sql : id in (...) //optional'
+        items:
+          type: integer
+        type: array
+      limit:
+        description: required
+        type: integer
+      meta_message:
+        type: string
+      meta_status:
+        type: integer
+      name:
+        description: optional
+        type: string
+      offset:
+        description: required
+        type: integer
+    type: object
+  api.MSG_REQ_UPDATE_TO_USER:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      status:
+        type: string
+    type: object
   api.MSG_REQ_UPDATE_USER:
+    properties:
+      to:
+        $ref: '#/definitions/api.MSG_REQ_UPDATE_TO_USER'
+      where:
+        $ref: '#/definitions/api.MSG_REQ_UPDATE_WHERE_USER'
+    type: object
+  api.MSG_REQ_UPDATE_WHERE_USER:
     properties:
       email:
         type: string
@@ -28,7 +68,23 @@ definitions:
       name:
         type: string
     type: object
-  api.MSG_RESP_GET_USER:
+  api.MSG_RESP_HEALTH:
+    properties:
+      unixtime:
+        type: integer
+    type: object
+  api.MSG_RESP_SEARCH_USER:
+    properties:
+      meta_message:
+        type: string
+      meta_status:
+        type: integer
+      result:
+        items:
+          $ref: '#/definitions/api.MSG_USER'
+        type: array
+    type: object
+  api.MSG_RESP_UPDATE_USER:
     properties:
       email:
         type: string
@@ -39,18 +95,11 @@ definitions:
       name:
         type: string
     type: object
-  api.MSG_RESP_HEALTH:
-    properties:
-      unixtime:
-        type: integer
-    type: object
-  api.MSG_RESP_UPDATE_USER:
+  api.MSG_USER:
     properties:
       email:
         type: string
-      meta_message:
-        type: string
-      meta_status:
+      id:
         type: integer
       name:
         type: string
@@ -105,25 +154,26 @@ paths:
       summary: creat user
       tags:
       - user
-  /api/user/get/{id}:
-    get:
-      description: get user
+  /api/user/search:
+    post:
+      description: search user
       parameters:
-      - description: user id
-        in: path
-        name: id
+      - description: user search param
+        in: body
+        name: msg
         required: true
-        type: integer
+        schema:
+          $ref: '#/definitions/api.MSG_REQ_SEARCH_USER'
       produces:
       - application/json
       responses:
         "200":
           description: result
           schema:
-            $ref: '#/definitions/api.MSG_RESP_GET_USER'
+            $ref: '#/definitions/api.MSG_RESP_SEARCH_USER'
       security:
       - ApiKeyAuth: []
-      summary: get user
+      summary: search user
       tags:
       - user
   /api/user/update:
@@ -132,7 +182,7 @@ paths:
       - application/json
       description: update user
       parameters:
-      - description: update user info
+      - description: update user
         in: body
         name: msg
         required: true

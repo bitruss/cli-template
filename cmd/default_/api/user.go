@@ -83,7 +83,7 @@ type MSG_RESP_SEARCH_USER struct {
 // @Security     ApiKeyAuth
 // @Param        msg  body  MSG_REQ_SEARCH_USER true  "user search param"
 // @Produce      json
-// @Success      200 {object} MSG_RESP_GET_USER "result"
+// @Success      200 {object} MSG_RESP_SEARCH_USER "result"
 // @Router       /api/user/search [post]
 func searchUser(ctx echo.Context) error {
 
