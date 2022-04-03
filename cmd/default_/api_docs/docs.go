@@ -106,7 +106,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.MSG_REQ_SEARCH_USER"
+                            "$ref": "#/definitions/api.MSG_REQ_SearchUser"
                         }
                     }
                 ],
@@ -114,7 +114,7 @@ const docTemplate = `{
                     "200": {
                         "description": "result",
                         "schema": {
-                            "$ref": "#/definitions/api.MSG_RESP_SEARCH_USER"
+                            "$ref": "#/definitions/api.MSG_RESP_SearchUser"
                         }
                     }
                 }
@@ -145,7 +145,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.MSG_REQ_UPDATE_USER"
+                            "$ref": "#/definitions/api.MSG_REQ_UpdateUser"
                         }
                     }
                 ],
@@ -153,7 +153,7 @@ const docTemplate = `{
                     "200": {
                         "description": "result",
                         "schema": {
-                            "$ref": "#/definitions/api.MSG_RESP_UPDATE_USER"
+                            "$ref": "#/definitions/api.API_META_STATUS"
                         }
                     }
                 }
@@ -161,6 +161,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "api.API_META_STATUS": {
+            "type": "object",
+            "properties": {
+                "meta_message": {
+                    "type": "string"
+                },
+                "meta_status": {
+                    "type": "integer"
+                }
+            }
+        },
         "api.MSG_REQ_CREATE_USER": {
             "type": "object",
             "properties": {
@@ -172,7 +183,23 @@ const docTemplate = `{
                 }
             }
         },
-        "api.MSG_REQ_SEARCH_USER": {
+        "api.MSG_REQ_SearchUser": {
+            "type": "object",
+            "properties": {
+                "filter": {
+                    "$ref": "#/definitions/api.MSG_REQ_SearchUser_Filter"
+                },
+                "limit": {
+                    "description": "required",
+                    "type": "integer"
+                },
+                "offset": {
+                    "description": "required",
+                    "type": "integer"
+                }
+            }
+        },
+        "api.MSG_REQ_SearchUser_Filter": {
             "type": "object",
             "properties": {
                 "email": {
@@ -186,82 +213,45 @@ const docTemplate = `{
                         "type": "integer"
                     }
                 },
-                "limit": {
-                    "description": "required",
-                    "type": "integer"
-                },
-                "meta_message": {
-                    "type": "string"
-                },
-                "meta_status": {
-                    "type": "integer"
-                },
                 "name": {
                     "description": "optional",
                     "type": "string"
-                },
-                "offset": {
-                    "description": "required",
-                    "type": "integer"
                 }
             }
         },
-        "api.MSG_REQ_UPDATE_TO_USER": {
+        "api.MSG_REQ_UpdateUser": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
+                "filter": {
+                    "$ref": "#/definitions/api.MSG_REQ_UpdateUser_Filter"
                 },
-                "name": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
+                "update": {
+                    "$ref": "#/definitions/api.Msg_Req_UpdateUser_To"
                 }
             }
         },
-        "api.MSG_REQ_UPDATE_USER": {
+        "api.MSG_REQ_UpdateUser_Filter": {
             "type": "object",
             "properties": {
-                "to": {
-                    "$ref": "#/definitions/api.MSG_REQ_UPDATE_TO_USER"
-                },
-                "where": {
-                    "$ref": "#/definitions/api.MSG_REQ_UPDATE_WHERE_USER"
-                }
-            }
-        },
-        "api.MSG_REQ_UPDATE_WHERE_USER": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
         "api.MSG_RESP_CREATE_USER": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "meta_message": {
                     "type": "string"
                 },
                 "meta_status": {
                     "type": "integer"
                 },
-                "name": {
-                    "type": "string"
+                "user": {
+                    "$ref": "#/definitions/api.MSG_User"
                 }
             }
         },
@@ -273,7 +263,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.MSG_RESP_SEARCH_USER": {
+        "api.MSG_RESP_SearchUser": {
             "type": "object",
             "properties": {
                 "meta_message": {
@@ -285,29 +275,12 @@ const docTemplate = `{
                 "result": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/api.MSG_USER"
+                        "$ref": "#/definitions/api.MSG_User"
                     }
                 }
             }
         },
-        "api.MSG_RESP_UPDATE_USER": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "meta_message": {
-                    "type": "string"
-                },
-                "meta_status": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.MSG_USER": {
+        "api.MSG_User": {
             "type": "object",
             "properties": {
                 "email": {
@@ -317,6 +290,20 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.Msg_Req_UpdateUser_To": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
                     "type": "string"
                 }
             }

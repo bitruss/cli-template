@@ -1,4 +1,11 @@
 definitions:
+  api.API_META_STATUS:
+    properties:
+      meta_message:
+        type: string
+      meta_status:
+        type: integer
+    type: object
   api.MSG_REQ_CREATE_USER:
     properties:
       email:
@@ -6,7 +13,18 @@ definitions:
       name:
         type: string
     type: object
-  api.MSG_REQ_SEARCH_USER:
+  api.MSG_REQ_SearchUser:
+    properties:
+      filter:
+        $ref: '#/definitions/api.MSG_REQ_SearchUser_Filter'
+      limit:
+        description: required
+        type: integer
+      offset:
+        description: required
+        type: integer
+    type: object
+  api.MSG_REQ_SearchUser_Filter:
     properties:
       email:
         description: optional  email can be like condition e.g " LIKE `%jack%` "
@@ -16,64 +34,39 @@ definitions:
         items:
           type: integer
         type: array
-      limit:
-        description: required
-        type: integer
-      meta_message:
-        type: string
-      meta_status:
-        type: integer
       name:
         description: optional
         type: string
-      offset:
-        description: required
-        type: integer
     type: object
-  api.MSG_REQ_UPDATE_TO_USER:
+  api.MSG_REQ_UpdateUser:
     properties:
-      email:
-        type: string
-      name:
-        type: string
-      status:
-        type: string
+      filter:
+        $ref: '#/definitions/api.MSG_REQ_UpdateUser_Filter'
+      update:
+        $ref: '#/definitions/api.Msg_Req_UpdateUser_To'
     type: object
-  api.MSG_REQ_UPDATE_USER:
+  api.MSG_REQ_UpdateUser_Filter:
     properties:
-      to:
-        $ref: '#/definitions/api.MSG_REQ_UPDATE_TO_USER'
-      where:
-        $ref: '#/definitions/api.MSG_REQ_UPDATE_WHERE_USER'
-    type: object
-  api.MSG_REQ_UPDATE_WHERE_USER:
-    properties:
-      email:
-        type: string
       id:
-        type: integer
-      name:
-        type: string
-      status:
-        type: string
+        items:
+          type: integer
+        type: array
     type: object
   api.MSG_RESP_CREATE_USER:
     properties:
-      email:
-        type: string
       meta_message:
         type: string
       meta_status:
         type: integer
-      name:
-        type: string
+      user:
+        $ref: '#/definitions/api.MSG_User'
     type: object
   api.MSG_RESP_HEALTH:
     properties:
       unixtime:
         type: integer
     type: object
-  api.MSG_RESP_SEARCH_USER:
+  api.MSG_RESP_SearchUser:
     properties:
       meta_message:
         type: string
@@ -81,27 +74,25 @@ definitions:
         type: integer
       result:
         items:
-          $ref: '#/definitions/api.MSG_USER'
+          $ref: '#/definitions/api.MSG_User'
         type: array
     type: object
-  api.MSG_RESP_UPDATE_USER:
-    properties:
-      email:
-        type: string
-      meta_message:
-        type: string
-      meta_status:
-        type: integer
-      name:
-        type: string
-    type: object
-  api.MSG_USER:
+  api.MSG_User:
     properties:
       email:
         type: string
       id:
         type: integer
       name:
+        type: string
+    type: object
+  api.Msg_Req_UpdateUser_To:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      status:
         type: string
     type: object
 info:
@@ -163,14 +154,14 @@ paths:
         name: msg
         required: true
         schema:
-          $ref: '#/definitions/api.MSG_REQ_SEARCH_USER'
+          $ref: '#/definitions/api.MSG_REQ_SearchUser'
       produces:
       - application/json
       responses:
         "200":
           description: result
           schema:
-            $ref: '#/definitions/api.MSG_RESP_SEARCH_USER'
+            $ref: '#/definitions/api.MSG_RESP_SearchUser'
       security:
       - ApiKeyAuth: []
       summary: search user
@@ -187,14 +178,14 @@ paths:
         name: msg
         required: true
         schema:
-          $ref: '#/definitions/api.MSG_REQ_UPDATE_USER'
+          $ref: '#/definitions/api.MSG_REQ_UpdateUser'
       produces:
       - application/json
       responses:
         "200":
           description: result
           schema:
-            $ref: '#/definitions/api.MSG_RESP_UPDATE_USER'
+            $ref: '#/definitions/api.API_META_STATUS'
       security:
       - ApiKeyAuth: []
       summary: update user
