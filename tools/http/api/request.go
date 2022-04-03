@@ -63,7 +63,8 @@ func request(method string, url string, token string, postData interface{}, time
 		return err
 	}
 
-	if resp.Response().StatusCode != 200 {
+	if resp.Response().StatusCode >= 200 && resp.Response().StatusCode < 300 {
+	} else {
 		return errors.New("network error")
 	}
 

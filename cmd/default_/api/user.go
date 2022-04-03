@@ -57,13 +57,17 @@ func createUser(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, res)
 }
 
+//search
+type MSG_REQ_SEARCH_USER_Filter struct {
+	Id    *[]int  //sql : id in (...) //optional
+	Name  *string //optional
+	Email *string //optional  email can be like condition e.g " LIKE `%jack%` "
+}
+
 type MSG_REQ_SEARCH_USER struct {
-	api.API_META_STATUS
-	Id     *[]int  //sql : id in (...) //optional
-	Name   *string //optional
-	Email  *string //optional  email can be like condition e.g " LIKE `%jack%` "
-	Offset int     //required
-	Limit  int     //required
+	Filter MSG_REQ_SEARCH_USER_Filter
+	Offset int //required
+	Limit  int //required
 }
 
 type MSG_USER struct {
@@ -95,8 +99,7 @@ func searchUser(ctx echo.Context) error {
 		return ctx.JSON(http.StatusOK, res)
 	}
 
-	qmap := data.MapRemoveNil(structs.Map(msg))
-
+	qmap := data.MapRemoveNil(structs.Map(msg.Filter))
 	//pass qmap to your code inside your manager
 	if len(qmap) == 0 {
 		res.MetaStatus(-1, "no query condition ")
@@ -112,28 +115,19 @@ func searchUser(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, res)
 }
 
-type MSG_REQ_UPDATE_WHERE_USER struct {
-	ID     *int
+type MSG_REQ_UpdateUser_Filter struct {
+	ID []int
+}
+
+type Msg_Req_UpdateUser_To struct {
 	Status *string
 	Name   *string
 	Email  *string
 }
 
-type MSG_REQ_UPDATE_TO_USER struct {
-	Status *string
-	Name   *string
-	Email  *string
-}
-
-type MSG_REQ_UPDATE_USER struct {
-	Where MSG_REQ_UPDATE_WHERE_USER
-	To    MSG_REQ_UPDATE_TO_USER
-}
-
-type MSG_RESP_UPDATE_USER struct {
-	api.API_META_STATUS
-	Name  string `json:"name"`
-	Email string `json:"email"`
+type MSG_REQ_UpdateUser struct {
+	Filter MSG_REQ_UpdateUser_Filter
+	Update Msg_Req_UpdateUser_To
 }
 
 // @Summary      update user
@@ -141,20 +135,20 @@ type MSG_RESP_UPDATE_USER struct {
 // @Tags         user
 // @Security     ApiKeyAuth
 // @Accept       json
-// @Param        msg  body  MSG_REQ_UPDATE_USER true  "update user"
+// @Param        msg  body  MSG_REQ_UpdateUser true  "update user"
 // @Produce      json
-// @Success      200 {object} MSG_RESP_UPDATE_USER "result"
+// @Success      200 {object} api.API_META_STATUS "result"
 // @Router       /api/user/update [post]
 func updateUser(ctx echo.Context) error {
-	var msg MSG_REQ_UPDATE_USER
-	var res MSG_RESP_UPDATE_USER
+	var msg MSG_REQ_UpdateUser
+	var res api.API_META_STATUS
 	if err := ctx.Bind(&msg); err != nil {
 		res.MetaStatus(-1, "post data error")
 		return ctx.JSON(http.StatusOK, res)
 	}
 
-	qmap := data.MapRemoveNil(structs.Map(msg.Where))
-	tomap := data.MapRemoveNil(structs.Map(msg.To))
+	qmap := data.MapRemoveNil(structs.Map(msg.Filter))
+	tomap := data.MapRemoveNil(structs.Map(msg.Update))
 
 	//pass qmap and tomap to your code inside your manager
 
