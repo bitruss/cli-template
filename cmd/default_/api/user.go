@@ -22,6 +22,13 @@ func config_user(httpServer *echoServer.EchoServer) {
 	httpServer.POST("/api/user/update", updateUser, MidToken)
 }
 
+type MSG_User struct {
+	Id    int
+	Name  string
+	Email string
+}
+
+//create
 type MSG_REQ_CREATE_USER struct {
 	Name  string
 	Email string
@@ -29,8 +36,7 @@ type MSG_REQ_CREATE_USER struct {
 
 type MSG_RESP_CREATE_USER struct {
 	api.API_META_STATUS
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	User *MSG_User
 }
 
 // @Summary      creat user
@@ -58,41 +64,35 @@ func createUser(ctx echo.Context) error {
 }
 
 //search
-type MSG_REQ_SEARCH_USER_Filter struct {
+type MSG_REQ_SearchUser_Filter struct {
 	Id    *[]int  //sql : id in (...) //optional
 	Name  *string //optional
 	Email *string //optional  email can be like condition e.g " LIKE `%jack%` "
 }
 
-type MSG_REQ_SEARCH_USER struct {
-	Filter MSG_REQ_SEARCH_USER_Filter
+type MSG_REQ_SearchUser struct {
+	Filter MSG_REQ_SearchUser_Filter
 	Offset int //required
 	Limit  int //required
 }
 
-type MSG_USER struct {
-	Id    int
-	Name  string
-	Email string
-}
-
-type MSG_RESP_SEARCH_USER struct {
+type MSG_RESP_SearchUser struct {
 	api.API_META_STATUS
-	Result []*MSG_USER
+	Result []*MSG_User
 }
 
 // @Summary      search user
 // @Description  search user
 // @Tags         user
 // @Security     ApiKeyAuth
-// @Param        msg  body  MSG_REQ_SEARCH_USER true  "user search param"
+// @Param        msg  body  MSG_REQ_SearchUser true  "user search param"
 // @Produce      json
-// @Success      200 {object} MSG_RESP_SEARCH_USER "result"
+// @Success      200 {object} MSG_RESP_SearchUser "result"
 // @Router       /api/user/search [post]
 func searchUser(ctx echo.Context) error {
 
-	var msg MSG_REQ_SEARCH_USER
-	res := &MSG_RESP_SEARCH_USER{}
+	var msg MSG_REQ_SearchUser
+	res := &MSG_RESP_SearchUser{}
 
 	if err := ctx.Bind(&msg); err != nil {
 		res.MetaStatus(-1, "bad request data")
