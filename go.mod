@@ -13,7 +13,7 @@ require (
 	github.com/coreservice-io/ULog v0.1.16
 	github.com/coreservice-io/UReference v0.0.4
 	github.com/coreservice-io/USafeGo v0.1.3
-	github.com/coreservice-io/UUtils v0.1.5
+	github.com/coreservice-io/UUtils v0.1.6
 	github.com/fatih/color v1.13.0
 	github.com/fatih/structs v1.1.0
 	github.com/go-redis/redis/v8 v8.11.4
