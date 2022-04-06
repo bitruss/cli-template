@@ -70,12 +70,16 @@ func Test_UserDB(t *testing.T) {
 
 	//get
 	log.Println("---get user---")
-	userInfo, err := userMgr.GetUserById(ID, false)
+	queryResult, err := userMgr.QueryUser(&ID, nil, nil, nil, 0, 0, false, true)
 	if err != nil {
 		log.Println("GetUserById error:", err)
 		return
 	}
-	log.Println("userInfo:", userInfo)
+	if len(queryResult.Users) == 0 {
+		log.Println("GetUserById user not exist")
+	} else {
+		log.Println("userInfo:", queryResult.Users[0])
+	}
 
 	//update
 	log.Println("---update user---")
@@ -90,12 +94,16 @@ func Test_UserDB(t *testing.T) {
 		return
 	}
 	//get
-	userInfo, err = userMgr.GetUserById(ID, false)
+	queryResult, err = userMgr.QueryUser(&ID, nil, nil, nil, 0, 0, false, true)
 	if err != nil {
 		log.Println("GetUserById error:", err)
 		return
 	}
-	log.Println("userInfo:", userInfo)
+	if len(queryResult.Users) == 0 {
+		log.Println("GetUserById user not exist")
+	} else {
+		log.Println("userInfo:", queryResult.Users[0])
+	}
 
 	//delete
 	log.Println("---delete user---")
@@ -104,86 +112,15 @@ func Test_UserDB(t *testing.T) {
 		log.Println("DeleteUser error:", err)
 		return
 	}
-	userInfo, err = userMgr.GetUserById(ID, false)
+	queryResult, err = userMgr.QueryUser(&ID, nil, nil, nil, 0, 0, false, true)
 	if err != nil {
 		log.Println("GetUserById error:", err)
 		return
 	}
-	log.Println("userInfo:", userInfo)
-
-	userInfo, err = userMgr.GetUserById(ID, false)
-	if err != nil {
-		log.Println("GetUserById error:", err)
-		return
+	if len(queryResult.Users) == 0 {
+		log.Println("GetUserById user not exist")
+	} else {
+		log.Println("userInfo:", queryResult.Users[0])
 	}
-	log.Println("userInfo:", userInfo)
 
-}
-
-func Test_UserArray(t *testing.T) {
-	initialize_exampleuser()
-	// user array
-	//for i := 0; i < 10; i++ {
-	//	newUser := &ExampleUserModel{
-	//		Status: "normal",
-	//		Name:   "userName" + strconv.Itoa(i),
-	//		Email:  "mail@email.com",
-	//	}
-	//	if i > 5 {
-	//		newUser.Status = "forbidden"
-	//	}
-	//	_, err := CreateUser(newUser)
-	//	if err != nil {
-	//		log.Println("InsertUser error:", err)
-	//		return
-	//	}
-	//}
-
-	userList, err := userMgr.GetUsersByStatus("forbidden", false)
-	if err != nil {
-		log.Println("GetUsersByStatus error:", err)
-		return
-	}
-	log.Println(userList)
-
-	userList, err = userMgr.GetUsersByStatus("forbidden", false)
-	if err != nil {
-		log.Println("GetUsersByStatus error:", err)
-		return
-	}
-	log.Println(userList)
-}
-
-func Test_UserName(t *testing.T) {
-	initialize_exampleuser()
-	// user array
-	//for i := 0; i < 10; i++ {
-	//	newUser := &ExampleUserModel{
-	//		Status: "normal",
-	//		Name:   "userName" + strconv.Itoa(i),
-	//		Email:  "mail@email.com",
-	//	}
-	//	if i > 5 {
-	//		newUser.Status = "forbidden"
-	//	}
-	//	_, err := CreateUser(newUser)
-	//	if err != nil {
-	//		log.Println("InsertUser error:", err)
-	//		return
-	//	}
-	//}
-
-	userName, err := userMgr.GetUserNameById(5, false)
-	if err != nil {
-		log.Println("GetUserNameById error:", err)
-		return
-	}
-	log.Println(userName)
-
-	userName, err = userMgr.GetUserNameById(5, false)
-	if err != nil {
-		log.Println("GetUsersByStatus error:", err)
-		return
-	}
-	log.Println(userName)
 }
