@@ -58,7 +58,7 @@ type QueryUserResult struct {
 
 func QueryUser(id *int, status *string, name *string, email *string, limit int, offset int, fromCache bool, updateCache bool) (*QueryUserResult, error) {
 	//gen_key
-	ck := smartCache.ConnectKey{}
+	ck := smartCache.NewConnectKey("user")
 	ck.C_Int_Ptr("id", id).C_Str_Ptr("status", status).
 		C_Str_Ptr("name", name).C_Str_Ptr("email", email).C_Int(limit).C_Int(offset)
 

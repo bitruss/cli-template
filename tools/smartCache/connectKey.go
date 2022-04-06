@@ -11,6 +11,12 @@ type ConnectKey struct {
 	Key string
 }
 
+func NewConnectKey(baseKey string) *ConnectKey {
+	return &ConnectKey{
+		Key: baseKey,
+	}
+}
+
 func (k *ConnectKey) String() string {
 	return k.Key
 }
