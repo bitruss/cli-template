@@ -39,12 +39,6 @@ func DeleteUser(id int) error {
 	return nil
 }
 
-//query
-type QueryUserResult struct {
-	Users      []*ExampleUserModel
-	TotalCount int64
-}
-
 func UpdateUser(newData map[string]interface{}, id int) error {
 	newData["updated"] = time.Now().UTC().Unix()
 	result := sqldb.GetInstance().Table("example_user_models").Where("id=?", id).Updates(newData)
@@ -54,6 +48,12 @@ func UpdateUser(newData map[string]interface{}, id int) error {
 	//refresh cache if necessary
 	QueryUser(&id, nil, nil, nil, 0, 0, false, true)
 	return nil
+}
+
+//query
+type QueryUserResult struct {
+	Users      []*ExampleUserModel
+	TotalCount int64
 }
 
 func QueryUser(id *int, status *string, name *string, email *string, limit int, offset int, fromCache bool, updateCache bool) (*QueryUserResult, error) {

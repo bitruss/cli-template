@@ -57,6 +57,20 @@ func (k *ConnectKey) C_Int64_Ptr(keyname string, key_ptr *int64) *ConnectKey {
 	return k
 }
 
+func (k *ConnectKey) C_UInt(key uint) *ConnectKey {
+	k.Key = k.Key + ":" + strconv.FormatUint(uint64(key), 10)
+	return k
+}
+
+func (k *ConnectKey) C_UInt_Ptr(keyname string, key_ptr *uint) *ConnectKey {
+	if key_ptr != nil {
+		k.C_UInt(*key_ptr)
+	} else {
+		k.Key = k.Key + ":" + keyname
+	}
+	return k
+}
+
 func (k *ConnectKey) C_UInt64(key uint64) *ConnectKey {
 	k.Key = k.Key + ":" + strconv.FormatUint(key, 10)
 	return k
