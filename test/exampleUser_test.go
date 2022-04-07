@@ -66,7 +66,7 @@ func Test_UserDB(t *testing.T) {
 		return
 	}
 	log.Println("newUserInfo:", newUserInfo)
-	ID := newUserInfo.ID
+	ID := newUserInfo.Id
 
 	//get
 	log.Println("---get user---")

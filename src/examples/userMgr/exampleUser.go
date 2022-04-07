@@ -14,7 +14,7 @@ import (
 
 //example for GormDB and tools cache
 type ExampleUserModel struct {
-	ID      int
+	Id      int64
 	Status  string
 	Name    string
 	Email   string
@@ -29,8 +29,8 @@ func CreateUser(userInfo *ExampleUserModel) (*ExampleUserModel, error) {
 	return userInfo, nil
 }
 
-func DeleteUser(id int) error {
-	user := &ExampleUserModel{ID: id}
+func DeleteUser(id int64) error {
+	user := &ExampleUserModel{Id: id}
 	if err := sqldb.GetInstance().Table("example_user_models").Delete(user).Error; err != nil {
 		return err
 	}
@@ -39,7 +39,7 @@ func DeleteUser(id int) error {
 	return nil
 }
 
-func UpdateUser(newData map[string]interface{}, id int) error {
+func UpdateUser(newData map[string]interface{}, id int64) error {
 	newData["updated"] = time.Now().UTC().Unix()
 	result := sqldb.GetInstance().Table("example_user_models").Where("id=?", id).Updates(newData)
 	if result.Error != nil {
@@ -56,10 +56,10 @@ type QueryUserResult struct {
 	TotalCount int64
 }
 
-func QueryUser(id *int, status *string, name *string, email *string, limit int, offset int, fromCache bool, updateCache bool) (*QueryUserResult, error) {
+func QueryUser(id *int64, status *string, name *string, email *string, limit int, offset int, fromCache bool, updateCache bool) (*QueryUserResult, error) {
 	//gen_key
 	ck := smartCache.NewConnectKey("user")
-	ck.C_Int_Ptr("id", id).C_Str_Ptr("status", status).
+	ck.C_Int64_Ptr("id", id).C_Str_Ptr("status", status).
 		C_Str_Ptr("name", name).C_Str_Ptr("email", email).C_Int(limit).C_Int(offset)
 
 	key := redisClient.GetInstance().GenKey(ck.String())

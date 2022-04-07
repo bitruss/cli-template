@@ -7,7 +7,7 @@ import (
 )
 
 func StartLog(clictx *cli.Context) {
-	num := clictx.Int("num")
+	num := clictx.Int64("num")
 	if num == 0 {
 		num = 20
 	}
