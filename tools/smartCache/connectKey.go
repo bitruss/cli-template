@@ -161,6 +161,30 @@ func (k *ConnectKey) C_Int_Array_Ptr(keyname string, key_ptr *[]int) *ConnectKey
 	return k
 }
 
+func (k *ConnectKey) C_Int64_Array(key []int64) *ConnectKey {
+
+	key_str := "array_" + strconv.Itoa(len(key))
+	for _, v := range key {
+		key_str = key_str + "_" + strconv.FormatInt(v, 10)
+	}
+
+	if len(key_str) > 10 {
+		key_str = hash_util.CRC32Hash([]byte(key_str))
+	}
+
+	k.Key = k.Key + ":" + key_str
+	return k
+}
+
+func (k *ConnectKey) C_Int64_Array_Ptr(keyname string, key_ptr *[]int64) *ConnectKey {
+	if key_ptr != nil {
+		k.C_Int64_Array(*key_ptr)
+	} else {
+		k.Key = k.Key + ":" + keyname
+	}
+	return k
+}
+
 func (k *ConnectKey) C_Str_Array(key []string) *ConnectKey {
 
 	key_str := "array_" + strconv.Itoa(len(key))
