@@ -27,5 +27,8 @@ func start_http_sever() {
 	httpServer := echoServer.GetInstance()
 	api.DeclareApi(httpServer)
 	api.ConfigApi(httpServer)
-	httpServer.Start()
+	err := httpServer.Start()
+	if err != nil {
+		basic.Logger.Errorln(err)
+	}
 }
