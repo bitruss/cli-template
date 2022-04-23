@@ -23,7 +23,6 @@ import (
 // @license.name    Apache 2.0
 // @license.url     http://www.apache.org/licenses/LICENSE-2.0.html
 
-//// @host           127.0.0.1:80
 // @schemes         http
 
 // @securityDefinitions.apikey  ApiKeyAuth
@@ -38,7 +37,7 @@ func DeclareApi(httpServer *echoServer.EchoServer) {
 }
 
 func ConfigApi(httpServer *echoServer.EchoServer) {
-	httpServer.GET("/*", echoSwagger.WrapHandler)
+	httpServer.GET("/swagger/*", echoSwagger.WrapHandler)
 }
 
 func Gen_Api_Docs() {
