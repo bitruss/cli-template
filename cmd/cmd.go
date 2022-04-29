@@ -8,7 +8,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/cmd/config"
 	"github.com/coreservice-io/CliAppTemplate/cmd/default_"
-	"github.com/coreservice-io/CliAppTemplate/cmd/default_/api"
+	"github.com/coreservice-io/CliAppTemplate/cmd/default_/http/api"
 	"github.com/coreservice-io/CliAppTemplate/cmd/log"
 	"github.com/coreservice-io/CliAppTemplate/cmd/service"
 	"github.com/coreservice-io/CliAppTemplate/configuration"

@@ -7,6 +7,7 @@ require (
 	github.com/coreservice-io/GormULog v0.1.3
 	github.com/coreservice-io/LogrusULog v0.1.19
 	github.com/coreservice-io/RedisSpr v0.1.18
+	github.com/coreservice-io/UBiRpc v0.0.0-20220429131114-2d265d89aa72
 	github.com/coreservice-io/UECSUploader v0.0.3
 	github.com/coreservice-io/UHub v0.0.3
 	github.com/coreservice-io/UJob v0.1.5

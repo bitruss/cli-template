@@ -23,9 +23,9 @@
   "elasticsearch_username": "xxxxx",
 
 
-  "api_doc_gen_search_dir":"cmd/default_/api",
+  "api_doc_gen_search_dir":"cmd/default_/http/api",
   "api_doc_gen_mainfile":"api.go",
-  "api_doc_gen_output_dir":"cmd/default_/api_docs",
+  "api_doc_gen_output_dir":"cmd/default_/http/api_docs",
 
 
   "provide_folder": [

@@ -107,6 +107,8 @@ github.com/coreservice-io/LogrusULog v0.1.19 h1:dvq2RrzDBQwC9vSgyHi99LFdLFLIC6zu
 github.com/coreservice-io/LogrusULog v0.1.19/go.mod h1:G92lJKzc19J8tLNFNmO607FTHxpMXJQB3fp/x269VQw=
 github.com/coreservice-io/RedisSpr v0.1.18 h1:ThbSak8rsRwexzuUChapQDadYBWnNbB2Xr1iK5UAUE0=
 github.com/coreservice-io/RedisSpr v0.1.18/go.mod h1:absPLrL4U4l452FEctr7t+qHrxUzoKDNZ2zKRH5/WH8=
+github.com/coreservice-io/UBiRpc v0.0.0-20220429131114-2d265d89aa72 h1:hrZahTD1T5uoj8mGnxW2WUmLD/sWyyX+u8OAdTTGGRw=
+github.com/coreservice-io/UBiRpc v0.0.0-20220429131114-2d265d89aa72/go.mod h1:RlAF5m9JtJ9DarOdbP6oA1uWn3oQN8L+v9DstZPsBEU=
 github.com/coreservice-io/UECSUploader v0.0.3 h1:WRl7p5IFTz/V2VGz901IhnS6Rkm0qc1CeYbhHbPtZjM=
 github.com/coreservice-io/UECSUploader v0.0.3/go.mod h1:Qiz9E3GwyAJ34hAECKt3ebaOX/6X8hxcn7z0Yfdh10Y=
 github.com/coreservice-io/UHub v0.0.3 h1:jQux27wjzDw79SfA3pJyVD+8wKZH8ogzRbi9zr6A+0k=
@@ -154,6 +156,7 @@ github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMo
 github.com/fsnotify/fsnotify v1.4.9/go.mod h1:znqG4EE+3YCdAaPaxE2ZRY/06pZUdp0tY4IgpuI1SZQ=
 github.com/fsnotify/fsnotify v1.5.1 h1:mZcQUHVQUQWoPXXtuf9yuEXKudkV2sx1E06UadKWpgI=
 github.com/fsnotify/fsnotify v1.5.1/go.mod h1:T3375wBYaZdLLcVNkcVbzGHY7f1l/uK5T5Ai1i3InKU=
+github.com/fxamacker/cbor/v2 v2.4.0/go.mod h1:TA1xS00nchWmaBnEIxPSE5oHLuJBAVvqrtAnWBwBCVo=
 github.com/ghodss/yaml v1.0.0 h1:wQHKEahhL6wmXdzwWG11gIVCkOv05bNOh+Rxn0yngAk=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/go-gl/glfw v0.0.0-20190409004039-e6da0acd62b1/go.mod h1:vR7hzQXu2zJy9AVAgeJqvqgH9Q5CA+iKCZ2gyEVpxRU=
@@ -481,6 +484,7 @@ github.com/valyala/fasttemplate v1.0.1/go.mod h1:UQGH1tvbgY+Nz5t2n7tXsz52dQxojPU
 github.com/valyala/fasttemplate v1.1.0/go.mod h1:UQGH1tvbgY+Nz5t2n7tXsz52dQxojPUpymEIMZ47gx8=
 github.com/valyala/fasttemplate v1.2.1 h1:TVEnxayobAdVkhQfrfes2IzOB6o+z4roRkPF52WA1u4=
 github.com/valyala/fasttemplate v1.2.1/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
+github.com/x448/float16 v0.8.4/go.mod h1:14CWIYCyZA/cWjXOioeEpHeN/83MdbZDRQHoFcYsOfg=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

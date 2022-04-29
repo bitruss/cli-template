@@ -3,7 +3,7 @@ package api
 import (
 	"github.com/coreservice-io/CliAppTemplate/basic"
 
-	_ "github.com/coreservice-io/CliAppTemplate/cmd/default_/api_docs"
+	_ "github.com/coreservice-io/CliAppTemplate/cmd/default_/http/api_docs"
 	"github.com/coreservice-io/CliAppTemplate/configuration"
 	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
 	"github.com/coreservice-io/UUtils/path_util"
