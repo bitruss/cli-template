@@ -1,4 +1,4 @@
-package ecs
+package ecs_plugin
 
 import (
 	"fmt"

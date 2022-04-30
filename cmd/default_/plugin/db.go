@@ -5,7 +5,7 @@ import (
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/configuration"
-	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
+	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb_plugin"
 )
 
 func initDB() error {
@@ -34,7 +34,7 @@ func initDB() error {
 		return errors.New("db_password [string] in config err," + err.Error())
 	}
 
-	return sqldb.Init(sqldb.Config{
+	return sqldb_plugin.Init(sqldb_plugin.Config{
 		Host:     db_host,
 		Port:     db_port,
 		DbName:   db_name,

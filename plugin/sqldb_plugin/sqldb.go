@@ -1,4 +1,4 @@
-package sqldb
+package sqldb_plugin
 
 import (
 	"fmt"

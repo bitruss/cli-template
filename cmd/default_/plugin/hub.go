@@ -1,7 +1,7 @@
 package plugin
 
-import "github.com/coreservice-io/CliAppTemplate/plugin/hub"
+import "github.com/coreservice-io/CliAppTemplate/plugin/hub_plugin"
 
 func iniHub() error {
-	return hub.Init()
+	return hub_plugin.Init()
 }

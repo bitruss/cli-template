@@ -1,4 +1,4 @@
-package ecsUploader
+package ecs_uploader_plugin
 
 import (
 	"fmt"

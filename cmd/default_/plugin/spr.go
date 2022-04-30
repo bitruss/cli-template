@@ -5,7 +5,7 @@ import (
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/configuration"
-	"github.com/coreservice-io/CliAppTemplate/plugin/sprMgr"
+	"github.com/coreservice-io/CliAppTemplate/plugin/spr_plugin"
 	"github.com/coreservice-io/RedisSpr"
 )
 
@@ -40,7 +40,7 @@ func initSpr() error {
 		return errors.New("redis_useTls [bool] in config err," + err.Error())
 	}
 
-	return sprMgr.Init(&RedisSpr.RedisConfig{
+	return spr_plugin.Init(&RedisSpr.RedisConfig{
 		Addr:     redis_addr,
 		UserName: redis_username,
 		Password: redis_password,

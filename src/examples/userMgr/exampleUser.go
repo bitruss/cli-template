@@ -5,9 +5,9 @@ import (
 	"time"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
-	"github.com/coreservice-io/CliAppTemplate/plugin/reference"
-	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
+	"github.com/coreservice-io/CliAppTemplate/plugin/redis_plugin"
+	"github.com/coreservice-io/CliAppTemplate/plugin/reference_plugin"
+	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb_plugin"
 	"github.com/coreservice-io/CliAppTemplate/tools/smartCache"
 	"github.com/go-redis/redis/v8"
 )
@@ -23,7 +23,7 @@ type ExampleUserModel struct {
 }
 
 func CreateUser(userInfo *ExampleUserModel) (*ExampleUserModel, error) {
-	if err := sqldb.GetInstance().Table("example_user_models").Create(userInfo).Error; err != nil {
+	if err := sqldb_plugin.GetInstance().Table("example_user_models").Create(userInfo).Error; err != nil {
 		return nil, err
 	}
 	return userInfo, nil
@@ -31,7 +31,7 @@ func CreateUser(userInfo *ExampleUserModel) (*ExampleUserModel, error) {
 
 func DeleteUser(id int64) error {
 	user := &ExampleUserModel{Id: id}
-	if err := sqldb.GetInstance().Table("example_user_models").Delete(user).Error; err != nil {
+	if err := sqldb_plugin.GetInstance().Table("example_user_models").Delete(user).Error; err != nil {
 		return err
 	}
 	//delete cache if necessary
@@ -41,7 +41,7 @@ func DeleteUser(id int64) error {
 
 func UpdateUser(newData map[string]interface{}, id int64) error {
 	newData["updated"] = time.Now().UTC().Unix()
-	result := sqldb.GetInstance().Table("example_user_models").Where("id=?", id).Updates(newData)
+	result := sqldb_plugin.GetInstance().Table("example_user_models").Where("id=?", id).Updates(newData)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -62,11 +62,11 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 	ck.C_Int64_Ptr("id", id).C_Str_Ptr("status", status).
 		C_Str_Ptr("name", name).C_Str_Ptr("email", email).C_Int(limit).C_Int(offset)
 
-	key := redisClient.GetInstance().GenKey(ck.String())
+	key := redis_plugin.GetInstance().GenKey(ck.String())
 
 	if fromCache {
 		// try to get from reference
-		result := smartCache.Ref_Get(reference.GetInstance(), key)
+		result := smartCache.Ref_Get(reference_plugin.GetInstance(), key)
 		if result != nil {
 			basic.Logger.Debugln("QueryUser hit from reference")
 			return result.(*QueryUserResult), nil
@@ -77,10 +77,10 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 			Users:      []*ExampleUserModel{},
 			TotalCount: 0,
 		}
-		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance().ClusterClient, true, key, redis_result)
+		err := smartCache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, redis_result)
 		if err == nil {
 			basic.Logger.Debugln("QueryUser hit from redis")
-			smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
+			smartCache.Ref_Set(reference_plugin.GetInstance(), key, redis_result)
 			return redis_result, nil
 		} else if err == redis.Nil {
 			//continue to get from db part
@@ -98,7 +98,7 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 		TotalCount: 0,
 	}
 
-	query := sqldb.GetInstance().Table("example_user_models")
+	query := sqldb_plugin.GetInstance().Table("example_user_models")
 	if id != nil {
 		query.Where("id = ?", *id)
 	}
@@ -126,7 +126,7 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 		return nil, err
 	} else {
 		if updateCache {
-			smartCache.RR_Set(context.Background(), redisClient.GetInstance().ClusterClient, reference.GetInstance(), true, key, queryResult, 300)
+			smartCache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, queryResult, 300)
 		}
 		return queryResult, nil
 	}

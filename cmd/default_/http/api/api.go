@@ -5,7 +5,7 @@ import (
 
 	_ "github.com/coreservice-io/CliAppTemplate/cmd/default_/http/api_docs"
 	"github.com/coreservice-io/CliAppTemplate/configuration"
-	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
+	"github.com/coreservice-io/CliAppTemplate/plugin/echo_plugin"
 	"github.com/coreservice-io/UUtils/path_util"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"github.com/swaggo/swag/gen"
@@ -29,14 +29,14 @@ import (
 // @in                          header
 // @name                        Authorization
 
-func DeclareApi(httpServer *echoServer.EchoServer) {
+func DeclareApi(httpServer *echo_plugin.EchoServer) {
 	//health
 	config_health(httpServer)
 	//user
 	config_user(httpServer)
 }
 
-func ConfigApi(httpServer *echoServer.EchoServer) {
+func ConfigApi(httpServer *echo_plugin.EchoServer) {
 	httpServer.GET("/swagger/*", echoSwagger.WrapHandler)
 }
 

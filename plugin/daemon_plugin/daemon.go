@@ -1,4 +1,4 @@
-package daemon
+package daemon_plugin
 
 import (
 	"fmt"

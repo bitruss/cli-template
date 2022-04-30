@@ -5,7 +5,7 @@ import (
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/configuration"
-	"github.com/coreservice-io/CliAppTemplate/plugin/ecsUploader"
+	"github.com/coreservice-io/CliAppTemplate/plugin/ecs_uploader_plugin"
 )
 
 func initEcsUploader() error {
@@ -24,7 +24,7 @@ func initEcsUploader() error {
 		return errors.New("elasticsearch_password [string] in config error," + err.Error())
 	}
 
-	return ecsUploader.Init(ecsUploader.Config{
+	return ecs_uploader_plugin.Init(ecs_uploader_plugin.Config{
 		Address:  elasticSearchAddr,
 		UserName: elasticSearchUserName,
 		Password: elasticSearchPassword}, basic.Logger)

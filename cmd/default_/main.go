@@ -17,11 +17,22 @@ func StartDefault(clictx *cli.Context) {
 	//ini components and run example
 	plugin.InitPlugin()
 
-	start_service()
+	//start threads jobs
+	go start_jobs()
+
+	start_components()
 }
 
-func start_service() {
-
+func start_components() {
 	//start the httpserver
-	http.StartHttpSever()
+	http.StartDefaultHttpSever()
+}
+
+func start_jobs() {
+	//check all services already started
+	if !http.CheckDefaultHttpServerStarted() {
+		panic("http server not working")
+	}
+
+	basic.Logger.Infoln("start your jobs below")
 }

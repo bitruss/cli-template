@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/plugin/daemon"
+	"github.com/coreservice-io/CliAppTemplate/plugin/daemon_plugin"
 	"github.com/urfave/cli/v2"
 )
 
@@ -17,7 +17,7 @@ func RunServiceCmd(clictx *cli.Context) {
 	}
 
 	action := subCmds[0]
-	err := daemon.Init()
+	err := daemon_plugin.Init()
 	if err != nil {
 		basic.Logger.Fatalln("init daemon service error:", err)
 	}
@@ -26,24 +26,24 @@ func RunServiceCmd(clictx *cli.Context) {
 	var e error
 	switch action {
 	case "install":
-		status, e = daemon.GetInstance().Install()
+		status, e = daemon_plugin.GetInstance().Install()
 		basic.Logger.Debugln("cmd install")
 	case "remove":
-		daemon.GetInstance().Stop()
-		status, e = daemon.GetInstance().Remove()
+		daemon_plugin.GetInstance().Stop()
+		status, e = daemon_plugin.GetInstance().Remove()
 		basic.Logger.Debugln("cmd remove")
 	case "start":
-		status, e = daemon.GetInstance().Start()
+		status, e = daemon_plugin.GetInstance().Start()
 		basic.Logger.Debugln("cmd start")
 	case "stop":
-		status, e = daemon.GetInstance().Stop()
+		status, e = daemon_plugin.GetInstance().Stop()
 		basic.Logger.Debugln("cmd stop")
 	case "restart":
-		daemon.GetInstance().Stop()
-		status, e = daemon.GetInstance().Start()
+		daemon_plugin.GetInstance().Stop()
+		status, e = daemon_plugin.GetInstance().Start()
 		basic.Logger.Debugln("cmd restart")
 	case "status":
-		status, e = daemon.GetInstance().Status()
+		status, e = daemon_plugin.GetInstance().Status()
 		basic.Logger.Debugln("cmd status")
 	default:
 		basic.Logger.Debugln("no sub command")

@@ -1,8 +1,11 @@
-package echoServer
+package echo_plugin
 
 import (
+	"context"
 	"fmt"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/coreservice-io/EchoMiddleware"
 	"github.com/coreservice-io/EchoMiddleware/tool"
@@ -85,4 +88,30 @@ func (s *EchoServer) Start() error {
 
 func (s *EchoServer) Close() {
 	s.Echo.Close()
+}
+
+//check the server is indeed up
+func (s *EchoServer) CheckStarted() bool {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	ticker := time.NewTicker(500 * time.Millisecond)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ctx.Done():
+			return false
+		case <-ticker.C:
+			addr_tls := s.Echo.TLSListenerAddr()
+			if addr_tls != nil && strings.Contains(addr_tls.String(), ":") {
+				return true
+			}
+			addr := s.Echo.ListenerAddr()
+			if addr != nil && strings.Contains(addr.String(), ":") {
+				return true
+			}
+		}
+	}
 }

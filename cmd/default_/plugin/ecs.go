@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/coreservice-io/CliAppTemplate/configuration"
-	"github.com/coreservice-io/CliAppTemplate/plugin/ecs"
+	"github.com/coreservice-io/CliAppTemplate/plugin/ecs_plugin"
 )
 
 func initElasticSearch() error {
@@ -23,7 +23,7 @@ func initElasticSearch() error {
 		return errors.New("elasticsearch_password [string] in config error," + err.Error())
 	}
 
-	return ecs.Init(ecs.Config{
+	return ecs_plugin.Init(ecs_plugin.Config{
 		Address:  elasticSearchAddr,
 		UserName: elasticSearchUserName,
 		Password: elasticSearchPassword})

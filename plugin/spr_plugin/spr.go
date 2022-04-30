@@ -1,4 +1,4 @@
-package sprMgr
+package spr_plugin
 
 import (
 	"fmt"

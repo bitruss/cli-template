@@ -4,13 +4,13 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/cmd/default_/http/api"
 	"github.com/coreservice-io/CliAppTemplate/configuration"
-	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
+	"github.com/coreservice-io/CliAppTemplate/plugin/echo_plugin"
 	"github.com/coreservice-io/UUtils/path_util"
 )
 
 //httpServer example
-func StartHttpSever() {
-	httpServer := echoServer.GetInstance()
+func StartDefaultHttpSever() {
+	httpServer := echo_plugin.GetInstance()
 	api.ConfigApi(httpServer)
 	api.DeclareApi(httpServer)
 
@@ -28,4 +28,8 @@ func StartHttpSever() {
 	if err != nil {
 		basic.Logger.Fatalln(err)
 	}
+}
+
+func CheckDefaultHttpServerStarted() bool {
+	return echo_plugin.GetInstance().CheckStarted()
 }

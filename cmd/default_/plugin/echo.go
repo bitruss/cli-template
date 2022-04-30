@@ -5,7 +5,7 @@ import (
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/configuration"
-	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
+	"github.com/coreservice-io/CliAppTemplate/plugin/echo_plugin"
 	tool_errors "github.com/coreservice-io/CliAppTemplate/tools/errors"
 )
 
@@ -15,5 +15,5 @@ func initEchoServer() error {
 		return errors.New("http_port [int] in config error," + err.Error())
 	}
 
-	return echoServer.Init(echoServer.Config{Port: http_port}, tool_errors.PanicHandler, basic.Logger)
+	return echo_plugin.Init(echo_plugin.Config{Port: http_port}, tool_errors.PanicHandler, basic.Logger)
 }

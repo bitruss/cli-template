@@ -5,9 +5,9 @@ import (
 	"testing"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
-	"github.com/coreservice-io/CliAppTemplate/plugin/reference"
-	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb"
+	"github.com/coreservice-io/CliAppTemplate/plugin/redis_plugin"
+	"github.com/coreservice-io/CliAppTemplate/plugin/reference_plugin"
+	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb_plugin"
 	"github.com/coreservice-io/CliAppTemplate/src/examples/userMgr"
 )
 
@@ -15,7 +15,7 @@ func initialize_exampleuser() {
 	basic.InitLogger()
 
 	//db
-	err := sqldb.Init(sqldb.Config{
+	err := sqldb_plugin.Init(sqldb_plugin.Config{
 		Host:     "127.0.0.1",
 		Port:     3306,
 		DbName:   "testdb",
@@ -28,10 +28,10 @@ func initialize_exampleuser() {
 
 	// auto migrate table in db
 	// please create table by yourself in real project
-	sqldb.GetInstance().AutoMigrate(&userMgr.ExampleUserModel{})
+	sqldb_plugin.GetInstance().AutoMigrate(&userMgr.ExampleUserModel{})
 
 	//redis
-	err = redisClient.Init(redisClient.Config{
+	err = redis_plugin.Init(redis_plugin.Config{
 		Address:   "127.0.0.1",
 		UserName:  "",
 		Password:  "",
@@ -44,7 +44,7 @@ func initialize_exampleuser() {
 	}
 
 	//reference
-	err = reference.Init()
+	err = reference_plugin.Init()
 	if err != nil {
 		log.Fatalln("reference init err", err)
 	}

@@ -4,14 +4,14 @@ import (
 	"net/http"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/plugin/echoServer"
+	"github.com/coreservice-io/CliAppTemplate/plugin/echo_plugin"
 	"github.com/coreservice-io/CliAppTemplate/tools/data"
 	"github.com/coreservice-io/CliAppTemplate/tools/http/api"
 	"github.com/fatih/structs"
 	"github.com/labstack/echo/v4"
 )
 
-func config_user(httpServer *echoServer.EchoServer) {
+func config_user(httpServer *echo_plugin.EchoServer) {
 	//create
 	httpServer.POST("/api/user/create", createUser, MidToken)
 

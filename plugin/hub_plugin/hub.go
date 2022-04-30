@@ -1,4 +1,4 @@
-package hub
+package hub_plugin
 
 import (
 	"fmt"

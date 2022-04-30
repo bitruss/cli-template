@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/plugin/redisClient"
-	"github.com/coreservice-io/CliAppTemplate/plugin/reference"
+	"github.com/coreservice-io/CliAppTemplate/plugin/redis_plugin"
+	"github.com/coreservice-io/CliAppTemplate/plugin/reference_plugin"
 	"github.com/coreservice-io/CliAppTemplate/src/examples/dataInRedis"
 )
 
@@ -14,7 +14,7 @@ func initialize_kv() {
 	basic.InitLogger()
 
 	//redis
-	err := redisClient.Init(redisClient.Config{
+	err := redis_plugin.Init(redis_plugin.Config{
 		Address:   "127.0.0.1",
 		UserName:  "",
 		Password:  "",
@@ -27,7 +27,7 @@ func initialize_kv() {
 	}
 
 	//reference
-	err = reference.Init()
+	err = reference_plugin.Init()
 	if err != nil {
 		log.Fatalln("reference init err", err)
 	}
