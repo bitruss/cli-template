@@ -11,22 +11,7 @@ import (
 	goredis "github.com/go-redis/redis/v8"
 )
 
-//const coolDownPrefix = "captcha_cool_down"
-const keyPrefix = "captcha"
-
-// func IsCoolDown(ip string) bool {
-// 	key := redis_plugin.GetInstance().GenKey(coolDownPrefix, ip)
-// 	_, err := redis_plugin.GetInstance().Get(context.Background(), key).Result()
-// 	if err == goredis.Nil {
-// 		return true
-// 	}
-// 	return false
-// }
-
-// func StartCoolDown(ip string) {
-// 	key := redis_plugin.GetInstance().GenKey(coolDownPrefix, ip)
-// 	redis_plugin.GetInstance().Set(context.Background(), key, 1, 2*time.Second)
-// }
+const redis_captcha_prefix = "captcha"
 
 func GenCaptcha() (id, b64s string, err error) {
 	keystr, img_encode64_str := Gen_svg_base64_prefix(400, 100, "#606060")
@@ -53,7 +38,7 @@ func VerifyCaptcha(id, captchaCode string) bool {
 }
 
 func set(id string, value string) error {
-	key := redis_plugin.GetInstance().GenKey(keyPrefix, id)
+	key := redis_plugin.GetInstance().GenKey(redis_captcha_prefix, id)
 	err := redis_plugin.GetInstance().Set(context.Background(), key, value, time.Minute*5).Err()
 	if err != nil {
 		basic.Logger.Errorln("captcha RedisStore Set error", "err", err, "id", id, "value", value)
@@ -64,7 +49,7 @@ func set(id string, value string) error {
 
 //get a capt
 func get(id string, clear bool) string {
-	key := redis_plugin.GetInstance().GenKey(keyPrefix, id)
+	key := redis_plugin.GetInstance().GenKey(redis_captcha_prefix, id)
 	val, err := redis_plugin.GetInstance().Get(context.Background(), key).Result()
 	if err != nil {
 		if err != goredis.Nil {

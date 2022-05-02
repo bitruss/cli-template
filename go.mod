@@ -3,12 +3,12 @@ module github.com/coreservice-io/CliAppTemplate
 go 1.17
 
 require (
+	github.com/ajstarks/svgo v0.0.0-20211024235047-1546f124cd8b
 	github.com/coreservice-io/EchoMiddleware v0.1.6
 	github.com/coreservice-io/GormULog v0.1.3
 	github.com/coreservice-io/LogrusULog v0.1.19
 	github.com/coreservice-io/RedisSpr v0.1.18
 	github.com/coreservice-io/UBiRpc v0.0.0-20220429131114-2d265d89aa72
-	github.com/coreservice-io/UCaptcha v0.0.4
 	github.com/coreservice-io/UECSUploader v0.0.3
 	github.com/coreservice-io/UHub v0.0.3
 	github.com/coreservice-io/UJob v0.1.5
@@ -16,6 +16,7 @@ require (
 	github.com/coreservice-io/UReference v0.0.5
 	github.com/coreservice-io/USafeGo v0.1.3
 	github.com/coreservice-io/UUtils v0.1.9
+	github.com/coreservice-io/ipGeo v0.0.4
 	github.com/fatih/color v1.13.0
 	github.com/fatih/structs v1.1.0
 	github.com/go-playground/validator/v10 v10.11.0
@@ -40,7 +41,6 @@ require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
-	github.com/ajstarks/svgo v0.0.0-20211024235047-1546f124cd8b // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect

@@ -1,4 +1,4 @@
-package vcode
+package captcha
 
 import (
 	"context"
@@ -11,26 +11,11 @@ import (
 	goredis "github.com/go-redis/redis/v8"
 )
 
-//const coolDownPrefix = "vCodeCoolDown"
-const codePrefix = "vcode"
-
-// func IsCoolDown(email string) bool {
-// 	key := redis_plugin.GetInstance().GenKey(coolDownPrefix, email)
-// 	_, err := redis_plugin.GetInstance().Get(context.Background(), key).Result()
-// 	if err == goredis.Nil {
-// 		return true
-// 	}
-// 	return false
-// }
-
-// func StartCoolDown(email string) {
-// 	key := redis_plugin.GetInstance().GenKey(coolDownPrefix, email)
-// 	redis_plugin.GetInstance().Set(context.Background(), key, 1, 25*time.Second)
-// }
+const redis_vcode_prefix = "vcode"
 
 //send vcode to user
 func GenVCode(vCodeKey string) (string, error) {
-	key := redis_plugin.GetInstance().GenKey(codePrefix, vCodeKey)
+	key := redis_plugin.GetInstance().GenKey(redis_vcode_prefix, vCodeKey)
 	code, _ := redis_plugin.GetInstance().Get(context.Background(), key).Result()
 	if code == "" {
 		code = rand_util.GenRandStr(4)
@@ -38,16 +23,15 @@ func GenVCode(vCodeKey string) (string, error) {
 	_, err := redis_plugin.GetInstance().Set(context.Background(), key, code, 4*time.Hour).Result()
 	if err != nil {
 		basic.Logger.Errorln("GenVCode set email vcode to redis error", "err", err)
-		return "", errors.New("set email vcode to redis error")
+		return "", errors.New("set email vcode error")
 	}
 
 	basic.Logger.Debugln("vcode", "code", code, "vCodeKey", vCodeKey)
-
 	return code, nil
 }
 
 func ValidateVCode(vCodeKey string, code string) bool {
-	key := redis_plugin.GetInstance().GenKey(codePrefix, vCodeKey)
+	key := redis_plugin.GetInstance().GenKey(redis_vcode_prefix, vCodeKey)
 	value, err := redis_plugin.GetInstance().Get(context.Background(), key).Result()
 	if err != nil && err != goredis.Nil {
 		basic.Logger.Debugln("ValidateVCode from redis err", "err", err, "vCodeKey", vCodeKey)
