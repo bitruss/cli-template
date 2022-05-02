@@ -3,10 +3,10 @@ package plugin
 import (
 	"errors"
 
-	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/configuration"
-	"github.com/coreservice-io/CliAppTemplate/plugin/echo_plugin"
-	tool_errors "github.com/coreservice-io/CliAppTemplate/tools/errors"
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/configuration"
+	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
+	tool_errors "github.com/coreservice-io/cli-template/tools/errors"
 )
 
 func initEchoServer() error {

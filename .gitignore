@@ -16,7 +16,7 @@
 # vendor/
 
 logs
-CliAppTemplate
+cli-template
 
 # Editor directories and files
 .vscode

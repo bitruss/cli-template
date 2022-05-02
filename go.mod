@@ -1,4 +1,4 @@
-module github.com/coreservice-io/CliAppTemplate
+module github.com/coreservice-io/cli-template
 
 go 1.17
 
@@ -16,7 +16,6 @@ require (
 	github.com/coreservice-io/UReference v0.0.5
 	github.com/coreservice-io/USafeGo v0.1.3
 	github.com/coreservice-io/UUtils v0.1.9
-	github.com/coreservice-io/ipGeo v0.0.4
 	github.com/fatih/color v1.13.0
 	github.com/fatih/structs v1.1.0
 	github.com/go-playground/validator/v10 v10.11.0

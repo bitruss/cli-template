@@ -3,8 +3,8 @@ package plugin
 import (
 	"errors"
 
-	"github.com/coreservice-io/CliAppTemplate/configuration"
-	"github.com/coreservice-io/CliAppTemplate/plugin/redis_plugin"
+	"github.com/coreservice-io/cli-template/configuration"
+	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
 )
 
 func initRedis() error {

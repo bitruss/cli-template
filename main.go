@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/cmd"
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/cmd"
 )
 
 func main() {

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/coreservice-io/CliAppTemplate/plugin/echo_plugin"
+	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
 	"github.com/labstack/echo/v4"
 )
 

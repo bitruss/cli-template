@@ -1,9 +1,9 @@
 package examples
 
 import (
-	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/plugin/hub_plugin"
 	"github.com/coreservice-io/UHub"
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/plugin/hub_plugin"
 )
 
 //hub example

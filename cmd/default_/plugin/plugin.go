@@ -1,7 +1,7 @@
 package plugin
 
 import (
-	"github.com/coreservice-io/CliAppTemplate/basic"
+	"github.com/coreservice-io/cli-template/basic"
 )
 
 //todo: ---

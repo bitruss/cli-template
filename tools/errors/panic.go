@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/UJob"
+	"github.com/coreservice-io/cli-template/basic"
 )
 
 var errMap sync.Map

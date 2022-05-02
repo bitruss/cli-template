@@ -1,4 +1,4 @@
-# CliTemplate
+# cli-template
 
 
 # How to use

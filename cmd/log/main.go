@@ -1,8 +1,8 @@
 package log
 
 import (
-	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/ULog"
+	"github.com/coreservice-io/cli-template/basic"
 	"github.com/urfave/cli/v2"
 )
 

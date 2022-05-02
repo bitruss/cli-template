@@ -4,11 +4,11 @@ import (
 	"log"
 	"testing"
 
-	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/plugin/redis_plugin"
-	"github.com/coreservice-io/CliAppTemplate/plugin/reference_plugin"
-	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb_plugin"
-	"github.com/coreservice-io/CliAppTemplate/src/examples/user_mgr"
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
+	"github.com/coreservice-io/cli-template/plugin/reference_plugin"
+	"github.com/coreservice-io/cli-template/plugin/sqldb_plugin"
+	"github.com/coreservice-io/cli-template/src/examples/user_mgr"
 )
 
 func initialize_exampleuser() {

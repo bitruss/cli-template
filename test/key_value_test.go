@@ -4,10 +4,10 @@ import (
 	"log"
 	"testing"
 
-	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/plugin/redis_plugin"
-	"github.com/coreservice-io/CliAppTemplate/plugin/reference_plugin"
-	"github.com/coreservice-io/CliAppTemplate/src/examples/data_redis"
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
+	"github.com/coreservice-io/cli-template/plugin/reference_plugin"
+	"github.com/coreservice-io/cli-template/src/examples/data_redis"
 )
 
 func initialize_kv() {

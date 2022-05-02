@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/coreservice-io/CliAppTemplate/tools/json"
 	"github.com/coreservice-io/UReference"
+	"github.com/coreservice-io/cli-template/tools/json"
 	"github.com/go-redis/redis/v8"
 )
 

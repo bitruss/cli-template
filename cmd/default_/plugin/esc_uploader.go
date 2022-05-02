@@ -3,9 +3,9 @@ package plugin
 import (
 	"errors"
 
-	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/configuration"
-	"github.com/coreservice-io/CliAppTemplate/plugin/ecs_uploader_plugin"
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/configuration"
+	"github.com/coreservice-io/cli-template/plugin/ecs_uploader_plugin"
 )
 
 func initEcsUploader() error {

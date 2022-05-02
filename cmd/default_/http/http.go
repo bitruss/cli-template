@@ -1,11 +1,11 @@
 package http
 
 import (
-	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/cmd/default_/http/api"
-	"github.com/coreservice-io/CliAppTemplate/configuration"
-	"github.com/coreservice-io/CliAppTemplate/plugin/echo_plugin"
 	"github.com/coreservice-io/UUtils/path_util"
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/cmd/default_/http/api"
+	"github.com/coreservice-io/cli-template/configuration"
+	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
 )
 
 //httpServer example

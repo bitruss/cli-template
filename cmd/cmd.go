@@ -5,15 +5,15 @@ import (
 	"os"
 	"strings"
 
-	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/cmd/config"
-	"github.com/coreservice-io/CliAppTemplate/cmd/default_"
-	"github.com/coreservice-io/CliAppTemplate/cmd/default_/http/api"
-	"github.com/coreservice-io/CliAppTemplate/cmd/log"
-	"github.com/coreservice-io/CliAppTemplate/cmd/service"
-	"github.com/coreservice-io/CliAppTemplate/configuration"
 	"github.com/coreservice-io/ULog"
 	"github.com/coreservice-io/UUtils/path_util"
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/cmd/config"
+	"github.com/coreservice-io/cli-template/cmd/default_"
+	"github.com/coreservice-io/cli-template/cmd/default_/http/api"
+	"github.com/coreservice-io/cli-template/cmd/log"
+	"github.com/coreservice-io/cli-template/cmd/service"
+	"github.com/coreservice-io/cli-template/configuration"
 	"github.com/urfave/cli/v2"
 )
 

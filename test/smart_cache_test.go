@@ -5,9 +5,9 @@ import (
 	"log"
 	"testing"
 
-	"github.com/coreservice-io/CliAppTemplate/plugin/redis_plugin"
-	"github.com/coreservice-io/CliAppTemplate/plugin/reference_plugin"
-	"github.com/coreservice-io/CliAppTemplate/tools/smart_cache"
+	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
+	"github.com/coreservice-io/cli-template/plugin/reference_plugin"
+	"github.com/coreservice-io/cli-template/tools/smart_cache"
 )
 
 func initialize_smc() {

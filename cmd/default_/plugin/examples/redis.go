@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/plugin/redis_plugin"
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
 	goredis "github.com/go-redis/redis/v8"
 )
 

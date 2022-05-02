@@ -1,8 +1,8 @@
 package plugin
 
 import (
-	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/plugin/rpc_plugin"
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/plugin/rpc_plugin"
 )
 
 func initRpcServer() error {

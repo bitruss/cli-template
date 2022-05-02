@@ -3,10 +3,10 @@ package plugin
 import (
 	"errors"
 
-	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/configuration"
-	"github.com/coreservice-io/CliAppTemplate/plugin/spr_plugin"
 	"github.com/coreservice-io/RedisSpr"
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/configuration"
+	"github.com/coreservice-io/cli-template/plugin/spr_plugin"
 )
 
 func initSpr() error {

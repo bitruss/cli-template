@@ -3,9 +3,9 @@ package plugin
 import (
 	"errors"
 
-	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/configuration"
-	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb_plugin"
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/configuration"
+	"github.com/coreservice-io/cli-template/plugin/sqldb_plugin"
 )
 
 func initDB() error {

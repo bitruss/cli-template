@@ -1,6 +1,6 @@
 package plugin
 
-import "github.com/coreservice-io/CliAppTemplate/plugin/reference_plugin"
+import "github.com/coreservice-io/cli-template/plugin/reference_plugin"
 
 //example 3 cache instance
 func initReference() error {

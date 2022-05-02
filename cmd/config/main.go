@@ -3,7 +3,7 @@ package config
 import (
 	"fmt"
 
-	"github.com/coreservice-io/CliAppTemplate/configuration"
+	"github.com/coreservice-io/cli-template/configuration"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 )

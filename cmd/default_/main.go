@@ -1,9 +1,9 @@
 package default_
 
 import (
-	"github.com/coreservice-io/CliAppTemplate/basic"
-	"github.com/coreservice-io/CliAppTemplate/cmd/default_/http"
-	"github.com/coreservice-io/CliAppTemplate/cmd/default_/plugin"
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/cmd/default_/http"
+	"github.com/coreservice-io/cli-template/cmd/default_/plugin"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 )
