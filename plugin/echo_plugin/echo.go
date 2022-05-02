@@ -51,7 +51,7 @@ func Init_(name string, serverConfig Config, OnPanicHanlder func(panic_err inter
 
 	_, exist := instanceMap[name]
 	if exist {
-		return fmt.Errorf("echo server instance <%s> has already initialized", name)
+		return fmt.Errorf("echo server instance <%s> has already been initialized", name)
 	}
 
 	if serverConfig.Port == 0 {

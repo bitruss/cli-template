@@ -41,7 +41,7 @@ func Init_(name string) error {
 
 	_, exist := instanceMap[name]
 	if exist {
-		return fmt.Errorf("daemon instance <%s> has already initialized", name)
+		return fmt.Errorf("daemon instance <%s> has already been initialized", name)
 	}
 
 	kind := daemon.SystemDaemon

@@ -1,4 +1,4 @@
-package dataInRedis
+package data_redis
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/plugin/redis_plugin"
 	"github.com/coreservice-io/CliAppTemplate/plugin/reference_plugin"
-	"github.com/coreservice-io/CliAppTemplate/tools/smartCache"
+	"github.com/coreservice-io/CliAppTemplate/tools/smart_cache"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -26,19 +26,19 @@ func SetPeer(peerInfo *PeerInfo, tag string) error {
 	//}
 
 	key := redis_plugin.GetInstance().GenKey("peerInfo", tag)
-	return smartCache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, peerInfo, 600)
+	return smart_cache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, peerInfo, 600)
 }
 
 func DeletePeer(tag string) {
 	key := redis_plugin.GetInstance().GenKey("peerInfo", tag)
-	smartCache.RR_Del(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), key)
+	smart_cache.RR_Del(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), key)
 }
 
 func GetPeer(tag string, forceUpdate bool) (*PeerInfo, error) {
 	key := redis_plugin.GetInstance().GenKey("peerInfo", tag)
 	if !forceUpdate {
 		// try to get from reference
-		result := smartCache.Ref_Get(reference_plugin.GetInstance(), key)
+		result := smart_cache.Ref_Get(reference_plugin.GetInstance(), key)
 		if result != nil {
 			basic.Logger.Debugln("GetPeer hit from reference")
 			return result.(*PeerInfo), nil
@@ -47,12 +47,12 @@ func GetPeer(tag string, forceUpdate bool) (*PeerInfo, error) {
 
 	// try to get from redis
 	redis_result := &PeerInfo{}
-	err := smartCache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, redis_result)
+	err := smart_cache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, redis_result)
 	if err == nil {
 		basic.Logger.Debugln("GetPeer hit from redis")
-		smartCache.Ref_Set(reference_plugin.GetInstance(), key, redis_result)
+		smart_cache.Ref_Set(reference_plugin.GetInstance(), key, redis_result)
 		return redis_result, nil
-	} else if err == redis.Nil || err == smartCache.TempNil {
+	} else if err == redis.Nil || err == smart_cache.TempNil {
 		return nil, nil
 	} else {
 		return nil, err

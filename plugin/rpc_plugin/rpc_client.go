@@ -31,7 +31,7 @@ func ClientInstanceInit_(name string, logger ULog.Logger) error {
 
 	_, exist := client_Map[name]
 	if exist {
-		return fmt.Errorf("client instance <%s> has already initialized", name)
+		return fmt.Errorf("rpc_client instance <%s> has already been initialized", name)
 	}
 
 	client_Map[name] = UBiRpc.NewClient(logger)

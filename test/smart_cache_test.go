@@ -7,7 +7,7 @@ import (
 
 	"github.com/coreservice-io/CliAppTemplate/plugin/redis_plugin"
 	"github.com/coreservice-io/CliAppTemplate/plugin/reference_plugin"
-	"github.com/coreservice-io/CliAppTemplate/tools/smartCache"
+	"github.com/coreservice-io/CliAppTemplate/tools/smart_cache"
 )
 
 func initialize_smc() {
@@ -40,14 +40,14 @@ func Test_BuildInType(t *testing.T) {
 	initialize_smc()
 	key := "test:111"
 	v := 7
-	err := smartCache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), false, key, &v, 300)
+	err := smart_cache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), false, key, &v, 300)
 	if err != nil {
 		log.Println("RR_Set error", err)
 	}
-	r := smartCache.Ref_Get(reference_plugin.GetInstance(), key)
+	r := smart_cache.Ref_Get(reference_plugin.GetInstance(), key)
 	log.Println(r.(*int))
 	var rInt int
-	smartCache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, false, key, &rInt)
+	smart_cache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, false, key, &rInt)
 	log.Println(rInt)
 }
 
@@ -58,13 +58,13 @@ func Test_Struct(t *testing.T) {
 		Name: "Jack",
 		Age:  10,
 	}
-	err := smartCache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, v, 300)
+	err := smart_cache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, v, 300)
 	if err != nil {
 		log.Println("RR_Set error", err)
 	}
-	r := smartCache.Ref_Get(reference_plugin.GetInstance(), key)
+	r := smart_cache.Ref_Get(reference_plugin.GetInstance(), key)
 	log.Println(r.(*person))
 	var p person
-	smartCache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, &p)
+	smart_cache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, &p)
 	log.Println(p)
 }

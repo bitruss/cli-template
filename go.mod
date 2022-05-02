@@ -15,7 +15,7 @@ require (
 	github.com/coreservice-io/ULog v0.1.17
 	github.com/coreservice-io/UReference v0.0.5
 	github.com/coreservice-io/USafeGo v0.1.3
-	github.com/coreservice-io/UUtils v0.1.7
+	github.com/coreservice-io/UUtils v0.1.9
 	github.com/fatih/color v1.13.0
 	github.com/fatih/structs v1.1.0
 	github.com/go-playground/validator/v10 v10.11.0

@@ -7,7 +7,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/basic"
 	"github.com/coreservice-io/CliAppTemplate/plugin/redis_plugin"
 	"github.com/coreservice-io/CliAppTemplate/plugin/reference_plugin"
-	"github.com/coreservice-io/CliAppTemplate/src/examples/dataInRedis"
+	"github.com/coreservice-io/CliAppTemplate/src/examples/data_redis"
 )
 
 func initialize_kv() {
@@ -36,23 +36,23 @@ func initialize_kv() {
 func Test_peer(t *testing.T) {
 	initialize_kv()
 	//
-	p := &dataInRedis.PeerInfo{
+	p := &data_redis.PeerInfo{
 		Tag:      "abcd",
 		Location: "USA",
 		IP:       "127.0.0.1",
 	}
 	tag := "abcd"
 
-	err := dataInRedis.SetPeer(p, tag)
+	err := data_redis.SetPeer(p, tag)
 	if err != nil {
 		log.Fatalln("SetPeer err", err, "tag", tag)
 	}
 
-	pp, err := dataInRedis.GetPeer(tag, false)
+	pp, err := data_redis.GetPeer(tag, false)
 	log.Println(pp, err)
 
-	dataInRedis.DeletePeer(tag)
+	data_redis.DeletePeer(tag)
 
-	pp, err = dataInRedis.GetPeer(tag, false)
+	pp, err = data_redis.GetPeer(tag, false)
 	log.Println(pp, err)
 }

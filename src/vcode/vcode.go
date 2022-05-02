@@ -1,4 +1,4 @@
-package vCodeMgr
+package vcode
 
 import (
 	"context"
@@ -11,22 +11,22 @@ import (
 	goredis "github.com/go-redis/redis/v8"
 )
 
-const coolDownPrefix = "vCodeCoolDown"
-const codePrefix = "vCode"
+//const coolDownPrefix = "vCodeCoolDown"
+const codePrefix = "vcode"
 
-func IsCoolDown(email string) bool {
-	key := redis_plugin.GetInstance().GenKey(coolDownPrefix, email)
-	_, err := redis_plugin.GetInstance().Get(context.Background(), key).Result()
-	if err == goredis.Nil {
-		return true
-	}
-	return false
-}
+// func IsCoolDown(email string) bool {
+// 	key := redis_plugin.GetInstance().GenKey(coolDownPrefix, email)
+// 	_, err := redis_plugin.GetInstance().Get(context.Background(), key).Result()
+// 	if err == goredis.Nil {
+// 		return true
+// 	}
+// 	return false
+// }
 
-func StartCoolDown(email string) {
-	key := redis_plugin.GetInstance().GenKey(coolDownPrefix, email)
-	redis_plugin.GetInstance().Set(context.Background(), key, 1, 25*time.Second)
-}
+// func StartCoolDown(email string) {
+// 	key := redis_plugin.GetInstance().GenKey(coolDownPrefix, email)
+// 	redis_plugin.GetInstance().Set(context.Background(), key, 1, 25*time.Second)
+// }
 
 //send vcode to user
 func GenVCode(vCodeKey string) (string, error) {

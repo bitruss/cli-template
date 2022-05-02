@@ -1,29 +1,28 @@
 package tools
 
 import (
+	"errors"
 	"unicode"
 
 	"github.com/go-playground/validator/v10"
 )
 
-func ValidateEmail(email string) bool {
+func ValidateEmail(email string) error {
 	validate := validator.New()
-	err := validate.Var(email, "email")
-	if err != nil {
-		return false
-	}
-	return true
+	return validate.Var(email, "email")
 }
 
-func ValidatePassword(password string) bool {
-	//must contain number and letter, special character is optional,length 6-20
+//length 6-20
+//must contain number and letter
+//special character is optional
+func ValidatePassword(password string) error {
 	if len(password) < 6 || len(password) > 20 {
-		return false
+		return errors.New("password length must between 6 - 20")
 	}
 	var hasNumber, hasLetter bool
 	for _, c := range password {
 		if hasNumber && hasLetter {
-			return true
+			return nil
 		}
 		switch {
 		case unicode.IsNumber(c):
@@ -32,5 +31,5 @@ func ValidatePassword(password string) bool {
 			hasLetter = true
 		}
 	}
-	return hasNumber && hasLetter
+	return errors.New("password must contain both number and letter")
 }

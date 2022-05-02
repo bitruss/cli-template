@@ -8,7 +8,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/redis_plugin"
 	"github.com/coreservice-io/CliAppTemplate/plugin/reference_plugin"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb_plugin"
-	"github.com/coreservice-io/CliAppTemplate/src/examples/userMgr"
+	"github.com/coreservice-io/CliAppTemplate/src/examples/user_mgr"
 )
 
 func initialize_exampleuser() {
@@ -28,7 +28,7 @@ func initialize_exampleuser() {
 
 	// auto migrate table in db
 	// please create table by yourself in real project
-	sqldb_plugin.GetInstance().AutoMigrate(&userMgr.ExampleUserModel{})
+	sqldb_plugin.GetInstance().AutoMigrate(&user_mgr.ExampleUserModel{})
 
 	//redis
 	err = redis_plugin.Init(redis_plugin.Config{
@@ -55,12 +55,12 @@ func Test_UserDB(t *testing.T) {
 	//important! Please create db table before you run this test.
 	//add
 	log.Println("---add user---")
-	newUser := &userMgr.ExampleUserModel{
+	newUser := &user_mgr.ExampleUserModel{
 		Status: "normal",
 		Name:   "userName",
 		Email:  "mail@email.com",
 	}
-	newUserInfo, err := userMgr.CreateUser(newUser)
+	newUserInfo, err := user_mgr.CreateUser(newUser)
 	if err != nil {
 		log.Println("InsertUser error:", err)
 		return
@@ -70,7 +70,7 @@ func Test_UserDB(t *testing.T) {
 
 	//get
 	log.Println("---get user---")
-	queryResult, err := userMgr.QueryUser(&ID, nil, nil, nil, 0, 0, false, true)
+	queryResult, err := user_mgr.QueryUser(&ID, nil, nil, nil, 0, 0, false, true)
 	if err != nil {
 		log.Println("GetUserById error:", err)
 		return
@@ -88,13 +88,13 @@ func Test_UserDB(t *testing.T) {
 		"name":   "userName2",
 		"email":  "mail2@email.com",
 	}
-	err = userMgr.UpdateUser(newData, ID)
+	err = user_mgr.UpdateUser(newData, ID)
 	if err != nil {
 		log.Println("UpdateUser error:", err)
 		return
 	}
 	//get
-	queryResult, err = userMgr.QueryUser(&ID, nil, nil, nil, 0, 0, false, true)
+	queryResult, err = user_mgr.QueryUser(&ID, nil, nil, nil, 0, 0, false, true)
 	if err != nil {
 		log.Println("GetUserById error:", err)
 		return
@@ -107,12 +107,12 @@ func Test_UserDB(t *testing.T) {
 
 	//delete
 	log.Println("---delete user---")
-	err = userMgr.DeleteUser(ID)
+	err = user_mgr.DeleteUser(ID)
 	if err != nil {
 		log.Println("DeleteUser error:", err)
 		return
 	}
-	queryResult, err = userMgr.QueryUser(&ID, nil, nil, nil, 0, 0, false, true)
+	queryResult, err = user_mgr.QueryUser(&ID, nil, nil, nil, 0, 0, false, true)
 	if err != nil {
 		log.Println("GetUserById error:", err)
 		return

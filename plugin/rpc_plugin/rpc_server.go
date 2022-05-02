@@ -31,7 +31,7 @@ func ServerInstanceInit_(name string, logger ULog.Logger) error {
 
 	_, exist := server_Map[name]
 	if exist {
-		return fmt.Errorf("server instance <%s> has already initialized", name)
+		return fmt.Errorf("rpc_server instance <%s> has already been initialized", name)
 	}
 
 	server_Map[name] = UBiRpc.NewServer(logger)

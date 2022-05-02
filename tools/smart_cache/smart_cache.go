@@ -1,4 +1,4 @@
-package smartCache
+package smart_cache
 
 import (
 	"context"
@@ -75,7 +75,9 @@ func RR_Set(ctx context.Context, Redis *redis.ClusterClient, localRef *UReferenc
 // set both value to both local reference & remote redis
 func RR_Set_RTTL(ctx context.Context, Redis *redis.ClusterClient, localRef *UReference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64, ref_ttl_second int64) error {
 	if value == nil {
-		return Redis.Set(ctx, keystr, temp_nil, time.Duration(redis_ttl_second)*time.Second).Err()
+		//rare case normally should not happen
+		//set 10 seconds to fast refresh
+		return Redis.Set(ctx, keystr, temp_nil, time.Duration(10)*time.Second).Err()
 	}
 	if isJSON {
 		err := localRef.Set(keystr, value, ref_ttl_second)

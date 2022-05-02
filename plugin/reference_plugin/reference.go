@@ -30,7 +30,7 @@ func Init_(name string) error {
 
 	_, exist := instanceMap[name]
 	if exist {
-		return fmt.Errorf("reference instance <%s> has already initialized", name)
+		return fmt.Errorf("reference instance <%s> has already been initialized", name)
 	}
 	instanceMap[name] = UReference.New()
 	return nil

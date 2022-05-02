@@ -1,4 +1,4 @@
-package smartCache
+package smart_cache
 
 import (
 	"fmt"
@@ -145,7 +145,7 @@ func (k *ConnectKey) C_Int_Array(key []int) *ConnectKey {
 	}
 
 	if len(key_str) > 10 {
-		key_str = hash_util.CRC32Hash([]byte(key_str))
+		key_str = hash_util.CRC32HashString(key_str)
 	}
 
 	k.Key = k.Key + ":" + key_str
@@ -169,7 +169,7 @@ func (k *ConnectKey) C_Int64_Array(key []int64) *ConnectKey {
 	}
 
 	if len(key_str) > 10 {
-		key_str = hash_util.CRC32Hash([]byte(key_str))
+		key_str = hash_util.CRC32HashString(key_str)
 	}
 
 	k.Key = k.Key + ":" + key_str
@@ -193,7 +193,7 @@ func (k *ConnectKey) C_Str_Array(key []string) *ConnectKey {
 	}
 
 	if len(key_str) > 10 {
-		key_str = hash_util.CRC32Hash([]byte(key_str))
+		key_str = hash_util.CRC32HashString(key_str)
 	}
 
 	k.Key = k.Key + ":" + key_str

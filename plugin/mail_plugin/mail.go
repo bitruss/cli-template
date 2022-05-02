@@ -1,4 +1,4 @@
-package mail
+package mail_plugin
 
 import (
 	"fmt"
@@ -8,18 +8,18 @@ import (
 	"github.com/jordan-wright/email"
 )
 
-type Sender struct {
-	host     string
-	port     string
-	userName string
-	password string
-}
-
 type Config struct {
 	Host     string
 	Port     int
 	UserName string
 	Password string
+}
+
+type Sender struct {
+	host     string
+	port     int
+	userName string
+	password string
 }
 
 var instanceMap = map[string]*Sender{}
@@ -37,13 +37,14 @@ func Init(config Config) error {
 }
 
 func Init_(name string, config Config) error {
+
 	if name == "" {
 		name = "default"
 	}
 
 	_, exist := instanceMap[name]
 	if exist {
-		return fmt.Errorf("mail sender instance <%s> has already initialized", name)
+		return fmt.Errorf("email instance <%s> has already been initialized", name)
 	}
 
 	if config.Port == 0 {
@@ -52,7 +53,7 @@ func Init_(name string, config Config) error {
 
 	sender := &Sender{
 		host:     config.Host,
-		port:     strconv.Itoa(config.Port),
+		port:     config.Port,
 		userName: config.UserName,
 		password: config.Password,
 	}
@@ -61,15 +62,16 @@ func Init_(name string, config Config) error {
 	return nil
 }
 
-func (s *Sender) SendVCode(code string, address string) error {
-	auth := smtp.PlainAuth("", s.userName, s.password, s.host)
-	e := email.NewEmail()
-	e.From = "coreservice <admin@coreservice.io>"
-	e.To = []string{address}
-	e.Subject = "Verification code"
-	e.Text = []byte("Your verification code is [" + code + "], it will expire in 4 hours")
+func (s *Sender) Send(from_text string, to_address string, subject string, body string) error {
 
-	err := e.Send(s.host+":"+s.port, auth)
+	e := email.NewEmail()
+	e.From = from_text
+	e.To = []string{to_address}
+	e.Subject = subject
+	e.Text = []byte(body)
+
+	auth := smtp.PlainAuth("", s.userName, s.password, s.host)
+	err := e.Send(s.host+":"+strconv.Itoa(s.port), auth)
 	if err != nil {
 		return err
 	}

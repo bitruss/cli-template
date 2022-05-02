@@ -31,7 +31,7 @@ func Init_(name string, redisConfig *RedisSpr.RedisConfig, logger ULog.Logger) e
 
 	_, exist := instanceMap[name]
 	if exist {
-		return fmt.Errorf("spr instance <%s> has already initialized", name)
+		return fmt.Errorf("spr instance <%s> has already been initialized", name)
 	}
 
 	if redisConfig.Addr == "" {

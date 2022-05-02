@@ -48,7 +48,7 @@ func Init_(name string, redisConfig Config) error {
 
 	_, exist := instanceMap[name]
 	if exist {
-		return fmt.Errorf("redis instance <%s> has already initialized", name)
+		return fmt.Errorf("redis instance <%s> has already been initialized", name)
 	}
 
 	if redisConfig.Address == "" {

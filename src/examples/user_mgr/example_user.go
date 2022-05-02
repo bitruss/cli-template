@@ -1,4 +1,4 @@
-package userMgr
+package user_mgr
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"github.com/coreservice-io/CliAppTemplate/plugin/redis_plugin"
 	"github.com/coreservice-io/CliAppTemplate/plugin/reference_plugin"
 	"github.com/coreservice-io/CliAppTemplate/plugin/sqldb_plugin"
-	"github.com/coreservice-io/CliAppTemplate/tools/smartCache"
+	"github.com/coreservice-io/CliAppTemplate/tools/smart_cache"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -58,7 +58,7 @@ type QueryUserResult struct {
 
 func QueryUser(id *int64, status *string, name *string, email *string, limit int, offset int, fromCache bool, updateCache bool) (*QueryUserResult, error) {
 	//gen_key
-	ck := smartCache.NewConnectKey("user")
+	ck := smart_cache.NewConnectKey("user")
 	ck.C_Int64_Ptr("id", id).C_Str_Ptr("status", status).
 		C_Str_Ptr("name", name).C_Str_Ptr("email", email).C_Int(limit).C_Int(offset)
 
@@ -66,7 +66,7 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 
 	if fromCache {
 		// try to get from reference
-		result := smartCache.Ref_Get(reference_plugin.GetInstance(), key)
+		result := smart_cache.Ref_Get(reference_plugin.GetInstance(), key)
 		if result != nil {
 			basic.Logger.Debugln("QueryUser hit from reference")
 			return result.(*QueryUserResult), nil
@@ -77,10 +77,10 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 			Users:      []*ExampleUserModel{},
 			TotalCount: 0,
 		}
-		err := smartCache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, redis_result)
+		err := smart_cache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, redis_result)
 		if err == nil {
 			basic.Logger.Debugln("QueryUser hit from redis")
-			smartCache.Ref_Set(reference_plugin.GetInstance(), key, redis_result)
+			smart_cache.Ref_Set(reference_plugin.GetInstance(), key, redis_result)
 			return redis_result, nil
 		} else if err == redis.Nil {
 			//continue to get from db part
@@ -126,7 +126,7 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 		return nil, err
 	} else {
 		if updateCache {
-			smartCache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, queryResult, 300)
+			smart_cache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, queryResult, 300)
 		}
 		return queryResult, nil
 	}

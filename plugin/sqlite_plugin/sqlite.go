@@ -38,7 +38,7 @@ func Init_(name string, dbConfig Config, logger ULog.Logger) error {
 
 	_, exist := instanceMap[name]
 	if exist {
-		return fmt.Errorf("db instance <%s> has already initialized", name)
+		return fmt.Errorf("sqlite instance <%s> has already been initialized", name)
 	}
 
 	//Level: Silent Error Warn Info. Info logs all record. Silent turns off log.
