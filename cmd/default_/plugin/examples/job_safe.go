@@ -6,14 +6,14 @@ import (
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/tools/errors"
 
-	"github.com/coreservice-io/UJob"
-	"github.com/coreservice-io/USafeGo"
+	"github.com/coreservice-io/job"
+	"github.com/coreservice-io/safe_go"
 )
 
 //job and safego example
 func Job_Safeo_run() {
 	count := 0
-	job := UJob.Start(
+	job := job.Start(
 		//job process
 		"exampleJob",
 		func() {
@@ -24,25 +24,25 @@ func Job_Safeo_run() {
 		errors.PanicHandler,
 		2,
 		// job type
-		// UJob.TYPE_PANIC_REDO  auto restart if panic
-		// UJob.TYPE_PANIC_RETURN  stop if panic
-		UJob.TYPE_PANIC_REDO,
+		// job.TYPE_PANIC_REDO  auto restart if panic
+		// job.TYPE_PANIC_RETURN  stop if panic
+		job.TYPE_PANIC_REDO,
 		// check continue callback, the job will stop running if return false
 		// the job will keep running if this callback is nil
-		func(job *UJob.Job) bool {
+		func(job *job.Job) bool {
 			return true
 		},
 		// onFinish callback
-		func(inst *UJob.Job) {
+		func(inst *job.Job) {
 			basic.Logger.Debugln("finish", "cycle", inst.Cycles)
 		},
 	)
 
 	//safeGo
-	USafeGo.Go(
+	safe_go.Go(
 		//process
 		func(args ...interface{}) {
-			basic.Logger.Debugln("example of USafeGo")
+			basic.Logger.Debugln("example of safe_go")
 			time.Sleep(10 * time.Second)
 			job.SetToCancel()
 		},

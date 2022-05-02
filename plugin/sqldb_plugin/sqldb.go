@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/coreservice-io/GormULog"
-	"github.com/coreservice-io/ULog"
+	"github.com/coreservice-io/gorm_log"
+	"github.com/coreservice-io/log"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -36,14 +36,14 @@ type Config struct {
 	Password string
 }
 
-func Init(dbConfig Config, logger ULog.Logger) error {
+func Init(dbConfig Config, logger log.Logger) error {
 	return Init_("default", dbConfig, logger)
 }
 
 // Init a new instance.
 //  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
 //  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
-func Init_(name string, dbConfig Config, logger ULog.Logger) error {
+func Init_(name string, dbConfig Config, logger log.Logger) error {
 	if name == "" {
 		name = "default"
 	}
@@ -54,15 +54,15 @@ func Init_(name string, dbConfig Config, logger ULog.Logger) error {
 	}
 
 	//Level: Silent Error Warn Info. Info logs all record. Silent turns off log.
-	db_log_level := GormULog.Warn
-	if logger.GetLevel() >= ULog.TraceLevel {
-		db_log_level = GormULog.Info
+	db_log_level := gorm_log.Warn
+	if logger.GetLevel() >= log.TraceLevel {
+		db_log_level = gorm_log.Info
 	}
 
 	dsn := dbConfig.UserName + ":" + dbConfig.Password + "@tcp(" + dbConfig.Host + ":" + strconv.Itoa(dbConfig.Port) + ")/" + dbConfig.DbName + "?charset=utf8mb4&loc=UTC"
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		Logger: GormULog.New_gormLocalLogger(logger, GormULog.Config{
+		Logger: gorm_log.New_gormLocalLogger(logger, gorm_log.Config{
 			SlowThreshold:             500 * time.Millisecond,
 			IgnoreRecordNotFoundError: false,
 			LogLevel:                  db_log_level,

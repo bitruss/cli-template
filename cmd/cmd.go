@@ -5,8 +5,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/coreservice-io/ULog"
-	"github.com/coreservice-io/UUtils/path_util"
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/cmd/config"
 	"github.com/coreservice-io/cli-template/cmd/default_"
@@ -14,6 +12,8 @@ import (
 	"github.com/coreservice-io/cli-template/cmd/log"
 	"github.com/coreservice-io/cli-template/cmd/service"
 	"github.com/coreservice-io/cli-template/configuration"
+	ilog "github.com/coreservice-io/log"
+	"github.com/coreservice-io/utils/path_util"
 	"github.com/urfave/cli/v2"
 )
 
@@ -246,7 +246,7 @@ func setLoggerLevel() error {
 		}
 	}
 
-	l := ULog.ParseLogLevel(logLevel)
+	l := ilog.ParseLogLevel(logLevel)
 	basic.Logger.SetLevel(l)
 	return nil
 }

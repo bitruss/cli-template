@@ -1,8 +1,8 @@
 package log
 
 import (
-	"github.com/coreservice-io/ULog"
 	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/log"
 	"github.com/urfave/cli/v2"
 )
 
@@ -14,8 +14,8 @@ func StartLog(clictx *cli.Context) {
 
 	onlyerr := clictx.Bool("only_err")
 	if onlyerr {
-		basic.Logger.PrintLastN(num, []ULog.LogLevel{ULog.PanicLevel, ULog.FatalLevel, ULog.ErrorLevel})
+		basic.Logger.PrintLastN(num, []log.LogLevel{log.PanicLevel, log.FatalLevel, log.ErrorLevel})
 	} else {
-		basic.Logger.PrintLastN(num, []ULog.LogLevel{ULog.PanicLevel, ULog.FatalLevel, ULog.ErrorLevel, ULog.InfoLevel, ULog.WarnLevel, ULog.DebugLevel, ULog.TraceLevel})
+		basic.Logger.PrintLastN(num, []log.LogLevel{log.PanicLevel, log.FatalLevel, log.ErrorLevel, log.InfoLevel, log.WarnLevel, log.DebugLevel, log.TraceLevel})
 	}
 }

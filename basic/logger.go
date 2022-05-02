@@ -1,18 +1,18 @@
 package basic
 
 import (
-	"github.com/coreservice-io/LogrusULog"
-	"github.com/coreservice-io/ULog"
-	"github.com/coreservice-io/UUtils/path_util"
+	"github.com/coreservice-io/log"
+	"github.com/coreservice-io/logrus_log"
+	"github.com/coreservice-io/utils/path_util"
 	"github.com/fatih/color"
 )
 
-var Logger ULog.Logger
+var Logger log.Logger
 
 func InitLogger() {
 	var llerr error
 	logs_path := path_util.ExE_Path("logs")
-	Logger, llerr = LogrusULog.New(logs_path, 2, 20, 30)
+	Logger, llerr = logrus_log.New(logs_path, 2, 20, 30)
 
 	if llerr != nil {
 		color.Set(color.FgRed)

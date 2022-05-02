@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/coreservice-io/UJob"
 	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/job"
 )
 
 var errMap sync.Map
@@ -37,7 +37,7 @@ func PanicHandler(panic_err interface{}) {
 }
 
 func ScheduleUploadPanic() {
-	UJob.Start(
+	job.Start(
 		//job process
 		"uploadPanic",
 		scheduleUploadPanic,
@@ -45,9 +45,9 @@ func ScheduleUploadPanic() {
 		PanicHandler,
 		300,
 		// job type
-		// UJob.TYPE_PANIC_REDO  auto restart if panic
-		// UJob.TYPE_PANIC_RETURN  stop if panic
-		UJob.TYPE_PANIC_REDO,
+		// job.TYPE_PANIC_REDO  auto restart if panic
+		// job.TYPE_PANIC_RETURN  stop if panic
+		job.TYPE_PANIC_REDO,
 		// check continue callback, the job will stop running if return false
 		// the job will keep running if this callback is nil
 		nil,

@@ -3,28 +3,28 @@ package spr_plugin
 import (
 	"fmt"
 
-	"github.com/coreservice-io/RedisSpr"
-	"github.com/coreservice-io/ULog"
+	"github.com/coreservice-io/log"
+	"github.com/coreservice-io/redis_spr"
 )
 
-var instanceMap = map[string]*RedisSpr.SprJobMgr{}
+var instanceMap = map[string]*redis_spr.SprJobMgr{}
 
-func GetInstance() *RedisSpr.SprJobMgr {
+func GetInstance() *redis_spr.SprJobMgr {
 	return instanceMap["default"]
 }
 
-func GetInstance_(name string) *RedisSpr.SprJobMgr {
+func GetInstance_(name string) *redis_spr.SprJobMgr {
 	return instanceMap[name]
 }
 
-func Init(redisConfig *RedisSpr.RedisConfig, logger ULog.Logger) error {
+func Init(redisConfig *redis_spr.RedisConfig, logger log.Logger) error {
 	return Init_("default", redisConfig, logger)
 }
 
 // Init a new instance.
 //  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
 //  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
-func Init_(name string, redisConfig *RedisSpr.RedisConfig, logger ULog.Logger) error {
+func Init_(name string, redisConfig *redis_spr.RedisConfig, logger log.Logger) error {
 	if name == "" {
 		name = "default"
 	}
@@ -42,7 +42,7 @@ func Init_(name string, redisConfig *RedisSpr.RedisConfig, logger ULog.Logger) e
 	}
 	//////// ini spr job //////////////////////
 
-	spr, err := RedisSpr.New(RedisSpr.RedisConfig{
+	spr, err := redis_spr.New(redis_spr.RedisConfig{
 		Addr:     redisConfig.Addr,
 		Port:     redisConfig.Port,
 		Password: redisConfig.Password,
@@ -55,7 +55,7 @@ func Init_(name string, redisConfig *RedisSpr.RedisConfig, logger ULog.Logger) e
 		return err
 	}
 
-	spr.SetULogger(logger)
+	spr.SetLogger(logger)
 
 	instanceMap[name] = spr
 

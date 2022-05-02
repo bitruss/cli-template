@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/coreservice-io/UUtils/hash_util"
+	"github.com/coreservice-io/utils/hash_util"
 )
 
 type ConnectKey struct {

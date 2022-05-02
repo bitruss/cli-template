@@ -5,9 +5,9 @@ import (
 	"errors"
 	"time"
 
-	"github.com/coreservice-io/UUtils/rand_util"
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
+	"github.com/coreservice-io/utils/rand_util"
 	goredis "github.com/go-redis/redis/v8"
 )
 

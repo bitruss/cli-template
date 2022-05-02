@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/coreservice-io/UReference"
 	"github.com/coreservice-io/cli-template/tools/json"
+	"github.com/coreservice-io/reference"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -31,7 +31,7 @@ func CheckTtlRefresh(secleft int64) bool {
 	return false
 }
 
-func Ref_Get(localRef *UReference.Reference, keystr string) (result interface{}) {
+func Ref_Get(localRef *reference.Reference, keystr string) (result interface{}) {
 	localvalue, ttl, localexist := localRef.Get(keystr)
 	if !CheckTtlRefresh(ttl) && localexist {
 		return localvalue
@@ -39,11 +39,11 @@ func Ref_Get(localRef *UReference.Reference, keystr string) (result interface{})
 	return nil
 }
 
-func Ref_Set(localRef *UReference.Reference, keystr string, value interface{}) error {
+func Ref_Set(localRef *reference.Reference, keystr string, value interface{}) error {
 	return Ref_Set_RTTL(localRef, keystr, value, local_reference_secs)
 }
 
-func Ref_Set_RTTL(localRef *UReference.Reference, keystr string, value interface{}, ref_ttl_second int64) error {
+func Ref_Set_RTTL(localRef *reference.Reference, keystr string, value interface{}, ref_ttl_second int64) error {
 	return localRef.Set(keystr, value, ref_ttl_second)
 }
 
@@ -67,13 +67,13 @@ func Redis_Get(ctx context.Context, Redis *redis.ClusterClient, isJSON bool, key
 	}
 }
 
-func RR_Set(ctx context.Context, Redis *redis.ClusterClient, localRef *UReference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64) error {
+func RR_Set(ctx context.Context, Redis *redis.ClusterClient, localRef *reference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64) error {
 	return RR_Set_RTTL(ctx, Redis, localRef, isJSON, keystr, value, redis_ttl_second, local_reference_secs)
 }
 
 // reference set && redis set
 // set both value to both local reference & remote redis
-func RR_Set_RTTL(ctx context.Context, Redis *redis.ClusterClient, localRef *UReference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64, ref_ttl_second int64) error {
+func RR_Set_RTTL(ctx context.Context, Redis *redis.ClusterClient, localRef *reference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64, ref_ttl_second int64) error {
 	if value == nil {
 		//rare case normally should not happen
 		//set 10 seconds to fast refresh
@@ -103,7 +103,7 @@ func RR_Set_RTTL(ctx context.Context, Redis *redis.ClusterClient, localRef *URef
 	}
 }
 
-func RR_Del(ctx context.Context, Redis *redis.ClusterClient, localRef *UReference.Reference, keystr string) {
+func RR_Del(ctx context.Context, Redis *redis.ClusterClient, localRef *reference.Reference, keystr string) {
 	localRef.Delete(keystr)
 	Redis.Del(ctx, keystr)
 }

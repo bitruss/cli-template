@@ -3,10 +3,10 @@ package plugin
 import (
 	"errors"
 
-	"github.com/coreservice-io/RedisSpr"
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/configuration"
 	"github.com/coreservice-io/cli-template/plugin/spr_plugin"
+	"github.com/coreservice-io/redis_spr"
 )
 
 func initSpr() error {
@@ -40,7 +40,7 @@ func initSpr() error {
 		return errors.New("redis_useTls [bool] in config err," + err.Error())
 	}
 
-	return spr_plugin.Init(&RedisSpr.RedisConfig{
+	return spr_plugin.Init(&redis_spr.RedisConfig{
 		Addr:     redis_addr,
 		UserName: redis_username,
 		Password: redis_password,

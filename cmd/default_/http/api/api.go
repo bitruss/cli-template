@@ -3,10 +3,10 @@ package api
 import (
 	"github.com/coreservice-io/cli-template/basic"
 
-	"github.com/coreservice-io/UUtils/path_util"
 	_ "github.com/coreservice-io/cli-template/cmd/default_/http/api_docs"
 	"github.com/coreservice-io/cli-template/configuration"
 	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
+	"github.com/coreservice-io/utils/path_util"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"github.com/swaggo/swag/gen"
 )

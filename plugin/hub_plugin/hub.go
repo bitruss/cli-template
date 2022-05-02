@@ -3,16 +3,16 @@ package hub_plugin
 import (
 	"fmt"
 
-	"github.com/coreservice-io/UHub"
+	"github.com/coreservice-io/hub"
 )
 
-var instanceMap = map[string]*UHub.Hub{}
+var instanceMap = map[string]*hub.Hub{}
 
-func GetInstance() *UHub.Hub {
+func GetInstance() *hub.Hub {
 	return instanceMap["default"]
 }
 
-func GetInstance_(name string) *UHub.Hub {
+func GetInstance_(name string) *hub.Hub {
 	return instanceMap[name]
 }
 
@@ -32,6 +32,6 @@ func Init_(name string) error {
 	if exist {
 		return fmt.Errorf("hub instance <%s> has already been initialized", name)
 	}
-	instanceMap[name] = &UHub.Hub{}
+	instanceMap[name] = &hub.Hub{}
 	return nil
 }

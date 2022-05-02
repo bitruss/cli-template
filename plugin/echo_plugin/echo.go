@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/coreservice-io/EchoMiddleware"
-	"github.com/coreservice-io/EchoMiddleware/tool"
-	"github.com/coreservice-io/ULog"
+	"github.com/coreservice-io/echo_middleware"
+	"github.com/coreservice-io/echo_middleware/tool"
+	"github.com/coreservice-io/log"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -17,7 +17,7 @@ import (
 type EchoServer struct {
 	*echo.Echo
 	Http_port int
-	Logger    ULog.Logger
+	Logger    log.Logger
 }
 
 var instanceMap = map[string]*EchoServer{}
@@ -37,14 +37,14 @@ type Config struct {
 	Port int
 }
 
-func Init(serverConfig Config, OnPanicHanlder func(panic_err interface{}), logger ULog.Logger) error {
+func Init(serverConfig Config, OnPanicHanlder func(panic_err interface{}), logger log.Logger) error {
 	return Init_("default", serverConfig, OnPanicHanlder, logger)
 }
 
 // Init a new instance.
 //  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
 //  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
-func Init_(name string, serverConfig Config, OnPanicHanlder func(panic_err interface{}), logger ULog.Logger) error {
+func Init_(name string, serverConfig Config, OnPanicHanlder func(panic_err interface{}), logger log.Logger) error {
 	if name == "" {
 		name = "default"
 	}
@@ -67,12 +67,12 @@ func Init_(name string, serverConfig Config, OnPanicHanlder func(panic_err inter
 	//cros
 	echoServer.Use(middleware.CORS())
 	//logger
-	echoServer.Use(EchoMiddleware.LoggerWithConfig(EchoMiddleware.LoggerConfig{
+	echoServer.Use(echo_middleware.LoggerWithConfig(echo_middleware.LoggerConfig{
 		Logger:            logger,
 		RecordFailRequest: false,
 	}))
 	//recover and panicHandler
-	echoServer.Use(EchoMiddleware.RecoverWithConfig(EchoMiddleware.RecoverConfig{
+	echoServer.Use(echo_middleware.RecoverWithConfig(echo_middleware.RecoverConfig{
 		OnPanic: OnPanicHanlder,
 	}))
 	echoServer.JSONSerializer = tool.NewJsoniter()

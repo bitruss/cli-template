@@ -3,10 +3,10 @@ package plugin
 import (
 	"errors"
 
-	"github.com/coreservice-io/UUtils/path_util"
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/configuration"
 	"github.com/coreservice-io/cli-template/plugin/sqlite_plugin"
+	"github.com/coreservice-io/utils/path_util"
 )
 
 func initSqlite() error {

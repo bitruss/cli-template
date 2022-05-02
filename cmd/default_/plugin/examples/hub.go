@@ -1,21 +1,21 @@
 package examples
 
 import (
-	"github.com/coreservice-io/UHub"
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/plugin/hub_plugin"
+	"github.com/coreservice-io/hub"
 )
 
 //hub example
-const testKind UHub.Kind = 1
+const testKind hub.Kind = 1
 
 type testEvent string
 
-func (e testEvent) Kind() UHub.Kind {
+func (e testEvent) Kind() hub.Kind {
 	return testKind
 }
 func Hub_run() {
-	hub_plugin.GetInstance().Subscribe(testKind, func(e UHub.Event) {
+	hub_plugin.GetInstance().Subscribe(testKind, func(e hub.Event) {
 		basic.Logger.Debugln("hub callback")
 		basic.Logger.Debugln(string(e.(testEvent)))
 	})

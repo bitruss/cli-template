@@ -4,18 +4,6 @@ go 1.17
 
 require (
 	github.com/ajstarks/svgo v0.0.0-20211024235047-1546f124cd8b
-	github.com/coreservice-io/EchoMiddleware v0.1.6
-	github.com/coreservice-io/GormULog v0.1.3
-	github.com/coreservice-io/LogrusULog v0.1.19
-	github.com/coreservice-io/RedisSpr v0.1.18
-	github.com/coreservice-io/UBiRpc v0.0.0-20220429131114-2d265d89aa72
-	github.com/coreservice-io/UECSUploader v0.0.3
-	github.com/coreservice-io/UHub v0.0.3
-	github.com/coreservice-io/UJob v0.1.5
-	github.com/coreservice-io/ULog v0.1.17
-	github.com/coreservice-io/UReference v0.0.5
-	github.com/coreservice-io/USafeGo v0.1.3
-	github.com/coreservice-io/UUtils v0.1.9
 	github.com/fatih/color v1.13.0
 	github.com/fatih/structs v1.1.0
 	github.com/go-playground/validator/v10 v10.11.0
@@ -34,6 +22,21 @@ require (
 	gorm.io/driver/mysql v1.3.3
 	gorm.io/driver/sqlite v1.2.6
 	gorm.io/gorm v1.23.4
+)
+
+require (
+	github.com/coreservice-io/bi_rpc v0.0.1
+	github.com/coreservice-io/echo_middleware v0.1.17
+	github.com/coreservice-io/ecs_uploader v0.0.5
+	github.com/coreservice-io/gorm_log v0.1.4
+	github.com/coreservice-io/hub v0.0.4
+	github.com/coreservice-io/job v0.1.20
+	github.com/coreservice-io/log v0.1.18
+	github.com/coreservice-io/logrus_log v0.1.20
+	github.com/coreservice-io/redis_spr v0.1.20
+	github.com/coreservice-io/reference v0.0.6
+	github.com/coreservice-io/safe_go v0.1.4
+	github.com/coreservice-io/utils v0.1.10
 )
 
 require (
