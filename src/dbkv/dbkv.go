@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"github.com/coreservice-io/CliAppTemplate/basic"
+	"github.com/coreservice-io/CliAppTemplate/plugin/redis_plugin"
+	"github.com/coreservice-io/CliAppTemplate/plugin/reference_plugin"
 	"github.com/coreservice-io/CliAppTemplate/tools/smartCache"
 	"github.com/go-redis/redis/v8"
-	"github.com/meson-network/mcdn/plugin/redisClient"
-	"github.com/meson-network/mcdn/plugin/reference"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -33,11 +33,11 @@ func GetDBKV(tx *gorm.DB, keyStr string, fromCache bool, updateCache bool) (*DBK
 	ck := smartCache.NewConnectKey("dbkv")
 	ck.C_Str(keyStr)
 
-	key := redisClient.GetInstance().GenKey(ck.String())
+	key := redis_plugin.GetInstance().GenKey(ck.String())
 
 	if fromCache {
 		// try to get from reference
-		result := smartCache.Ref_Get(reference.GetInstance(), key)
+		result := smartCache.Ref_Get(reference_plugin.GetInstance(), key)
 		if result != nil {
 			basic.Logger.Debugln("GetDBKV hit from reference")
 			return result.(*DBKVModel), nil
@@ -45,10 +45,10 @@ func GetDBKV(tx *gorm.DB, keyStr string, fromCache bool, updateCache bool) (*DBK
 
 		redis_result := &DBKVModel{}
 		// try to get from redis
-		err := smartCache.Redis_Get(context.Background(), redisClient.GetInstance().ClusterClient, true, key, redis_result)
+		err := smartCache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, redis_result)
 		if err == nil {
 			basic.Logger.Debugln("GetDBKV hit from redis")
-			smartCache.Ref_Set(reference.GetInstance(), key, redis_result)
+			smartCache.Ref_Set(reference_plugin.GetInstance(), key, redis_result)
 			return redis_result, nil
 		} else if err == redis.Nil {
 			//continue to get from db part
@@ -72,7 +72,7 @@ func GetDBKV(tx *gorm.DB, keyStr string, fromCache bool, updateCache bool) (*DBK
 		return nil, err
 	} else {
 		if updateCache {
-			smartCache.RR_Set(context.Background(), redisClient.GetInstance().ClusterClient, reference.GetInstance(), true, key, queryResult, 300)
+			smartCache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, queryResult, 300)
 		}
 		return queryResult, nil
 	}

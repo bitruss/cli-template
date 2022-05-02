@@ -21,9 +21,9 @@ require (
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/imroc/req v0.3.2
+	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/json-iterator/go v1.1.12
 	github.com/labstack/echo/v4 v4.7.2
-	github.com/meson-network/mcdn v0.0.0-20220502015940-671e5550ee84
 	github.com/olivere/elastic/v7 v7.0.32
 	github.com/spf13/cast v1.4.1
 	github.com/spf13/viper v1.10.1
