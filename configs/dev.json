@@ -16,7 +16,7 @@
   "redis_port": 6379,
   "redis_username": "",
   "redis_prefix": "template",
-  "redis_useTls": false,
+  "redis_useTls": true,
 
   "elasticsearch_addr": "xxxxx",
   "elasticsearch_password": "xxxxx",
