@@ -23,6 +23,25 @@
   "elasticsearch_username": "xxxxx",
 
 
+  "smtp_host": "",
+  "smtp_password": "",
+  "smtp_port": 587,
+  "smtp_username": "",
+
+
+  "ip_geo_ip2l_db_path": "/assets/default_/ip2l/IP2LOCATION-LITE-DB1.BIN",
+  "ip_geo_ip2l_upgrade_interval":172800,
+  "ip_geo_ip2l_upgrade_url": "",
+  "ip_geo_redis_addr": "",
+  "ip_geo_redis_password": "",
+  "ip_geo_redis_port": 6379,
+  "ip_geo_redis_prefix": "",
+  "ip_geo_redis_username": "",
+  "ip_geo_redis_usetls": true,
+  "ip_geo_ipstack_key": "",
+
+
+
   "api_doc_gen_search_dir":"cmd/default_/http/api",
   "api_doc_gen_mainfile":"api.go",
   "api_doc_gen_output_dir":"cmd/default_/http/api_docs",

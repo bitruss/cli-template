@@ -20,7 +20,6 @@ require (
 	github.com/takama/daemon v1.0.0
 	github.com/urfave/cli/v2 v2.4.0
 	gorm.io/driver/mysql v1.3.3
-	gorm.io/driver/sqlite v1.2.6
 	gorm.io/gorm v1.23.4
 )
 
@@ -30,6 +29,7 @@ require (
 	github.com/coreservice-io/ecs_uploader v0.0.5
 	github.com/coreservice-io/gorm_log v0.1.4
 	github.com/coreservice-io/hub v0.0.4
+	github.com/coreservice-io/ip_geo v0.0.7
 	github.com/coreservice-io/job v0.1.20
 	github.com/coreservice-io/log v0.1.18
 	github.com/coreservice-io/logrus_log v0.1.20
@@ -57,6 +57,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/ip2location/ip2location-go v8.3.0+incompatible // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
@@ -66,7 +67,6 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
-	github.com/mattn/go-sqlite3 v1.14.9 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
