@@ -14,12 +14,12 @@ import (
 
 //example for GormDB and tools cache
 type ExampleUserModel struct {
-	Id      int64
-	Status  string
-	Name    string
-	Email   string
-	Updated int64 `gorm:"autoUpdateTime"`
-	Created int64 `gorm:"autoCreateTime"`
+	Id               int64  `json:"id"`
+	Status           string `json:"status"`
+	Name             string `json:"name"`
+	Email            string `json:"email"`
+	Updated_unixtime int64  `json:"updated_unixtime" gorm:"autoUpdateTime"`
+	Created_unixtime int64  `json:"created_unixtime" gorm:"autoCreateTime"`
 }
 
 func CreateUser(userInfo *ExampleUserModel) (*ExampleUserModel, error) {
