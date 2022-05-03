@@ -7,7 +7,7 @@ import (
 //todo: ---
 func InitPlugin() {
 
-	err := iniHub()
+	err := initHub()
 	if err != nil {
 		basic.Logger.Fatalln(err)
 	}
