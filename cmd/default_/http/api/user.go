@@ -23,20 +23,20 @@ func config_user(httpServer *echo_plugin.EchoServer) {
 }
 
 type MSG_User struct {
-	Id    int
-	Name  string
-	Email string
+	Id    int    `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
 //create
 type MSG_REQ_CREATE_USER struct {
-	Name  string
-	Email string
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
 type MSG_RESP_CREATE_USER struct {
 	api.API_META_STATUS
-	User *MSG_User
+	User *MSG_User `json:"user"`
 }
 
 // @Summary      creat user
@@ -65,20 +65,20 @@ func createUser(ctx echo.Context) error {
 
 //search
 type MSG_REQ_SearchUser_Filter struct {
-	Id    *[]int  //sql : id in (...) //optional
-	Name  *string //optional
-	Email *string //optional  email can be like condition e.g " LIKE `%jack%` "
+	Id    *[]int  `json:"id"`    //sql : id in (...) //optional
+	Name  *string `json:"name"`  //optional
+	Email *string `json:"email"` //optional  email can be like condition e.g " LIKE `%jack%` "
 }
 
 type MSG_REQ_SearchUser struct {
 	Filter MSG_REQ_SearchUser_Filter
-	Offset int //required
-	Limit  int //required
+	Offset int `json:"offset"` //required
+	Limit  int `json:"limit"`  //required
 }
 
 type MSG_RESP_SearchUser struct {
 	api.API_META_STATUS
-	Result []*MSG_User
+	Result []*MSG_User `json:"result"`
 }
 
 // @Summary      search user
@@ -116,18 +116,18 @@ func searchUser(ctx echo.Context) error {
 }
 
 type MSG_REQ_UpdateUser_Filter struct {
-	ID []int
+	ID []int `json:"id"`
 }
 
 type Msg_Req_UpdateUser_To struct {
-	Status *string
-	Name   *string
-	Email  *string
+	Status *string `json:"status"`
+	Name   *string `json:"name"`
+	Email  *string `json:"email"`
 }
 
 type MSG_REQ_UpdateUser struct {
-	Filter MSG_REQ_UpdateUser_Filter
-	Update Msg_Req_UpdateUser_To
+	Filter MSG_REQ_UpdateUser_Filter `json:"filter"`
+	Update Msg_Req_UpdateUser_To     `json:"update"`
 }
 
 // @Summary      update user
