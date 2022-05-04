@@ -12,8 +12,8 @@ func Reference_run() {
 	if err1 != nil {
 		basic.Logger.Errorln(err1)
 	}
-	v, _, exist := reference_plugin.GetInstance_("ref1").Get("foo1")
-	if exist {
+	v, _ := reference_plugin.GetInstance_("ref1").Get("foo1")
+	if v != nil {
 		basic.Logger.Debugln(*(v.(*string)))
 	}
 
@@ -22,8 +22,8 @@ func Reference_run() {
 	if err2 != nil {
 		basic.Logger.Errorln(err2)
 	}
-	v, _, exist = reference_plugin.GetInstance_("ref1").Get("foo2")
-	if exist {
+	v, _ = reference_plugin.GetInstance_("ref1").Get("foo2")
+	if v != nil {
 		basic.Logger.Debugln(*(v.(*string)))
 	}
 }

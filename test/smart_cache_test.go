@@ -45,7 +45,9 @@ func Test_BuildInType(t *testing.T) {
 		log.Println("RR_Set error", err)
 	}
 	r := smart_cache.Ref_Get(reference_plugin.GetInstance(), key)
-	log.Println(r.(*int))
+	if r != nil {
+		log.Println(r.(*int))
+	}
 	var rInt int
 	smart_cache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, false, key, &rInt)
 	log.Println(rInt)
@@ -63,7 +65,9 @@ func Test_Struct(t *testing.T) {
 		log.Println("RR_Set error", err)
 	}
 	r := smart_cache.Ref_Get(reference_plugin.GetInstance(), key)
-	log.Println(r.(*person))
+	if r != nil {
+		log.Println(r.(*person))
+	}
 	var p person
 	smart_cache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, &p)
 	log.Println(p)

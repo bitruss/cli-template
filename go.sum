@@ -114,8 +114,8 @@ github.com/coreservice-io/gorm_log v0.1.4 h1:C3Xlu1TlfUvYtobJgEF5eWeQroawSqafxDu
 github.com/coreservice-io/gorm_log v0.1.4/go.mod h1:KhA2B4emVBneXuWlPQZ//PyrJIBLXbbhkFr/llPtUSI=
 github.com/coreservice-io/hub v0.0.4 h1:PQmvpP98GZU1OaI8Vfr1faYhqA6yuaMcFmYbmM3XVeo=
 github.com/coreservice-io/hub v0.0.4/go.mod h1:pcEGOurRjJbrECol/0TiTLz9+vdiLAzRtrBQJnrxmtk=
-github.com/coreservice-io/ip_geo v0.0.7 h1:hhpgrpdMYPe05dzmHpobAPzFe1eEBo/moHkzAvXCTvY=
-github.com/coreservice-io/ip_geo v0.0.7/go.mod h1:bg8ytqzjdPeL4/oG+vfOIkrKN3kKb3KtEJ+E1q9vaPk=
+github.com/coreservice-io/ip_geo v0.0.8 h1:EoDgZQn6XgYjD6nlXMlNXZmC/JkMyeJyxPiVgXXMnnw=
+github.com/coreservice-io/ip_geo v0.0.8/go.mod h1:XxQMiMgiy3c2tr28e1xzAC09YXxSymB1RyzWPrJtb1k=
 github.com/coreservice-io/job v0.1.20 h1:eCtVkB5MrCK9K7XFUu2X6D894H3mzy+puLl3HFC6yic=
 github.com/coreservice-io/job v0.1.20/go.mod h1:79+xxo1XzAYSyFXmOhsSzgzqKL0J40dVOtH0fhu3ORs=
 github.com/coreservice-io/log v0.1.18 h1:hZ8MXvnxtchnjap36ac4Cpe63W8Mg2eRahBtP9ykAHE=
@@ -124,8 +124,8 @@ github.com/coreservice-io/logrus_log v0.1.20 h1:wZAe/ddKLMvN6OJDctZP1D1AWU34r2Lf
 github.com/coreservice-io/logrus_log v0.1.20/go.mod h1:bEsSSRphetRNaKomr4kq59w5UUXvKW2YsI47gr2cw3s=
 github.com/coreservice-io/redis_spr v0.1.20 h1:aFrnxXforYRaibkKoZ+n44wMQgYf2KD6Pk+JQuttkoo=
 github.com/coreservice-io/redis_spr v0.1.20/go.mod h1:aqN5LsNLNJIdnkc/cYorN3To+6sm6Oa2AdPSPAtmC+Q=
-github.com/coreservice-io/reference v0.0.6 h1:vyB/uTeybm5E5sMi+1uX5b7wYZAVf+lzqw11m3uXw0k=
-github.com/coreservice-io/reference v0.0.6/go.mod h1:Kehi3lk+/a+hbK+4o+w4tUGlNdzezjewZ+1uKOkcP4Q=
+github.com/coreservice-io/reference v0.0.8 h1:Fx1zU262ExmKs6EQhTITkgRCPlXfhrBN2V7hY5ga7Vk=
+github.com/coreservice-io/reference v0.0.8/go.mod h1:Kehi3lk+/a+hbK+4o+w4tUGlNdzezjewZ+1uKOkcP4Q=
 github.com/coreservice-io/safe_go v0.1.4 h1:jEr2dFgjaffXM8bjHxIo62ukCG54GL350L6u+kuDUJA=
 github.com/coreservice-io/safe_go v0.1.4/go.mod h1:mic9xep3Vv+0DLsQgKN0MlmmmuCGMaw4G4NM03l+coM=
 github.com/coreservice-io/utils v0.1.10 h1:wNDlTOdoZyrt59W4CFqa7P4hsOlgiQL2VaqFzUMZDqI=

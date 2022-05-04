@@ -32,8 +32,8 @@ func CheckTtlRefresh(secleft int64) bool {
 }
 
 func Ref_Get(localRef *reference.Reference, keystr string) (result interface{}) {
-	localvalue, ttl, localexist := localRef.Get(keystr)
-	if !CheckTtlRefresh(ttl) && localexist {
+	localvalue, ttl := localRef.Get(keystr)
+	if !CheckTtlRefresh(ttl) && localvalue != nil {
 		return localvalue
 	}
 	return nil
@@ -76,8 +76,8 @@ func RR_Set(ctx context.Context, Redis *redis.ClusterClient, localRef *reference
 func RR_Set_RTTL(ctx context.Context, Redis *redis.ClusterClient, localRef *reference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64, ref_ttl_second int64) error {
 	if value == nil {
 		//rare case normally should not happen
-		//set 10 seconds to fast refresh
-		return Redis.Set(ctx, keystr, temp_nil, time.Duration(10)*time.Second).Err()
+		//set 5 seconds to fast refresh
+		return Redis.Set(ctx, keystr, temp_nil, time.Duration(5)*time.Second).Err()
 	}
 	if isJSON {
 		err := localRef.Set(keystr, value, ref_ttl_second)

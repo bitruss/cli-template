@@ -52,8 +52,8 @@ func UpdateUser(newData map[string]interface{}, id int64) error {
 
 //query
 type QueryUserResult struct {
-	Users      []*ExampleUserModel
-	TotalCount int64
+	Users       []*ExampleUserModel `json:"users"`
+	Total_count int64               `json:"total_count"`
 }
 
 func QueryUser(id *int64, status *string, name *string, email *string, limit int, offset int, fromCache bool, updateCache bool) (*QueryUserResult, error) {
@@ -74,8 +74,8 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 
 		// try to get from redis
 		redis_result := &QueryUserResult{
-			Users:      []*ExampleUserModel{},
-			TotalCount: 0,
+			Users:       []*ExampleUserModel{},
+			Total_count: 0,
 		}
 		err := smart_cache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, redis_result)
 		if err == nil {
@@ -84,6 +84,9 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 			return redis_result, nil
 		} else if err == redis.Nil {
 			//continue to get from db part
+		} else if err == smart_cache.TempNil {
+			//won't happen actually unless you set a nil pointer of queryResult when update
+			basic.Logger.Errorln("QueryUser smart_cache.TempNil")
 		} else {
 			//redis may broken, just return to keep db safe
 			return redis_result, err
@@ -94,8 +97,8 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 	basic.Logger.Debugln("QueryUser try from database")
 
 	queryResult := &QueryUserResult{
-		Users:      []*ExampleUserModel{},
-		TotalCount: 0,
+		Users:       []*ExampleUserModel{},
+		Total_count: 0,
 	}
 
 	query := sqldb_plugin.GetInstance().Table("example_user_models")
@@ -112,7 +115,7 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 		query.Where("email = ?", email)
 	}
 
-	query.Count(&queryResult.TotalCount)
+	query.Count(&queryResult.Total_count)
 	if limit > 0 {
 		query.Limit(limit)
 	}

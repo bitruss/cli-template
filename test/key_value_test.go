@@ -48,11 +48,11 @@ func Test_peer(t *testing.T) {
 		log.Fatalln("SetPeer err", err, "tag", tag)
 	}
 
-	pp, err := data_redis.GetPeer(tag, false)
+	pp, err := data_redis.GetPeer(tag)
 	log.Println(pp, err)
 
 	data_redis.DeletePeer(tag)
 
-	pp, err = data_redis.GetPeer(tag, false)
+	pp, err = data_redis.GetPeer(tag)
 	log.Println(pp, err)
 }
