@@ -37,7 +37,7 @@ func Init_(name string, ipStackKey string, localDbFile string, ip2LUpgradeUrl st
 
 	_, exist := instanceMap[name]
 	if exist {
-		return fmt.Errorf("mail sender instance <%s> has already initialized", name)
+		return fmt.Errorf("ip_geo instance <%s> has already initialized", name)
 	}
 
 	ipClient := &IpLocation{}

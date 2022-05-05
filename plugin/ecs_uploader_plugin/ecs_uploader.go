@@ -42,7 +42,7 @@ func Init_(name string, esConfig Config, logger log.Logger) error {
 
 	_, exist := instanceMap[name]
 	if exist {
-		return fmt.Errorf("elasticSearch instance <%s> has already been initialized", name)
+		return fmt.Errorf("ecs_uploader instance <%s> has already been initialized", name)
 	}
 
 	es, err := uploader.New(esConfig.Address, esConfig.UserName, esConfig.Password)
