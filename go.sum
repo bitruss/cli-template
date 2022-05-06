@@ -114,8 +114,8 @@ github.com/coreservice-io/gorm_log v0.1.4 h1:C3Xlu1TlfUvYtobJgEF5eWeQroawSqafxDu
 github.com/coreservice-io/gorm_log v0.1.4/go.mod h1:KhA2B4emVBneXuWlPQZ//PyrJIBLXbbhkFr/llPtUSI=
 github.com/coreservice-io/hub v0.0.4 h1:PQmvpP98GZU1OaI8Vfr1faYhqA6yuaMcFmYbmM3XVeo=
 github.com/coreservice-io/hub v0.0.4/go.mod h1:pcEGOurRjJbrECol/0TiTLz9+vdiLAzRtrBQJnrxmtk=
-github.com/coreservice-io/ip_geo v0.0.9 h1:ZcIFGjKVhPRksmLsCn+kjYfDAX6GTxqQwiGWrAsYcS8=
-github.com/coreservice-io/ip_geo v0.0.9/go.mod h1:XxQMiMgiy3c2tr28e1xzAC09YXxSymB1RyzWPrJtb1k=
+github.com/coreservice-io/ip_geo v0.0.11 h1:8UhK9IsHfPTbr8heQUW0pQLBUcEUrQ0HbPPdiHgxMGw=
+github.com/coreservice-io/ip_geo v0.0.11/go.mod h1:XxQMiMgiy3c2tr28e1xzAC09YXxSymB1RyzWPrJtb1k=
 github.com/coreservice-io/job v0.1.20 h1:eCtVkB5MrCK9K7XFUu2X6D894H3mzy+puLl3HFC6yic=
 github.com/coreservice-io/job v0.1.20/go.mod h1:79+xxo1XzAYSyFXmOhsSzgzqKL0J40dVOtH0fhu3ORs=
 github.com/coreservice-io/log v0.1.18 h1:hZ8MXvnxtchnjap36ac4Cpe63W8Mg2eRahBtP9ykAHE=
