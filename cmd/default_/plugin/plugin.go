@@ -9,19 +9,19 @@ func InitPlugin() {
 
 	err := initHub()
 	if err != nil {
-		basic.Logger.Fatalln(err)
+		basic.Logger.Fatalln("initHub err:", err)
 	}
 
 	/////////////////////////
 	err = initReference()
 	if err != nil {
-		basic.Logger.Fatalln(err)
+		basic.Logger.Fatalln("initReference err:", err)
 	}
 
 	/////////////////////////
 	err = initEchoServer()
 	if err != nil {
-		basic.Logger.Fatalln(err)
+		basic.Logger.Fatalln("initEchoServer err:", err)
 	}
 
 }
