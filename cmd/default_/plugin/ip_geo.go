@@ -75,6 +75,7 @@ func initIpGeo() error {
 		UseTLS:   redis_useTls,
 	}
 
+	reference_plugin.Init_("ip_geo")
 	return ip_geo_plugin.Init(ipStackAccessKey, dbFilePath, upgradeUrl, int64(upgradeInterval),
-		reference_plugin.GetInstance_("ipLocation"), ip_geo_redis_config, basic.Logger, tool_errors.PanicHandler)
+		reference_plugin.GetInstance_("ip_geo"), ip_geo_redis_config, basic.Logger, tool_errors.PanicHandler)
 }
