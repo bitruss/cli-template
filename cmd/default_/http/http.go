@@ -26,7 +26,7 @@ func StartDefaultHttpSever() {
 
 	err := httpServer.Start()
 	if err != nil {
-		basic.Logger.Fatalln(err)
+		basic.Logger.Fatalln("StartDefaultHttpSever err:", err)
 	}
 }
 

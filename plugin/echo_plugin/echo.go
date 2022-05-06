@@ -18,6 +18,9 @@ type EchoServer struct {
 	*echo.Echo
 	Http_port int
 	Logger    log.Logger
+	Tls       bool
+	Crt_path  string
+	Key_path  string
 }
 
 var instanceMap = map[string]*EchoServer{}
@@ -34,7 +37,10 @@ func GetInstance_(name string) *EchoServer {
 http_port
 */
 type Config struct {
-	Port int
+	Port     int
+	Tls      bool
+	Crt_path string
+	Key_path string
 }
 
 func Init(serverConfig Config, OnPanicHanlder func(panic_err interface{}), logger log.Logger) error {
@@ -62,6 +68,9 @@ func Init_(name string, serverConfig Config, OnPanicHanlder func(panic_err inter
 		echo.New(),
 		serverConfig.Port,
 		logger,
+		serverConfig.Tls,
+		serverConfig.Crt_path,
+		serverConfig.Key_path,
 	}
 
 	//cros
@@ -82,8 +91,13 @@ func Init_(name string, serverConfig Config, OnPanicHanlder func(panic_err inter
 }
 
 func (s *EchoServer) Start() error {
-	s.Logger.Infoln("http server started on port :" + strconv.Itoa(s.Http_port))
-	return s.Echo.Start(":" + strconv.Itoa(s.Http_port))
+	if s.Tls {
+		s.Logger.Infoln("https server started on port :" + strconv.Itoa(s.Http_port))
+		return s.Echo.StartTLS(":"+strconv.Itoa(s.Http_port), s.Crt_path, s.Key_path)
+	} else {
+		s.Logger.Infoln("http server started on port :" + strconv.Itoa(s.Http_port))
+		return s.Echo.Start(":" + strconv.Itoa(s.Http_port))
+	}
 }
 
 func (s *EchoServer) Close() {

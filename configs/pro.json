@@ -2,6 +2,9 @@
   "local_log_level": "INFO",
 
   "http_port": 80,
+  "http_tls":false,
+  "http_tls_crt":"",
+  "http_tls_key":"",
   "http_static_dir":"assets/html",
 
   "db_host": "localhost",
