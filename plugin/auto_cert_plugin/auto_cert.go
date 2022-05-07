@@ -52,7 +52,7 @@ func (cert *Cert) AutoUpdate(update_change_callback func(string, string)) {
 
 			},
 			// job interval in seconds , one day
-			15,
+			int64(cert.Check_interval_secs),
 			job.TYPE_PANIC_REDO,
 			// check continue callback, the job will stop running if return false
 			// the job will keep running if this callback is nil
