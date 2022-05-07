@@ -138,18 +138,20 @@ func (cert *Cert) update_(Update_change_callback func(string, string)) error {
 	}
 
 	//////save .crt and .key/////
-	crt_file_err := file_overwrite(cert.Local_crt_path, rp.Cert.Crt_content)
-	if crt_file_err != nil {
-		return crt_file_err
-	}
+	if change {
+		crt_file_err := file_overwrite(cert.Local_crt_path, rp.Cert.Crt_content)
+		if crt_file_err != nil {
+			return crt_file_err
+		}
 
-	key_file_err := file_overwrite(cert.Local_key_path, rp.Cert.Key_content)
-	if key_file_err != nil {
-		return key_file_err
-	}
+		key_file_err := file_overwrite(cert.Local_key_path, rp.Cert.Key_content)
+		if key_file_err != nil {
+			return key_file_err
+		}
 
-	if Update_change_callback != nil && change {
-		Update_change_callback(rp.Cert.Crt_content, rp.Cert.Key_content)
+		if Update_change_callback != nil {
+			Update_change_callback(rp.Cert.Crt_content, rp.Cert.Key_content)
+		}
 	}
 
 	return nil
