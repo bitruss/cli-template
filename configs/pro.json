@@ -3,9 +3,14 @@
 
   "http_port": 80,
   "http_tls":false,
-  "http_tls_crt":"",
-  "http_tls_key":"",
+  "http_tls_crt_path":"",
+  "http_tls_key_path":"",
   "http_static_dir":"assets/html",
+
+
+  "auto_cert_crt_path":"",
+  "auto_cert_key_path":"",
+  "auto_cert_url":"",
 
   "db_host": "localhost",
   "db_name": "xxxxx",

@@ -12,11 +12,7 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
-
-logs
-cli-template
+ 
 
 # Editor directories and files
 .vscode
@@ -28,6 +24,15 @@ default_dev
 *.njsproj
 *.sln
 *.sw?
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+logs
+cli-template
+assets/cert/*.crt
+assets/cert/*.key
+
  
 # don't forget to remove your pro.json
 

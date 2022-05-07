@@ -34,5 +34,8 @@ func start_jobs() {
 		panic("http server not working")
 	}
 
+	//start the auto_cert auto-updating job
+	//auto_cert_plugin.GetInstance().AutoUpdate()
+
 	basic.Logger.Infoln("start your jobs below")
 }

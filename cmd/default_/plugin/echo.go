@@ -19,14 +19,14 @@ func initEchoServer() error {
 	tls, _ := configuration.Config.GetBool("http_tls", false)
 	if tls {
 
-		crt, err := configuration.Config.GetString("http_tls_crt", "")
+		crt, err := configuration.Config.GetString("http_tls_crt_path", "")
 		if err != nil {
-			return errors.New("http_tls_crt [string] in config.json err," + err.Error())
+			return errors.New("http_tls_crt_path [string] in config.json err," + err.Error())
 		}
 
-		key, err := configuration.Config.GetString("http_tls_key", "")
+		key, err := configuration.Config.GetString("http_tls_key_path", "")
 		if err != nil {
-			return errors.New("http_tls_key [string] in config.json err," + err.Error())
+			return errors.New("http_tls_key_path [string] in config.json err," + err.Error())
 		}
 
 		crt_path, cert_path_err := path_util.SmartExistPath(crt)
