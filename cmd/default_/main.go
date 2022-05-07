@@ -35,25 +35,13 @@ func start_jobs() {
 		panic("http server not working")
 	}
 
-	//start the auto_cert auto-updating job
+	// //start the auto_cert auto-updating job
 	// auto_cert_plugin.GetInstance().AutoUpdate(func(new_crt_str, new_key_str string) {
-	// 	basic.Logger.Infoln("new_crt_str", new_crt_str)
-	// 	basic.Logger.Infoln("new_key_str", new_key_str)
-
 	// 	//reload server
 	// 	sre := http.ServerReloadCert()
 	// 	if sre != nil {
 	// 		basic.Logger.Errorln("cert change reload echo server error:" + sre.Error())
 	// 	}
-
-	// 	//restart nginx
-	// 	go func() {
-	// 		cmd := exec.Command("/bin/bash", "-c", "sudo nginx -s reload")
-	// 		err := cmd.Run()
-	// 		if err != nil {
-	// 			basic.Logger.Errorln("cert change reload nginx error:", err)
-	// 		}
-	// 	}()
 	// })
 
 	basic.Logger.Infoln("start your jobs below")

@@ -4,10 +4,12 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/echo_middleware"
 	"github.com/coreservice-io/echo_middleware/tool"
 	"github.com/coreservice-io/log"
@@ -22,6 +24,7 @@ type EchoServer struct {
 	Tls       bool
 	Crt_path  string
 	Key_path  string
+	Cert      *tls.Certificate
 }
 
 var instanceMap = map[string]*EchoServer{}
@@ -72,6 +75,7 @@ func Init_(name string, serverConfig Config, OnPanicHanlder func(panic_err inter
 		serverConfig.Tls,
 		serverConfig.Crt_path,
 		serverConfig.Key_path,
+		nil,
 	}
 
 	//cros
@@ -93,23 +97,39 @@ func Init_(name string, serverConfig Config, OnPanicHanlder func(panic_err inter
 
 func (s *EchoServer) Start() error {
 	if s.Tls {
+		cert, err := tls.LoadX509KeyPair(s.Crt_path, s.Key_path)
+		if err != nil {
+			return err
+		}
+		s.Cert = &cert
+		tlsconf := new(tls.Config)
+		tlsconf.GetCertificate = func(*tls.ClientHelloInfo) (*tls.Certificate, error) {
+			return s.Cert, nil
+		}
+
+		server := http.Server{
+			Addr:      ":" + strconv.Itoa(s.Http_port),
+			TLSConfig: tlsconf,
+		}
+
 		s.Logger.Infoln("https server started on port :" + strconv.Itoa(s.Http_port))
-		return s.Echo.StartTLS(":"+strconv.Itoa(s.Http_port), s.Crt_path, s.Key_path)
+		return s.StartServer(&server)
+
 	} else {
-		s.Logger.Infoln("http server started on port :" + strconv.Itoa(s.Http_port))
+		s.Logger.Infoln("https server started on port :" + strconv.Itoa(s.Http_port))
 		return s.Echo.Start(":" + strconv.Itoa(s.Http_port))
 	}
 }
 
 func (s *EchoServer) ReloadCert() error {
 	if s.Tls {
-		NewCertificates := make([]tls.Certificate, 1)
 		cert, err := tls.LoadX509KeyPair(s.Crt_path, s.Key_path)
 		if err != nil {
 			return err
 		}
-		NewCertificates[0] = cert
-		s.Echo.TLSServer.TLSConfig.Certificates = NewCertificates
+
+		basic.Logger.Debugln("GetCertificate reloading happend")
+		s.Cert = &cert
 	}
 	return nil
 }
