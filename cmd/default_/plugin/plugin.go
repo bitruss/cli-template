@@ -19,6 +19,12 @@ func InitPlugin() {
 	}
 
 	/////////////////////////
+	// err = initAutoCert()
+	// if err != nil {
+	// 	basic.Logger.Fatalln("initAutoCert err:", err)
+	// }
+
+	/////////////////////////
 	err = initEchoServer()
 	if err != nil {
 		basic.Logger.Fatalln("initEchoServer err:", err)

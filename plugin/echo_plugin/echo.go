@@ -2,6 +2,7 @@ package echo_plugin
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"strconv"
 	"strings"
@@ -98,6 +99,19 @@ func (s *EchoServer) Start() error {
 		s.Logger.Infoln("http server started on port :" + strconv.Itoa(s.Http_port))
 		return s.Echo.Start(":" + strconv.Itoa(s.Http_port))
 	}
+}
+
+func (s *EchoServer) ReloadCert() error {
+	if s.Tls {
+		NewCertificates := make([]tls.Certificate, 1)
+		cert, err := tls.LoadX509KeyPair(s.Crt_path, s.Key_path)
+		if err != nil {
+			return err
+		}
+		NewCertificates[0] = cert
+		s.Echo.TLSServer.TLSConfig.Certificates = NewCertificates
+	}
+	return nil
 }
 
 func (s *EchoServer) Close() {

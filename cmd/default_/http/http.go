@@ -9,7 +9,7 @@ import (
 )
 
 //httpServer example
-func StartDefaultHttpSever() {
+func ServerStart() {
 	httpServer := echo_plugin.GetInstance()
 	api.ConfigApi(httpServer)
 	api.DeclareApi(httpServer)
@@ -28,8 +28,13 @@ func StartDefaultHttpSever() {
 	if err != nil {
 		basic.Logger.Fatalln("StartDefaultHttpSever err:", err)
 	}
+
 }
 
-func CheckDefaultHttpServerStarted() bool {
+func ServerReloadCert() error {
+	return echo_plugin.GetInstance().ReloadCert()
+}
+
+func ServerCheckStarted() bool {
 	return echo_plugin.GetInstance().CheckStarted()
 }
