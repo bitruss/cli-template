@@ -170,11 +170,12 @@ func file_overwrite(path string, content string) error {
 	return nil
 }
 
-func Init(conf Config) error {
-	return Init_("default", conf)
+//init_download ==true ,it will update from remote url in init process
+func Init(conf Config, init_download bool) error {
+	return Init_("default", conf, init_download)
 }
 
-func Init_(name string, conf Config) error {
+func Init_(name string, conf Config, init_download bool) error {
 	if name == "" {
 		name = "default"
 	}
@@ -196,9 +197,11 @@ func Init_(name string, conf Config) error {
 		conf.Check_interval_secs,
 	}
 
-	first_update_err := cert.update_(nil)
-	if first_update_err != nil {
-		return errors.New("cert init failed," + first_update_err.Error())
+	if init_download {
+		first_update_err := cert.update_(nil)
+		if first_update_err != nil {
+			return errors.New("cert init failed," + first_update_err.Error())
+		}
 	}
 
 	instanceMap[name] = cert

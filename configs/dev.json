@@ -11,6 +11,7 @@
   "auto_cert_crt_path":"",
   "auto_cert_key_path":"",
   "auto_cert_url":"",
+  "auto_cert_init_download":true,
   "auto_cert_check_interval":3600,
 
 

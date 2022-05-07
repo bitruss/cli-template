@@ -30,9 +30,6 @@ default_dev
 
 logs
 cli-template
-assets/cert/*.crt
-assets/cert/*.key
-
  
 # don't forget to remove your pro.json
 

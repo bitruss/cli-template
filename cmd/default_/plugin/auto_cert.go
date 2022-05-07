@@ -29,11 +29,16 @@ func initAutoCert() error {
 		return errors.New("auto_cert_check_interval [int64] in config err or too small interval")
 	}
 
+	auto_cert_init_download, err := configuration.Config.GetBool("auto_cert_init_download", true)
+	if err != nil {
+		return errors.New("auto_cert_init_download [bool] in config err or too small interval")
+	}
+
 	return auto_cert_plugin.Init(auto_cert_plugin.Config{
 		Download_url:        auto_cert_url,
 		Local_crt_path:      auto_cert_crt_path,
 		Local_key_path:      auto_cert_key_path,
 		Check_interval_secs: auto_cert_check_interval,
-	})
+	}, auto_cert_init_download)
 
 }
