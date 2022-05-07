@@ -48,8 +48,8 @@ func (cert *Cert) AutoUpdate() {
 			func(err interface{}) {
 
 			},
-			// job interval in seconds
-			30,
+			// job interval in seconds , one day
+			24*3600,
 			job.TYPE_PANIC_REDO,
 			// check continue callback, the job will stop running if return false
 			// the job will keep running if this callback is nil
