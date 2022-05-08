@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"errors"
+	"os"
 	"path/filepath"
 
 	"github.com/coreservice-io/cli-template/basic"
@@ -27,11 +28,16 @@ func init_http_echo_server() error {
 
 		html_file := ""
 		if http_html_dir != "" {
-			html_file_, html_file_err := path_util.SmartExistPath(filepath.Join(http_html_dir, "index.html"))
-			if html_file_err != nil {
-				basic.Logger.Fatalln("index.html file not found inside " + http_html_dir + " folder :")
+			http_html_dir_abs, http_html_dir_abs_err := path_util.SmartExistPath(http_html_dir)
+			if http_html_dir_abs_err != nil {
+				return errors.New("http_html_dir  error," + http_html_dir_abs_err.Error())
 			}
-			html_file = html_file_
+			http_html_dir = http_html_dir_abs
+			html_file = filepath.Join(http_html_dir_abs, "index.html")
+			_, err := os.Stat(html_file)
+			if err != nil {
+				return errors.New("index.html file not found inside " + http_html_dir_abs + " folder :")
+			}
 		}
 
 		return echo_plugin.Init_("http", echo_plugin.Config{Port: http_port, Tls: false, Crt_path: "", Key_path: "",
@@ -77,11 +83,16 @@ func init_https_echo_server() error {
 
 		html_file := ""
 		if https_html_dir != "" {
-			html_file_, html_file_err := path_util.SmartExistPath(filepath.Join(https_html_dir, "index.html"))
-			if html_file_err != nil {
-				basic.Logger.Fatalln("index.html file not found inside " + https_html_dir + " folder :")
+			https_html_dir_abs, https_html_dir_abs_err := path_util.SmartExistPath(https_html_dir)
+			if https_html_dir_abs_err != nil {
+				return errors.New("https_html_dir  error," + https_html_dir_abs_err.Error())
 			}
-			html_file = html_file_
+			https_html_dir = https_html_dir_abs
+			html_file = filepath.Join(https_html_dir_abs, "index.html")
+			_, err := os.Stat(html_file)
+			if err != nil {
+				return errors.New("index.html file not found inside " + https_html_dir_abs + " folder :")
+			}
 		}
 
 		return echo_plugin.Init_("https", echo_plugin.Config{Port: https_port, Tls: true, Crt_path: crt_path, Key_path: key_path,
