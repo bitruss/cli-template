@@ -1,6 +1,7 @@
 package http
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/coreservice-io/cli-template/basic"
@@ -36,10 +37,13 @@ func ServerStart() {
 	//http just redirect to https
 	http_srv := echo_plugin.GetInstance_("http")
 	if http_srv != nil {
-		//redirect
-		http_srv.Any("/*", func(ctx echo.Context) error {
-			return ctx.Redirect(302, "https://"+ctx.Request().Host+":443"+ctx.Request().URL.String())
-		})
+
+		if https_srv != nil {
+			//redirect
+			http_srv.Any("/*", func(ctx echo.Context) error {
+				return ctx.Redirect(302, "https://"+ctx.Request().Host+":"+strconv.Itoa(https_srv.Http_port)+ctx.Request().URL.String())
+			})
+		}
 
 		go func() {
 			err := http_srv.Start()
