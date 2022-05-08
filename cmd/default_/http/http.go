@@ -41,7 +41,7 @@ func ServerStart() {
 		if https_srv != nil {
 			//redirect
 			http_srv.Any("/*", func(ctx echo.Context) error {
-				return ctx.Redirect(302, "https://"+ctx.Request().Host+":"+strconv.Itoa(https_srv.Http_port)+ctx.Request().URL.String())
+				return ctx.Redirect(301, "https://"+ctx.Request().Host+":"+strconv.Itoa(https_srv.Http_port)+ctx.Request().URL.String())
 			})
 		}
 
