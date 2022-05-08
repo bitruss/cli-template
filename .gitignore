@@ -25,12 +25,15 @@ default_dev
 *.sln
 *.sw?
 
-# Dependency directories (remove the comment below to include it)
+ 
+ # Dependency directories (remove the comment below to include it)
 # vendor/
 
 logs
 cli-template
+
  
 # don't forget to remove your pro.json
 
 #.configs/pro.json
+

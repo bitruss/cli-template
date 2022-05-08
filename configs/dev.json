@@ -1,12 +1,15 @@
 {
   "local_log_level": "DEBUG",
-
+  
+  "http_on":true,
   "http_port": 80,
-  "http_tls":false,
-  "http_tls_crt_path":"",
-  "http_tls_key_path":"",
-  "http_static_dir":"assets/html",
+  "http_html_dir":"",
 
+  "https_on":true,
+  "https_port": 443,
+  "https_crt_path":"assets/cert/crt.crt",
+  "https_key_path":"assets/cert/key.key",
+  "https_html_dir":"assets/html",
 
   "auto_cert_crt_path":"",
   "auto_cert_key_path":"",

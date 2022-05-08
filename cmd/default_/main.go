@@ -1,6 +1,8 @@
 package default_
 
 import (
+	"time"
+
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/cmd/default_/http"
 	"github.com/coreservice-io/cli-template/cmd/default_/plugin"
@@ -21,12 +23,19 @@ func StartDefault(clictx *cli.Context) {
 	go start_jobs()
 
 	start_components()
+
+	for {
+		//never quit
+		time.Sleep(time.Duration(1) * time.Hour)
+	}
+
 }
 
 func start_components() {
 
 	//start the httpserver
 	http.ServerStart()
+
 }
 
 func start_jobs() {

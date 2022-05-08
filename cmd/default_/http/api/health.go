@@ -19,6 +19,9 @@ type MSG_RESP_HEALTH struct {
 // @Success      200 {object} MSG_RESP_HEALTH "server unix time"
 // @Router       /api/health [get]
 func healthCheck(ctx echo.Context) error {
+	// o := 0
+	// v := 5 / o
+	// return errors.New(strconv.Itoa(v))
 	return ctx.JSON(http.StatusOK, &MSG_RESP_HEALTH{UnixTime: time.Now().Unix()})
 }
 
