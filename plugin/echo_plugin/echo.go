@@ -14,6 +14,7 @@ import (
 	"github.com/coreservice-io/echo_middleware/tool"
 	"github.com/coreservice-io/log"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type EchoServer struct {
@@ -84,7 +85,7 @@ func Init_(name string, serverConfig Config, OnPanicHanlder func(panic_err inter
 	}
 
 	//cros
-	// echoServer.Use(middleware.CORS())
+	echoServer.Use(middleware.CORS())
 
 	//logger
 	echoServer.Use(echo_middleware.LoggerWithConfig(echo_middleware.LoggerConfig{
