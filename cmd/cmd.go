@@ -122,7 +122,7 @@ func ConfigCmd() *cli.App {
 					//service install
 					{
 						Name:  "install",
-						Usage: "install meson node in service",
+						Usage: "install service",
 						Action: func(clictx *cli.Context) error {
 							service.RunServiceCmd(clictx)
 							return nil
@@ -131,7 +131,7 @@ func ConfigCmd() *cli.App {
 					//service remove
 					{
 						Name:  "remove",
-						Usage: "remove meson node from service",
+						Usage: "remove service",
 						Action: func(clictx *cli.Context) error {
 							service.RunServiceCmd(clictx)
 							return nil
