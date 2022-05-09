@@ -5,6 +5,7 @@ import (
 
 	"github.com/coreservice-io/cli-template/configuration"
 	"github.com/coreservice-io/cli-template/plugin/auto_cert_plugin"
+	"github.com/coreservice-io/utils/path_util"
 )
 
 func initAutoCert() error {
@@ -14,9 +15,25 @@ func initAutoCert() error {
 		return errors.New("auto_cert_crt_path [string] in config err," + err.Error())
 	}
 
+	if auto_cert_crt_path != "" {
+		auto_cert_crt_path_abs, auto_cert_crt_path_abs_err := path_util.SmartExistPath(auto_cert_crt_path)
+		if auto_cert_crt_path_abs_err != nil {
+			return errors.New("auto_cert_crt_path  error," + auto_cert_crt_path_abs_err.Error())
+		}
+		auto_cert_crt_path = auto_cert_crt_path_abs
+	}
+
 	auto_cert_key_path, err := configuration.Config.GetString("auto_cert_key_path", "")
 	if err != nil {
 		return errors.New("auto_cert_key_path [string] in config err," + err.Error())
+	}
+
+	if auto_cert_key_path != "" {
+		auto_cert_key_path_abs, auto_cert_key_path_abs_err := path_util.SmartExistPath(auto_cert_key_path)
+		if auto_cert_key_path_abs_err != nil {
+			return errors.New("auto_cert_key_path  error," + auto_cert_key_path_abs_err.Error())
+		}
+		auto_cert_key_path = auto_cert_key_path_abs
 	}
 
 	auto_cert_url, err := configuration.Config.GetString("auto_cert_url", "")
