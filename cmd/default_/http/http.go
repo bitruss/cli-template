@@ -63,11 +63,11 @@ func ServerStart() {
 			res := ctx.Response()
 			req := ctx.Request()
 
-			domain_echo := echo_plugin.CheckMatchedEcho(req.Host, req.RequestURI)
-			if domain_echo == nil {
+			matched_echo := echo_plugin.CheckMatchedEcho(req.Host, req.RequestURI)
+			if matched_echo == nil {
 				html_echo.ServeHTTP(res, req)
 			} else {
-				domain_echo.ServeHTTP(res, req)
+				matched_echo.ServeHTTP(res, req)
 			}
 
 			return nil
