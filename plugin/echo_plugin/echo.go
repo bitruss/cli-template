@@ -17,37 +17,38 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-var domain_echo = map[string]*DomainEcho{}
+var match_echo = map[string]*MatchEcho{}
 
-type DomainEcho struct {
+type MatchEcho struct {
 	*echo.Echo
-	DomainTag string
+	Name  string
+	Match func(string, string) bool //func(host string, req_uri string)
 }
 
-func GetHostEcho(name string) *DomainEcho {
-	return domain_echo[name]
+func GetMatchEcho(name string) *MatchEcho {
+	return match_echo[name]
 }
 
-func MatchDomainEcho(host string) *DomainEcho {
-	for k, v := range domain_echo {
-		if strings.HasPrefix(host, k) {
+func CheckMatchedEcho(host string, req_uri string) *MatchEcho {
+	for _, v := range match_echo {
+		if v.Match(host, req_uri) {
 			return v
 		}
 	}
 	return nil
 }
 
-//domain_tag will be 'api' for  'https://api.abc.com/api/xxx'
-func InitHostEcho(domain_tag string) (*DomainEcho, error) {
-	_, exist := domain_echo[domain_tag]
+func InitHostEcho(name string, match func(string, string) bool) (*MatchEcho, error) {
+	_, exist := match_echo[name]
 	if exist {
-		return nil, fmt.Errorf("DomainEcho instance <%s> has already been initialized", domain_tag)
+		return nil, fmt.Errorf("MatchEcho instance <%s> has already been initialized", name)
 	}
-	domain_echo[domain_tag] = &DomainEcho{
+	match_echo[name] = &MatchEcho{
 		echo.New(),
-		domain_tag,
+		name,
+		match,
 	}
-	return domain_echo[domain_tag], nil
+	return match_echo[name], nil
 }
 
 type EchoServer struct {

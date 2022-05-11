@@ -19,7 +19,9 @@ func ServerStart() {
 	//init hosted echo
 
 	///////////////////
-	api_echo, err := echo_plugin.InitHostEcho("api")
+	api_echo, err := echo_plugin.InitHostEcho("api", func(host, req_uri string) bool {
+		return strings.HasPrefix(host, "api")
+	})
 	if err != nil {
 		basic.Logger.Fatalln(err)
 	} else {
@@ -28,7 +30,10 @@ func ServerStart() {
 	}
 
 	////////////////////
-	html_echo, err := echo_plugin.InitHostEcho("www")
+	html_echo, err := echo_plugin.InitHostEcho("www", func(host, req_uri string) bool {
+		return strings.HasPrefix(host, "www")
+	})
+
 	if err != nil {
 		basic.Logger.Fatalln(err)
 	} else {
@@ -58,7 +63,7 @@ func ServerStart() {
 			res := ctx.Response()
 			req := ctx.Request()
 
-			domain_echo := echo_plugin.MatchDomainEcho(req.Host)
+			domain_echo := echo_plugin.CheckMatchedEcho(req.Host, req.RequestURI)
 			if domain_echo == nil {
 				html_echo.ServeHTTP(res, req)
 			} else {
