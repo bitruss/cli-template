@@ -16,7 +16,7 @@ import (
 //httpServer example
 func ServerStart() {
 
-	//init hosted echo
+	//init matched echo
 
 	///////////////////
 	api_echo, err := echo_plugin.InitMatchedEcho("api", func(host, req_uri string) bool {
