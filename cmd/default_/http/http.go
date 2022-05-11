@@ -19,7 +19,7 @@ func ServerStart() {
 	//init hosted echo
 
 	///////////////////
-	api_echo, err := echo_plugin.InitHostEcho("api", func(host, req_uri string) bool {
+	api_echo, err := echo_plugin.InitMatchedEcho("api", func(host, req_uri string) bool {
 		return strings.HasPrefix(host, "api")
 	})
 	if err != nil {
@@ -30,7 +30,7 @@ func ServerStart() {
 	}
 
 	////////////////////
-	html_echo, err := echo_plugin.InitHostEcho("www", func(host, req_uri string) bool {
+	html_echo, err := echo_plugin.InitMatchedEcho("www", func(host, req_uri string) bool {
 		return strings.HasPrefix(host, "www")
 	})
 

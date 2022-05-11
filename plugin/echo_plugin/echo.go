@@ -38,7 +38,7 @@ func CheckMatchedEcho(host string, req_uri string) *MatchEcho {
 	return nil
 }
 
-func InitHostEcho(name string, match func(string, string) bool) (*MatchEcho, error) {
+func InitMatchedEcho(name string, match func(string, string) bool) (*MatchEcho, error) {
 	_, exist := match_echo[name]
 	if exist {
 		return nil, fmt.Errorf("MatchEcho instance <%s> has already been initialized", name)
