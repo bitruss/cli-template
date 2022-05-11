@@ -17,16 +17,47 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+var domain_echo = map[string]*DomainEcho{}
+
+type DomainEcho struct {
+	*echo.Echo
+	DomainTag string
+}
+
+func GetHostEcho(name string) *DomainEcho {
+	return domain_echo[name]
+}
+
+func MatchDomainEcho(host string) *DomainEcho {
+	for k, v := range domain_echo {
+		if strings.HasPrefix(host, k) {
+			return v
+		}
+	}
+	return nil
+}
+
+//domain_tag will be 'api' for  'https://api.abc.com/api/xxx'
+func InitHostEcho(domain_tag string) (*DomainEcho, error) {
+	_, exist := domain_echo[domain_tag]
+	if exist {
+		return nil, fmt.Errorf("DomainEcho instance <%s> has already been initialized", domain_tag)
+	}
+	domain_echo[domain_tag] = &DomainEcho{
+		echo.New(),
+		domain_tag,
+	}
+	return domain_echo[domain_tag], nil
+}
+
 type EchoServer struct {
 	*echo.Echo
-	Logger          log.Logger
-	Http_port       int
-	Tls             bool
-	Crt_path        string
-	Key_path        string
-	Html_dir        string
-	Html_index_path string
-	Cert            *tls.Certificate
+	Logger    log.Logger
+	Http_port int
+	Tls       bool
+	Crt_path  string
+	Key_path  string
+	Cert      *tls.Certificate
 }
 
 var instanceMap = map[string]*EchoServer{}
@@ -43,12 +74,10 @@ func GetInstance_(name string) *EchoServer {
 http_port
 */
 type Config struct {
-	Port            int
-	Tls             bool
-	Crt_path        string
-	Key_path        string
-	Html_dir        string
-	Html_index_path string
+	Port     int
+	Tls      bool
+	Crt_path string
+	Key_path string
 }
 
 func Init(serverConfig Config, OnPanicHanlder func(panic_err interface{}), logger log.Logger) error {
@@ -79,8 +108,6 @@ func Init_(name string, serverConfig Config, OnPanicHanlder func(panic_err inter
 		serverConfig.Tls,
 		serverConfig.Crt_path,
 		serverConfig.Key_path,
-		serverConfig.Html_dir,
-		serverConfig.Html_index_path,
 		nil,
 	}
 
@@ -124,7 +151,7 @@ func (s *EchoServer) Start() error {
 		return s.StartServer(&server)
 
 	} else {
-		s.Logger.Infoln("https server started on port :" + strconv.Itoa(s.Http_port))
+		s.Logger.Infoln("http server started on port :" + strconv.Itoa(s.Http_port))
 		return s.Echo.Start(":" + strconv.Itoa(s.Http_port))
 	}
 }

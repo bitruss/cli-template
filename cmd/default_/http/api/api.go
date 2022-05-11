@@ -2,10 +2,10 @@ package api
 
 import (
 	"github.com/coreservice-io/cli-template/basic"
+	"github.com/labstack/echo/v4"
 
 	_ "github.com/coreservice-io/cli-template/cmd/default_/http/api_docs"
 	"github.com/coreservice-io/cli-template/configuration"
-	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
 	"github.com/coreservice-io/utils/path_util"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"github.com/swaggo/swag/gen"
@@ -29,15 +29,15 @@ import (
 // @in                          header
 // @name                        Authorization
 
-func DeclareApi(httpServer *echo_plugin.EchoServer) {
+func DeclareApi(httpServer *echo.Echo) {
 	//health
 	config_health(httpServer)
 	//user
 	config_user(httpServer)
 }
 
-func ConfigApi(httpServer *echo_plugin.EchoServer) {
-	httpServer.GET("/swagger/*", echoSwagger.WrapHandler)
+func ConfigApi(httpServer *echo.Echo) {
+	httpServer.GET("/*", echoSwagger.WrapHandler)
 }
 
 func Gen_Api_Docs() {

@@ -1,11 +1,14 @@
 package http
 
 import (
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/cmd/default_/http/api"
+	"github.com/coreservice-io/cli-template/configuration"
 	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
 	"github.com/labstack/echo/v4"
 )
@@ -13,17 +16,57 @@ import (
 //httpServer example
 func ServerStart() {
 
+	//init hosted echo
+
+	///////////////////
+	api_echo, err := echo_plugin.InitHostEcho("api")
+	if err != nil {
+		basic.Logger.Fatalln(err)
+	} else {
+		api.DeclareApi(api_echo.Echo)
+		api.ConfigApi(api_echo.Echo)
+	}
+
+	////////////////////
+	html_echo, err := echo_plugin.InitHostEcho("www")
+	if err != nil {
+		basic.Logger.Fatalln(err)
+	} else {
+		https_html_dir, https_html_dir_err := configuration.Config.GetString("https_html_dir", "")
+		if https_html_dir_err != nil || https_html_dir == "" {
+			basic.Logger.Fatalln("https_html_dir config error")
+		}
+
+		html_file := filepath.Join(https_html_dir, "index.html")
+		_, err := os.Stat(html_file)
+		if err != nil {
+			basic.Logger.Fatalln("index.html file not found inside " + https_html_dir)
+		}
+
+		html_echo.Static("/*", https_html_dir)
+		//router all traffic to html.page as for html mode
+		html_echo.HTTPErrorHandler = func(err error, ctx echo.Context) {
+			ctx.File(html_file)
+		}
+	}
+
 	//config https server
 	https_srv := echo_plugin.GetInstance_("https")
 	if https_srv != nil {
-		api.ConfigApi(https_srv)
-		api.DeclareApi(https_srv)
-		//html folder
-		if https_srv.Html_index_path != "" {
-			https_srv.Static("/", https_srv.Html_dir)
-		}
-		//error handler
-		conf_error_handler(https_srv)
+
+		https_srv.Any("/*", func(ctx echo.Context) error {
+			res := ctx.Response()
+			req := ctx.Request()
+
+			domain_echo := echo_plugin.MatchDomainEcho(req.Host)
+			if domain_echo == nil {
+				html_echo.ServeHTTP(res, req)
+			} else {
+				domain_echo.ServeHTTP(res, req)
+			}
+
+			return nil
+		})
 
 		go func() {
 			err := https_srv.Start()
@@ -37,11 +80,12 @@ func ServerStart() {
 	//http just redirect to https
 	http_srv := echo_plugin.GetInstance_("http")
 	if http_srv != nil {
-
 		if https_srv != nil {
-			//redirect
 			http_srv.Any("/*", func(ctx echo.Context) error {
-				return ctx.Redirect(301, "https://"+ctx.Request().Host+":"+strconv.Itoa(https_srv.Http_port)+ctx.Request().URL.String())
+				basic.Logger.Infoln(ctx.Request().Host)
+				domain := strings.Split(ctx.Request().Host, ":")[0]
+				basic.Logger.Infoln(domain)
+				return ctx.Redirect(301, "https://"+domain+":"+strconv.Itoa(https_srv.Http_port)+ctx.Request().URL.String())
 			})
 		}
 
@@ -53,22 +97,6 @@ func ServerStart() {
 		}()
 	}
 
-}
-
-func conf_error_handler(server *echo_plugin.EchoServer) {
-	server.HTTPErrorHandler = func(err error, ctx echo.Context) {
-		if strings.HasPrefix(ctx.Request().URL.String(), "/api") ||
-			strings.HasPrefix(ctx.Request().URL.String(), "/swagger") {
-
-		} else {
-			if server.Html_index_path != "" {
-				ctx.File(server.Html_index_path)
-				return
-			}
-		}
-
-		ctx.HTML(500, err.Error())
-	}
 }
 
 func ServerReloadCert() error {

@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
 	"github.com/labstack/echo/v4"
 )
 
@@ -25,7 +24,7 @@ func healthCheck(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, &MSG_RESP_HEALTH{UnixTime: time.Now().Unix()})
 }
 
-func config_health(httpServer *echo_plugin.EchoServer) {
+func config_health(httpServer *echo.Echo) {
 	//health
 	httpServer.GET("/api/health", healthCheck)
 }
