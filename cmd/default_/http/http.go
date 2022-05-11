@@ -10,6 +10,7 @@ import (
 	"github.com/coreservice-io/cli-template/cmd/default_/http/api"
 	"github.com/coreservice-io/cli-template/configuration"
 	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
+	"github.com/coreservice-io/utils/path_util"
 	"github.com/labstack/echo/v4"
 )
 
@@ -42,13 +43,18 @@ func ServerStart() {
 			basic.Logger.Fatalln("https_html_dir config error")
 		}
 
-		html_file := filepath.Join(https_html_dir, "index.html")
-		_, err := os.Stat(html_file)
-		if err != nil {
-			basic.Logger.Fatalln("index.html file not found inside " + https_html_dir)
+		https_html_abs_dir, https_html_abs_dir_err := path_util.SmartExistPath(https_html_dir)
+		if https_html_abs_dir_err != nil {
+			basic.Logger.Fatalln("https_html_dir:" + https_html_dir + " not exist on disk")
 		}
 
-		html_echo.Static("/*", https_html_dir)
+		html_file := filepath.Join(https_html_abs_dir, "index.html")
+		_, err := os.Stat(html_file)
+		if err != nil {
+			basic.Logger.Fatalln("index.html file not found inside " + https_html_abs_dir)
+		}
+
+		html_echo.Static("/*", https_html_abs_dir)
 		//router all traffic to html.page as for html mode
 		html_echo.HTTPErrorHandler = func(err error, ctx echo.Context) {
 			ctx.File(html_file)
