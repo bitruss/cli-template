@@ -93,9 +93,7 @@ func ServerStart() {
 	if http_srv != nil {
 		if https_srv != nil {
 			http_srv.Any("/*", func(ctx echo.Context) error {
-				basic.Logger.Infoln(ctx.Request().Host)
 				domain := strings.Split(ctx.Request().Host, ":")[0]
-				basic.Logger.Infoln(domain)
 				return ctx.Redirect(301, "https://"+domain+":"+strconv.Itoa(https_srv.Http_port)+ctx.Request().URL.String())
 			})
 		}
