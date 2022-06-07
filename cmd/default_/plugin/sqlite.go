@@ -1,27 +1,27 @@
 package plugin
 
-// import (
-// 	"errors"
+import (
+	"errors"
 
-// 	"github.com/coreservice-io/cli-template/basic"
-// 	"github.com/coreservice-io/cli-template/configuration"
-// 	"github.com/coreservice-io/cli-template/plugin/sqlite_plugin"
-// 	"github.com/coreservice-io/utils/path_util"
-// )
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/configuration"
+	"github.com/coreservice-io/cli-template/plugin/sqlite_plugin"
+	"github.com/coreservice-io/utils/path_util"
+)
 
-// func initSqlite() error {
+func initSqlite() error {
 
-// 	sf, sf_err := configuration.Config.GetString("sqlite_path", "")
-// 	if sf_err != nil || sf == "" {
-// 		return errors.New("sqlite_path not configured correctly")
-// 	}
+	sf, sf_err := configuration.Config.GetString("sqlite_path", "")
+	if sf_err != nil || sf == "" {
+		return errors.New("sqlite_path not configured correctly")
+	}
 
-// 	sqlite_path, sqlite_path_err := path_util.SmartExistPath(sf)
-// 	if sqlite_path_err != nil {
-// 		return errors.New(sf + " :sqlite_path not exist , please reset your sqlite_path ")
-// 	}
+	sqlite_abs_path, sqlite_abs_path_exist, _ := path_util.SmartPathExist(sf)
+	if !sqlite_abs_path_exist {
+		return errors.New(sf + " :sqlite_path not exist , please reset your sqlite_path :" + sf)
+	}
 
-// 	return sqlite_plugin.Init(sqlite_plugin.Config{
-// 		Sqlite_path: sqlite_path,
-// 	}, basic.Logger)
-// }
+	return sqlite_plugin.Init(&sqlite_plugin.Config{
+		Sqlite_abs_path: sqlite_abs_path,
+	}, basic.Logger)
+}

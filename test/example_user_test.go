@@ -31,7 +31,7 @@ func initialize_exampleuser() {
 	sqldb_plugin.GetInstance().AutoMigrate(&user_mgr.ExampleUserModel{})
 
 	//redis
-	err = redis_plugin.Init(redis_plugin.Config{
+	err = redis_plugin.Init(&redis_plugin.Config{
 		Address:   "127.0.0.1",
 		UserName:  "",
 		Password:  "",

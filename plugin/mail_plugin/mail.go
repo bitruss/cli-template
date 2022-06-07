@@ -32,11 +32,11 @@ func GetInstance_(name string) *Sender {
 	return instanceMap[name]
 }
 
-func Init(config Config) error {
+func Init(config *Config) error {
 	return Init_("default", config)
 }
 
-func Init_(name string, config Config) error {
+func Init_(name string, config *Config) error {
 
 	if name == "" {
 		name = "default"

@@ -43,8 +43,8 @@ func ServerStart() {
 			basic.Logger.Fatalln("https_html_dir config error")
 		}
 
-		https_html_abs_dir, https_html_abs_dir_err := path_util.SmartExistPath(https_html_dir)
-		if https_html_abs_dir_err != nil {
+		https_html_abs_dir, https_html_abs_dir_exist, _ := path_util.SmartPathExist(https_html_dir)
+		if !https_html_abs_dir_exist {
 			basic.Logger.Fatalln("https_html_dir:" + https_html_dir + " not exist on disk")
 		}
 

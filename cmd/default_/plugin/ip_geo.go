@@ -62,9 +62,9 @@ func initIpGeo() error {
 		return errors.New("ip_geo_redis_usetls [bool] in config err," + err.Error())
 	}
 
-	dbFilePath, err = path_util.SmartExistPath(dbFilePath)
-	if err != nil {
-		return errors.New("ip2Location db file path error," + err.Error())
+	dbFilePath_abs, dbFilePath_abs_exist, _ := path_util.SmartPathExist(dbFilePath)
+	if !dbFilePath_abs_exist {
+		return errors.New("ip2Location db file path error," + dbFilePath)
 	}
 	ip_geo_redis_config := ip_geo.RedisConfig{
 		Addr:     redis_addr,
@@ -76,6 +76,6 @@ func initIpGeo() error {
 	}
 
 	reference_plugin.Init_("ip_geo")
-	return ip_geo_plugin.Init(ipStackAccessKey, dbFilePath, upgradeUrl, int64(upgradeInterval),
+	return ip_geo_plugin.Init(ipStackAccessKey, dbFilePath_abs, upgradeUrl, int64(upgradeInterval),
 		reference_plugin.GetInstance_("ip_geo"), ip_geo_redis_config, basic.Logger, tool_errors.PanicHandler)
 }

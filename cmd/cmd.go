@@ -185,18 +185,20 @@ func readDefaultConfig(isDev bool, confShow bool) (*configuration.VConfig, strin
 	var err error
 	if isDev {
 		basic.Logger.Infoln("======== using dev mode ========")
-		defaultConfigPath, err = path_util.SmartExistPath("configs/dev.json")
-		if err != nil {
+		dev_c_p, dev_c_p_exist, _ := path_util.SmartPathExist("configs/dev.json")
+		if !dev_c_p_exist {
 			basic.Logger.Errorln("no dev.json under /configs folder , use --mode=pro to run pro mode")
 			return nil, "", err
 		}
+		defaultConfigPath = dev_c_p
 	} else {
 		basic.Logger.Infoln("======== using pro mode ========")
-		defaultConfigPath, err = path_util.SmartExistPath("configs/pro.json")
-		if err != nil {
+		pro_c_p, pro_c_p_exist, _ := path_util.SmartPathExist("configs/pro.json")
+		if !pro_c_p_exist {
 			basic.Logger.Errorln("no pro.json under /configs folder , use --mode=dev to run dev mode")
 			return nil, "", err
 		}
+		defaultConfigPath = pro_c_p
 	}
 
 	if confShow {

@@ -44,7 +44,7 @@
   "smtp_port": 587,
   "smtp_username": "",
   
-  "ip_geo_ip2l_db_path": "/assets/ip2l/IP2LOCATION-LITE-DB1.BIN",
+  "ip_geo_ip2l_db_path": "assets/ip2l/IP2LOCATION-LITE-DB1.BIN",
   "ip_geo_ip2l_upgrade_interval":172800,
   "ip_geo_ip2l_upgrade_url": "",
   "ip_geo_redis_addr": "",

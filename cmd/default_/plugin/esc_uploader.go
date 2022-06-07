@@ -24,7 +24,7 @@ func initEcsUploader() error {
 		return errors.New("elasticsearch_password [string] in config error," + err.Error())
 	}
 
-	return ecs_uploader_plugin.Init(ecs_uploader_plugin.Config{
+	return ecs_uploader_plugin.Init(&ecs_uploader_plugin.Config{
 		Address:  elasticSearchAddr,
 		UserName: elasticSearchUserName,
 		Password: elasticSearchPassword}, basic.Logger)

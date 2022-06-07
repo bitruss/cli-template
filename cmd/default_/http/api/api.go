@@ -53,14 +53,14 @@ func Gen_Api_Docs() {
 		return
 	}
 
-	api_f, api_f_err := path_util.SmartExistPath(api_doc_gen_search_dir)
-	if api_f_err != nil {
-		basic.Logger.Errorln("api_doc_gen_search_dir folder not exist")
+	api_f, api_f_exist, _ := path_util.SmartPathExist(api_doc_gen_search_dir)
+	if !api_f_exist {
+		basic.Logger.Errorln("api_doc_gen_search_dir folder not exist:" + api_doc_gen_search_dir)
 		return
 	}
-	api_doc_f, api_doc_f_err := path_util.SmartExistPath(api_doc_gen_output_dir)
-	if api_doc_f_err != nil {
-		basic.Logger.Errorln("api_doc_gen_output_dir folder not exist")
+	api_doc_f, api_doc_f_exist, _ := path_util.SmartPathExist(api_doc_gen_output_dir)
+	if !api_doc_f_exist {
+		basic.Logger.Errorln("api_doc_gen_output_dir folder not exist:" + api_doc_gen_output_dir)
 		return
 	}
 

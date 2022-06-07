@@ -34,14 +34,14 @@ type Config struct {
 	UseTLS    bool
 }
 
-func Init(redisConfig Config) error {
+func Init(redisConfig *Config) error {
 	return Init_("default", redisConfig)
 }
 
 // Init a new instance.
 //  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
 //  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
-func Init_(name string, redisConfig Config) error {
+func Init_(name string, redisConfig *Config) error {
 	if name == "" {
 		name = "default"
 	}

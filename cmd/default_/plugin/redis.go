@@ -38,7 +38,7 @@ func initRedis() error {
 		return errors.New("redis_useTls [bool] in config err," + err.Error())
 	}
 
-	return redis_plugin.Init(redis_plugin.Config{
+	return redis_plugin.Init(&redis_plugin.Config{
 		Address:   redis_addr,
 		UserName:  redis_username,
 		Password:  redis_password,

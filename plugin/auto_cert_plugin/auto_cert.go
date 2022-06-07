@@ -172,11 +172,11 @@ func file_overwrite(path string, content string) error {
 }
 
 //init_download ==true ,it will update from remote url in init process
-func Init(conf Config, init_download bool) error {
+func Init(conf *Config, init_download bool) error {
 	return Init_("default", conf, init_download)
 }
 
-func Init_(name string, conf Config, init_download bool) error {
+func Init_(name string, conf *Config, init_download bool) error {
 	if name == "" {
 		name = "default"
 	}

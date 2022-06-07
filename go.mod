@@ -36,7 +36,8 @@ require (
 	github.com/coreservice-io/redis_spr v0.1.20
 	github.com/coreservice-io/reference v0.0.8
 	github.com/coreservice-io/safe_go v0.1.4
-	github.com/coreservice-io/utils v0.1.10
+	github.com/coreservice-io/utils v0.1.12
+	gorm.io/driver/sqlite v1.2.6
 )
 
 require (
@@ -67,6 +68,7 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/mattn/go-sqlite3 v1.14.9 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect

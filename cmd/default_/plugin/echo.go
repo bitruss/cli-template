@@ -44,14 +44,14 @@ func init_https_echo_server() error {
 			return errors.New("https_key_path [string] in config.json err")
 		}
 
-		crt_path, cert_path_err := path_util.SmartExistPath(crt)
-		if cert_path_err != nil {
-			return errors.New("https crt file path error," + cert_path_err.Error())
+		crt_path, crt_path_exist, _ := path_util.SmartPathExist(crt)
+		if !crt_path_exist {
+			return errors.New("https crt file path error:" + crt)
 		}
 
-		key_path, key_path_err := path_util.SmartExistPath(key)
-		if cert_path_err != nil {
-			return errors.New("https key file path error," + key_path_err.Error())
+		key_path, key_path_exist, _ := path_util.SmartPathExist(key)
+		if !key_path_exist {
+			return errors.New("https key file path error:" + key)
 		}
 
 		return echo_plugin.Init_("https",

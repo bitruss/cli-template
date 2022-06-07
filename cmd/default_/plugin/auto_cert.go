@@ -19,11 +19,10 @@ func initAutoCert() error {
 		return errors.New("auto_cert_crt_path config error")
 	}
 
-	auto_cert_crt_path_abs, auto_cert_crt_path_abs_err := path_util.SmartExistPath(auto_cert_crt_path)
-	if auto_cert_crt_path_abs_err != nil {
-		return errors.New("auto_cert_crt_path error," +
-			auto_cert_crt_path_abs_err.Error() +
-			", please check crt file exist on your disk")
+	auto_cert_crt_path_abs, auto_cert_crt_path_abs_exist, _ := path_util.SmartPathExist(auto_cert_crt_path)
+	if !auto_cert_crt_path_abs_exist {
+		return errors.New("auto_cert_crt_path error:" +
+			auto_cert_crt_path + ", please check crt file exist on your disk")
 	}
 	///////
 
@@ -34,11 +33,9 @@ func initAutoCert() error {
 	if auto_cert_key_path == "" {
 		return errors.New("auto_cert_key_path config error")
 	}
-	auto_cert_key_path_abs, auto_cert_key_path_abs_err := path_util.SmartExistPath(auto_cert_key_path)
-	if auto_cert_key_path_abs_err != nil {
-		return errors.New("auto_cert_key_path error," +
-			auto_cert_key_path_abs_err.Error() +
-			",please check key file exist on your disk")
+	auto_cert_key_path_abs, auto_cert_key_path_abs_exist, _ := path_util.SmartPathExist(auto_cert_key_path)
+	if !auto_cert_key_path_abs_exist {
+		return errors.New("auto_cert_key_path error:" + auto_cert_key_path_abs + ",please check key file exist on your disk")
 	}
 	////////////
 	auto_cert_url, err := configuration.Config.GetString("auto_cert_url", "")
@@ -58,7 +55,7 @@ func initAutoCert() error {
 		return errors.New("auto_cert_init_download [bool] in config err or too small interval")
 	}
 
-	return auto_cert_plugin.Init(auto_cert_plugin.Config{
+	return auto_cert_plugin.Init(&auto_cert_plugin.Config{
 		Download_url:        auto_cert_url,
 		Local_crt_path:      auto_cert_crt_path_abs,
 		Local_key_path:      auto_cert_key_path_abs,

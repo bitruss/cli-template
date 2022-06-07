@@ -28,7 +28,7 @@ func initSmtpMail() error {
 		return errors.New("smtp_password [string] in config err," + err.Error())
 	}
 
-	return mail_plugin.Init(mail_plugin.Config{
+	return mail_plugin.Init(&mail_plugin.Config{
 		Host:     host,
 		Port:     port,
 		Password: password,
