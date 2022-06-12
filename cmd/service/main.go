@@ -1,18 +1,17 @@
 package service
 
 import (
-	"fmt"
 	"os"
 	"path"
 	"path/filepath"
 
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/configuration"
-	"github.com/coreservice-io/cli-template/plugin/daemon_plugin"
+	"github.com/kardianos/service"
 	"github.com/urfave/cli/v2"
 )
 
-func RunServiceCmd(clictx *cli.Context) {
+func RunServiceCmd(clictx *cli.Context, s service.Service) {
 
 	daemon_name, err := configuration.Config.GetString("daemon_name", "")
 	if err != nil {
@@ -50,42 +49,58 @@ func RunServiceCmd(clictx *cli.Context) {
 	}
 
 	action := subCmds[0]
-	err = daemon_plugin.Init(daemon_name)
-	if err != nil {
-		basic.Logger.Fatalln("init daemon service error:", err)
-	}
 
-	var status string
-	var e error
 	switch action {
 	case "install":
-		status, e = daemon_plugin.GetInstance(daemon_name).Install()
-		basic.Logger.Debugln("cmd install")
+		err := s.Install()
+		if err != nil {
+			basic.Logger.Errorln("install service error:", err)
+		} else {
+			basic.Logger.Infoln("service installed")
+		}
 	case "remove":
-		daemon_plugin.GetInstance(daemon_name).Stop()
-		status, e = daemon_plugin.GetInstance(daemon_name).Remove()
-		basic.Logger.Debugln("cmd remove")
+		err := s.Uninstall()
+		if err != nil {
+			basic.Logger.Errorln("remove service error:", err)
+		} else {
+			basic.Logger.Infoln("service removed")
+		}
 	case "start":
-		status, e = daemon_plugin.GetInstance(daemon_name).Start()
-		basic.Logger.Debugln("cmd start")
+		err := s.Start()
+		if err != nil {
+			basic.Logger.Errorln("start service error:", err)
+		} else {
+			basic.Logger.Infoln("service started")
+		}
 	case "stop":
-		status, e = daemon_plugin.GetInstance(daemon_name).Stop()
-		basic.Logger.Debugln("cmd stop")
+		err := s.Stop()
+		if err != nil {
+			basic.Logger.Errorln("stop service error:", err)
+		} else {
+			basic.Logger.Infoln("service stopped")
+		}
 	case "restart":
-		daemon_plugin.GetInstance(daemon_name).Stop()
-		status, e = daemon_plugin.GetInstance(daemon_name).Start()
-		basic.Logger.Debugln("cmd restart")
+		err := s.Restart()
+		if err != nil {
+			basic.Logger.Errorln("restart service error:", err)
+		} else {
+			basic.Logger.Infoln("service restarted")
+		}
 	case "status":
-		status, e = daemon_plugin.GetInstance(daemon_name).Status()
-		basic.Logger.Debugln("cmd status")
+		status, err := s.Status()
+		if err != nil {
+			basic.Logger.Errorln(err)
+		}
+		switch status {
+		case service.StatusRunning:
+			basic.Logger.Infoln("service status:", "RUNNING")
+		case service.StatusStopped:
+			basic.Logger.Infoln("service status:", "STOPPED")
+		default:
+			basic.Logger.Infoln("service status:", "UNKNOWN")
+		}
 	default:
 		basic.Logger.Debugln("no sub command")
 		return
 	}
-
-	if e != nil {
-		fmt.Println(status, "\nError: ", e)
-		os.Exit(1)
-	}
-	fmt.Println(status)
 }

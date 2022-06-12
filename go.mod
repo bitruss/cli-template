@@ -17,7 +17,6 @@ require (
 	github.com/spf13/viper v1.10.1
 	github.com/swaggo/echo-swagger v1.3.0
 	github.com/swaggo/swag v1.8.1
-	github.com/takama/daemon v1.0.0
 	github.com/urfave/cli/v2 v2.4.0
 	gorm.io/driver/mysql v1.3.3
 	gorm.io/gorm v1.23.4
@@ -37,6 +36,7 @@ require (
 	github.com/coreservice-io/reference v0.0.8
 	github.com/coreservice-io/safe_go v0.1.4
 	github.com/coreservice-io/utils v0.1.12
+	github.com/kardianos/service v1.2.1
 	gorm.io/driver/sqlite v1.2.6
 )
 

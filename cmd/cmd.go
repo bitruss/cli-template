@@ -12,8 +12,10 @@ import (
 	"github.com/coreservice-io/cli-template/cmd/log"
 	"github.com/coreservice-io/cli-template/cmd/service"
 	"github.com/coreservice-io/cli-template/configuration"
+	"github.com/coreservice-io/cli-template/plugin/daemon_plugin"
 	ilog "github.com/coreservice-io/log"
 	"github.com/coreservice-io/utils/path_util"
+	daemonService "github.com/kardianos/service"
 	"github.com/urfave/cli/v2"
 )
 
@@ -22,6 +24,26 @@ const CMD_NAME_GEN_API = "gen_api"
 const CMD_NAME_LOG = "log"
 const CMD_NAME_SERVICE = "service"
 const CMD_NAME_CONFIG = "config"
+
+type Program struct {
+	Clictx *cli.Context
+}
+
+func (p *Program) Start(s daemonService.Service) error {
+	// Start should not block. Do the actual work async.
+	go p.run()
+	return nil
+}
+func (p *Program) run() {
+	// Do work here
+	default_.StartDefault(p.Clictx)
+}
+func (p *Program) Stop(s daemonService.Service) error {
+	// Stop should not block. Return with a few seconds.
+	//basic.Logger.Infoln("service will stop in 5 seconds...")
+	//<-time.After(time.Second * 5)
+	return nil
+}
 
 ////////config to do cmd ///////////
 func ConfigCmd() *cli.App {
@@ -63,9 +85,26 @@ func ConfigCmd() *cli.App {
 		basic.Logger.Panicln(conferr)
 	}
 
+	daemon_name, err := configuration.Config.GetString("daemon_name", "")
+	if err != nil {
+		basic.Logger.Fatalln("daemon_name [string] in config error," + err.Error())
+	}
+
+	if daemon_name == "" {
+		basic.Logger.Fatalln("daemon_name in config should not be vacant")
+	}
+
+	p := &Program{}
+	err = daemon_plugin.Init(daemon_name, p)
+	if err != nil {
+		basic.Logger.Fatalln("daemon_plugin.Init error:", err)
+	}
+	s := daemon_plugin.GetInstance(daemon_name)
+
 	return &cli.App{
 		Action: func(clictx *cli.Context) error {
-			default_.StartDefault(clictx)
+			p.Clictx = clictx
+			s.Run()
 			return nil
 		},
 
@@ -124,7 +163,7 @@ func ConfigCmd() *cli.App {
 						Name:  "install",
 						Usage: "install service",
 						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx)
+							service.RunServiceCmd(clictx, s)
 							return nil
 						},
 					},
@@ -133,7 +172,7 @@ func ConfigCmd() *cli.App {
 						Name:  "remove",
 						Usage: "remove service",
 						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx)
+							service.RunServiceCmd(clictx, s)
 							return nil
 						},
 					},
@@ -142,7 +181,7 @@ func ConfigCmd() *cli.App {
 						Name:  "start",
 						Usage: "run",
 						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx)
+							service.RunServiceCmd(clictx, s)
 							return nil
 						},
 					},
@@ -151,7 +190,7 @@ func ConfigCmd() *cli.App {
 						Name:  "stop",
 						Usage: "stop",
 						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx)
+							service.RunServiceCmd(clictx, s)
 							return nil
 						},
 					},
@@ -160,7 +199,7 @@ func ConfigCmd() *cli.App {
 						Name:  "restart",
 						Usage: "restart",
 						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx)
+							service.RunServiceCmd(clictx, s)
 							return nil
 						},
 					},
@@ -169,7 +208,7 @@ func ConfigCmd() *cli.App {
 						Name:  "status",
 						Usage: "show process status",
 						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx)
+							service.RunServiceCmd(clictx, s)
 							return nil
 						},
 					},
