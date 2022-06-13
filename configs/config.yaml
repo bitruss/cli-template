@@ -1,8 +1,5 @@
-mode: dev
-
 default:
   daemon_name: cli-template-service
-
 dev:
   auto_cert:
     check_interval: 3600
@@ -23,7 +20,7 @@ dev:
   http:
     enable: true
     html_dir: ""
-    port: 80
+    port: 88
   https:
     crt_path: assets/cert/crt.crt
     enable: true
@@ -46,13 +43,6 @@ dev:
   leveldb:
     path: ""
   log_level: INFO
-  provide_folder:
-  - abs_path: /Users/1
-    size_GB: 1
-  - abs_path: /Users/2
-    size_GB: 3
-  - abs_path: /Users/3
-    size_GB: 10
   redis:
     host: 127.0.0.1
     password: ""
@@ -67,7 +57,7 @@ dev:
     username: ""
   sqlite:
     path: ""
-
+mode: pro
 pro:
   auto_cert:
     check_interval: 3600
@@ -109,13 +99,6 @@ pro:
       use_tls: true
       username: ipgeoCore
   log_level: INFO
-  provide_folder:
-  - abs_path: /Users/1
-    size_GB: 1
-  - abs_path: /Users/2
-    size_GB: 3
-  - abs_path: /Users/3
-    size_GB: 10
   redis:
     host: 127.0.0.1
     password: ""

@@ -5,54 +5,68 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-//set your config params types
-var stringConfParams = []string{}
-var float64ConfParams = []string{}
-var boolConfParams = []string{}
-var intConfParams = []string{}
-var otherConf = []string{}
+var allKeysMap = map[string]string{}
+
+func getConfigKeys(config interface{}, keysMap map[string]string, keyPre string) {
+	if keyPre != "" {
+		keyPre = keyPre + "."
+	}
+	configMap, ok := config.(map[string]interface{})
+	if !ok {
+		switch config.(type) {
+		case string:
+			keysMap[keyPre[:len(keyPre)-1]] = "string"
+		case float64:
+			keysMap[keyPre[:len(keyPre)-1]] = "float64"
+		case int:
+			keysMap[keyPre[:len(keyPre)-1]] = "int"
+		case bool:
+			keysMap[keyPre[:len(keyPre)-1]] = "bool"
+		}
+		return
+	} else {
+		if keyPre != "" {
+			delete(keysMap, keyPre[:len(keyPre)-1])
+		}
+		for k, v := range configMap {
+			keysMap[keyPre+k] = ""
+			getConfigKeys(v, keysMap, keyPre+k)
+		}
+	}
+}
 
 //get all config flags
 func GetFlags() (allflags []cli.Flag) {
 	allConfig := configuration.Config.AllSettings()
-	mode := "default"
-	iMode, exist := allConfig["mode"]
-	if exist {
-		mode = iMode.(string)
+
+	modeType := map[string]struct{}{}
+	for k, _ := range allConfig {
+		if k == "mode" {
+			continue
+		}
+		modeType[k] = struct{}{}
+	}
+	modeType["default"] = struct{}{}
+
+	keysMap := map[string]string{}
+	for mType := range modeType {
+		configsInType, exist := allConfig[mType]
+		if !exist {
+			continue
+		}
+
+		getConfigKeys(configsInType, keysMap, "")
 	}
 
-	for k, v := range allConfig[mode].(map[string]interface{}) {
-		switch v.(type) {
-		case string:
-			stringConfParams = append(stringConfParams, k)
-		case float64:
-			float64ConfParams = append(float64ConfParams, k)
-		case int:
-			intConfParams = append(intConfParams, k)
-		case bool:
-			boolConfParams = append(boolConfParams, k)
+	for k := range modeType {
+		for key, valueType := range keysMap {
+			allKeysMap[k+"."+key] = valueType
+			allflags = append(allflags, &cli.StringFlag{Name: k + "." + key, Required: false})
 		}
 	}
 
-	for _, name := range stringConfParams {
-		allflags = append(allflags, &cli.StringFlag{Name: name, Required: false})
-	}
-
-	for _, name := range float64ConfParams {
-		allflags = append(allflags, &cli.Float64Flag{Name: name, Required: false})
-	}
-
-	for _, name := range intConfParams {
-		allflags = append(allflags, &cli.IntFlag{Name: name, Required: false})
-	}
-
-	for _, name := range boolConfParams {
-		allflags = append(allflags, &cli.BoolFlag{Name: name, Required: false})
-	}
-
-	//other custom flags
-	allflags = append(allflags, &cli.StringFlag{Name: "addpath", Required: false})
-	allflags = append(allflags, &cli.StringFlag{Name: "removepath", Required: false})
+	allKeysMap["mode"] = "string"
+	allflags = append(allflags, &cli.StringFlag{Name: "mode", Required: false})
 
 	return
 }

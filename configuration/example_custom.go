@@ -11,7 +11,7 @@ type ProvideFolder struct {
 
 //example read provide_folder
 func (c *VConfig) GetProvideFolders() ([]ProvideFolder, error) {
-	key := "provide_folder"
+	key := c.getConfigKey("provide_folder")
 	if !c.Viper.IsSet(key) {
 		return nil, errors.New("provide_folder not find in config")
 	}
@@ -37,6 +37,7 @@ func (c *VConfig) GetProvideFolders() ([]ProvideFolder, error) {
 	return provideFolders, nil
 }
 
-func SetProvideFolders(pf []ProvideFolder) {
-	Config.Set("provide_folder", pf)
+func SetProvideFolders(key string, pf []ProvideFolder) {
+	//key := c.getConfigKey("provide_folder")
+	Config.Set(key, pf)
 }

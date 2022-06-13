@@ -26,7 +26,7 @@ func ReadConfig(configPath string) (*VConfig, error) {
 	c.configPath = configPath
 
 	//read mode
-	mode := ""
+	mode := "default"
 	if c.Viper.IsSet("mode") {
 		v := c.Viper.Get("mode")
 		value, err := cast.ToStringE(v)
@@ -42,27 +42,22 @@ func ReadConfig(configPath string) (*VConfig, error) {
 }
 
 func (c *VConfig) getConfigKey(key string) string {
-	vKey := ""
-	if c.mode != "" {
-		vKey = c.mode + "." + key
-		if !c.Viper.IsSet(vKey) {
-			vKey = "default." + key
-		}
-	} else {
-		vKey = "default." + key
+	vKey := c.mode + "." + key
+	if !c.Viper.IsSet(vKey) {
+		return "default." + key
 	}
 
-	return vKey
+	return "default." + key
 }
 
-func (c *VConfig) Set(key string, value interface{}) {
-	vKey := "default." + key
-	if c.mode != "" {
-		vKey = c.mode + "." + key
-	}
-
-	c.Viper.Set(vKey, value)
-}
+//func (c *VConfig) Set(key string, value interface{}) {
+//	vKey := "default." + key
+//	if c.mode != "" {
+//		vKey = c.mode + "." + key
+//	}
+//
+//	c.Viper.Set(vKey, value)
+//}
 
 func (c *VConfig) Get(key string, defaultValue interface{}) interface{} {
 	vKey := c.getConfigKey(key)
