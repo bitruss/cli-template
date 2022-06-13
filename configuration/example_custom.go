@@ -5,7 +5,7 @@ import (
 )
 
 type ProvideFolder struct {
-	AbsPath string `json:"abs_path""`
+	AbsPath string `json:"abs_path"`
 	SizeGB  int    `json:"size_GB"`
 }
 

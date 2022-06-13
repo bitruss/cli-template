@@ -12,11 +12,11 @@ import (
 
 func init_http_echo_server() error {
 
-	http_on, _ := configuration.Config.GetBool("http_on", false)
+	http_on, _ := configuration.Config.GetBool("http.enable", false)
 	if http_on {
-		http_port, err := configuration.Config.GetInt("http_port", 80)
+		http_port, err := configuration.Config.GetInt("http.port", 80)
 		if err != nil {
-			return errors.New("http_port [int] in config error," + err.Error())
+			return errors.New("http.port [int] in config error," + err.Error())
 		}
 
 		return echo_plugin.Init_("http", echo_plugin.Config{Port: http_port, Tls: false, Crt_path: "", Key_path: ""},
@@ -27,21 +27,21 @@ func init_http_echo_server() error {
 
 func init_https_echo_server() error {
 
-	https_on, _ := configuration.Config.GetBool("https_on", false)
+	https_on, _ := configuration.Config.GetBool("https.enable", false)
 	if https_on {
-		https_port, err := configuration.Config.GetInt("https_port", 443)
+		https_port, err := configuration.Config.GetInt("https.port", 443)
 		if err != nil {
-			return errors.New("https_port [int] in config error," + err.Error())
+			return errors.New("https.port [int] in config error," + err.Error())
 		}
 
-		crt, err := configuration.Config.GetString("https_crt_path", "")
+		crt, err := configuration.Config.GetString("https.crt_path", "")
 		if err != nil || crt == "" {
-			return errors.New("https_crt_path [string] in config.json err")
+			return errors.New("https.crt_path [string] in config.json err")
 		}
 
-		key, err := configuration.Config.GetString("https_key_path", "")
+		key, err := configuration.Config.GetString("https.key_path", "")
 		if err != nil || key == "" {
-			return errors.New("https_key_path [string] in config.json err")
+			return errors.New("https.key_path [string] in config.json err")
 		}
 
 		crt_path, crt_path_exist, _ := path_util.SmartPathExist(crt)

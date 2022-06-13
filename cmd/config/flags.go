@@ -8,20 +8,29 @@ import (
 //set your config params types
 var stringConfParams = []string{}
 var float64ConfParams = []string{}
-var boolConfPrams = []string{}
+var boolConfParams = []string{}
+var intConfParams = []string{}
 var otherConf = []string{}
 
 //get all config flags
 func GetFlags() (allflags []cli.Flag) {
 	allConfig := configuration.Config.AllSettings()
-	for k, v := range allConfig {
+	mode := "default"
+	iMode, exist := allConfig["mode"]
+	if exist {
+		mode = iMode.(string)
+	}
+
+	for k, v := range allConfig[mode].(map[string]interface{}) {
 		switch v.(type) {
 		case string:
 			stringConfParams = append(stringConfParams, k)
 		case float64:
 			float64ConfParams = append(float64ConfParams, k)
+		case int:
+			intConfParams = append(intConfParams, k)
 		case bool:
-			boolConfPrams = append(boolConfPrams, k)
+			boolConfParams = append(boolConfParams, k)
 		}
 	}
 
@@ -33,7 +42,11 @@ func GetFlags() (allflags []cli.Flag) {
 		allflags = append(allflags, &cli.Float64Flag{Name: name, Required: false})
 	}
 
-	for _, name := range boolConfPrams {
+	for _, name := range intConfParams {
+		allflags = append(allflags, &cli.IntFlag{Name: name, Required: false})
+	}
+
+	for _, name := range boolConfParams {
 		allflags = append(allflags, &cli.BoolFlag{Name: name, Required: false})
 	}
 

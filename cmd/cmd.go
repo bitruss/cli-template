@@ -48,22 +48,12 @@ func (p *Program) Stop(s daemonService.Service) error {
 ////////config to do cmd ///////////
 func ConfigCmd() *cli.App {
 	//check is dev or pro
-	isDev := false
 	confShow := false
 	real_args := []string{}
 
 	for _, arg := range os.Args {
 
 		s := strings.ToLower(arg)
-		if strings.Contains(s, "-mode=dev") || strings.Contains(s, "--mode=dev") {
-			isDev = true
-			continue
-		}
-
-		if strings.Contains(s, "-mode=pro") || strings.Contains(s, "--mode=pro") {
-			isDev = false
-			continue
-		}
 
 		if strings.Contains(s, "-conf=show") || strings.Contains(s, "--conf=show") {
 			confShow = true
@@ -80,7 +70,7 @@ func ConfigCmd() *cli.App {
 
 	os.Args = real_args
 
-	conferr := iniConfig(isDev, confShow)
+	conferr := iniConfig(confShow)
 	if conferr != nil {
 		basic.Logger.Panicln(conferr)
 	}
@@ -219,26 +209,16 @@ func ConfigCmd() *cli.App {
 }
 
 ////////end config to do app ///////////
-func readDefaultConfig(isDev bool, confShow bool) (*configuration.VConfig, string, error) {
+func readDefaultConfig(confShow bool) (*configuration.VConfig, string, error) {
 	var defaultConfigPath string
 	var err error
-	if isDev {
-		basic.Logger.Infoln("======== using dev mode ========")
-		dev_c_p, dev_c_p_exist, _ := path_util.SmartPathExist("configs/dev.json")
-		if !dev_c_p_exist {
-			basic.Logger.Errorln("no dev.json under /configs folder , use --mode=pro to run pro mode")
-			return nil, "", err
-		}
-		defaultConfigPath = dev_c_p
-	} else {
-		basic.Logger.Infoln("======== using pro mode ========")
-		pro_c_p, pro_c_p_exist, _ := path_util.SmartPathExist("configs/pro.json")
-		if !pro_c_p_exist {
-			basic.Logger.Errorln("no pro.json under /configs folder , use --mode=dev to run dev mode")
-			return nil, "", err
-		}
-		defaultConfigPath = pro_c_p
+
+	c_p, c_p_exist, _ := path_util.SmartPathExist("configs/config.yaml")
+	if !c_p_exist {
+		basic.Logger.Errorln("no config.yaml under /configs folder")
+		return nil, "", err
 	}
+	defaultConfigPath = c_p
 
 	if confShow {
 		basic.Logger.Infoln("using config:", defaultConfigPath)
@@ -253,10 +233,10 @@ func readDefaultConfig(isDev bool, confShow bool) (*configuration.VConfig, strin
 	return config, defaultConfigPath, nil
 }
 
-func iniConfig(isDev bool, confShow bool) error {
+func iniConfig(confShow bool) error {
 	//path_util.ExEPathPrintln()
 	////read default config
-	config, _, err := readDefaultConfig(isDev, confShow)
+	config, _, err := readDefaultConfig(confShow)
 	if err != nil {
 		return err
 	}
@@ -281,7 +261,7 @@ func setLoggerLevel() error {
 	logLevel := "INFO"
 	if configuration.Config != nil {
 		var err error
-		logLevel, err = configuration.Config.GetString("local_log_level", "INFO")
+		logLevel, err = configuration.Config.GetString("log_level", "INFO")
 		if err != nil {
 			return err
 		}

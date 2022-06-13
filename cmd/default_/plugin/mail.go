@@ -8,24 +8,24 @@ import (
 )
 
 func initSmtpMail() error {
-	host, err := configuration.Config.GetString("smtp_host", "smtp.gmail.com")
+	host, err := configuration.Config.GetString("smtp.host", "smtp.gmail.com")
 	if err != nil {
-		return errors.New("smtp_host [string] in config err," + err.Error())
+		return errors.New("smtp.host [string] in config err," + err.Error())
 	}
 
-	port, err := configuration.Config.GetInt("smtp_port", 578)
+	port, err := configuration.Config.GetInt("smtp.port", 578)
 	if err != nil {
-		return errors.New("smtp_port [int] in config err," + err.Error())
+		return errors.New("smtp.port [int] in config err," + err.Error())
 	}
 
-	username, err := configuration.Config.GetString("smtp_username", "username")
+	username, err := configuration.Config.GetString("smtp.username", "username")
 	if err != nil {
-		return errors.New("smtp_username [string] in config err," + err.Error())
+		return errors.New("smtp.username [string] in config err," + err.Error())
 	}
 
-	password, err := configuration.Config.GetString("smtp_password", "password")
+	password, err := configuration.Config.GetString("smtp.password", "password")
 	if err != nil {
-		return errors.New("smtp_password [string] in config err," + err.Error())
+		return errors.New("smtp.password [string] in config err," + err.Error())
 	}
 
 	return mail_plugin.Init(&mail_plugin.Config{

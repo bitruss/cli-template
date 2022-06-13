@@ -8,19 +8,19 @@ import (
 )
 
 func initElasticSearch() error {
-	elasticSearchAddr, err := configuration.Config.GetString("elasticsearch_addr", "")
+	elasticSearchAddr, err := configuration.Config.GetString("elasticsearch.host", "")
 	if err != nil {
-		return errors.New("elasticsearch_addr [string] in config error," + err.Error())
+		return errors.New("elasticsearch.host [string] in config error," + err.Error())
 	}
 
-	elasticSearchUserName, err := configuration.Config.GetString("elasticsearch_username", "")
+	elasticSearchUserName, err := configuration.Config.GetString("elasticsearch.username", "")
 	if err != nil {
-		return errors.New("elasticsearch_username_err [string] in config error," + err.Error())
+		return errors.New("elasticsearch.username_err [string] in config error," + err.Error())
 	}
 
-	elasticSearchPassword, err := configuration.Config.GetString("elasticsearch_password", "")
+	elasticSearchPassword, err := configuration.Config.GetString("elasticsearch.password", "")
 	if err != nil {
-		return errors.New("elasticsearch_password [string] in config error," + err.Error())
+		return errors.New("elasticsearch.password [string] in config error," + err.Error())
 	}
 
 	return ecs_plugin.Init(&ecs_plugin.Config{

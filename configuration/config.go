@@ -3,6 +3,7 @@ package configuration
 import (
 	"io/ioutil"
 
+	"github.com/coreservice-io/cli-template/basic"
 	"github.com/spf13/cast"
 	"github.com/spf13/viper"
 )
@@ -12,32 +13,75 @@ var Config *VConfig
 type VConfig struct {
 	*viper.Viper
 	configPath string
+	mode       string
 }
 
 func ReadConfig(configPath string) (*VConfig, error) {
-	c := &VConfig{viper.New(), ""}
+	c := &VConfig{viper.New(), "", ""}
 	c.SetConfigFile(configPath)
 	err := c.ReadInConfig()
 	if err != nil {
 		return nil, err
 	}
 	c.configPath = configPath
+
+	//read mode
+	mode := ""
+	if c.Viper.IsSet("mode") {
+		v := c.Viper.Get("mode")
+		value, err := cast.ToStringE(v)
+		if err != nil {
+			basic.Logger.Errorln("read mode in config err:", err)
+		} else {
+			mode = value
+		}
+	}
+	basic.Logger.Infoln("config mode:", mode)
+	c.mode = mode
 	return c, nil
 }
 
+func (c *VConfig) getConfigKey(key string) string {
+	vKey := ""
+	if c.mode != "" {
+		vKey = c.mode + "." + key
+		if !c.Viper.IsSet(vKey) {
+			vKey = "default." + key
+		}
+	} else {
+		vKey = "default." + key
+	}
+
+	return vKey
+}
+
+func (c *VConfig) Set(key string, value interface{}) {
+	vKey := "default." + key
+	if c.mode != "" {
+		vKey = c.mode + "." + key
+	}
+
+	c.Viper.Set(vKey, value)
+}
+
 func (c *VConfig) Get(key string, defaultValue interface{}) interface{} {
-	if !c.Viper.IsSet(key) {
+	vKey := c.getConfigKey(key)
+
+	if !c.Viper.IsSet(vKey) {
 		return defaultValue
 	}
-	return c.Viper.Get(key)
+
+	return c.Viper.Get(vKey)
 }
 
 func (c *VConfig) GetBool(key string, defaultValue bool) (bool, error) {
-	if !c.Viper.IsSet(key) {
+	vKey := c.getConfigKey(key)
+
+	if !c.Viper.IsSet(vKey) {
 		return defaultValue, nil
 	}
 
-	v := c.Viper.Get(key)
+	v := c.Viper.Get(vKey)
 	value, err := cast.ToBoolE(v)
 	if err != nil {
 		return false, err
@@ -46,11 +90,13 @@ func (c *VConfig) GetBool(key string, defaultValue bool) (bool, error) {
 }
 
 func (c *VConfig) GetFloat64(key string, defaultValue float64) (float64, error) {
-	if !c.Viper.IsSet(key) {
+	vKey := c.getConfigKey(key)
+
+	if !c.Viper.IsSet(vKey) {
 		return defaultValue, nil
 	}
 
-	v := c.Viper.Get(key)
+	v := c.Viper.Get(vKey)
 	value, err := cast.ToFloat64E(v)
 	if err != nil {
 		return 0, err
@@ -59,11 +105,13 @@ func (c *VConfig) GetFloat64(key string, defaultValue float64) (float64, error) 
 }
 
 func (c *VConfig) GetInt(key string, defaultValue int) (int, error) {
-	if !c.Viper.IsSet(key) {
+	vKey := c.getConfigKey(key)
+
+	if !c.Viper.IsSet(vKey) {
 		return defaultValue, nil
 	}
 
-	v := c.Viper.GetInt(key)
+	v := c.Viper.Get(vKey)
 	value, err := cast.ToIntE(v)
 	if err != nil {
 		return 0, err
@@ -72,11 +120,13 @@ func (c *VConfig) GetInt(key string, defaultValue int) (int, error) {
 }
 
 func (c *VConfig) GetIntSlice(key string, defaultValue []int) ([]int, error) {
-	if !c.Viper.IsSet(key) {
+	vKey := c.getConfigKey(key)
+
+	if !c.Viper.IsSet(vKey) {
 		return defaultValue, nil
 	}
 
-	v := c.Viper.Get(key)
+	v := c.Viper.Get(vKey)
 	value, err := cast.ToIntSliceE(v)
 	if err != nil {
 		return nil, err
@@ -85,11 +135,13 @@ func (c *VConfig) GetIntSlice(key string, defaultValue []int) ([]int, error) {
 }
 
 func (c *VConfig) GetString(key string, defaultValue string) (string, error) {
-	if !c.Viper.IsSet(key) {
+	vKey := c.getConfigKey(key)
+
+	if !c.Viper.IsSet(vKey) {
 		return defaultValue, nil
 	}
 
-	v := c.Viper.Get(key)
+	v := c.Viper.Get(vKey)
 	value, err := cast.ToStringE(v)
 	if err != nil {
 		return "", err
@@ -98,11 +150,13 @@ func (c *VConfig) GetString(key string, defaultValue string) (string, error) {
 }
 
 func (c *VConfig) GetStringMap(key string, defaultValue map[string]interface{}) (map[string]interface{}, error) {
-	if !c.Viper.IsSet(key) {
+	vKey := c.getConfigKey(key)
+
+	if !c.Viper.IsSet(vKey) {
 		return defaultValue, nil
 	}
 
-	v := c.Viper.Get(key)
+	v := c.Viper.Get(vKey)
 	value, err := cast.ToStringMapE(v)
 	if err != nil {
 		return nil, err
@@ -111,11 +165,13 @@ func (c *VConfig) GetStringMap(key string, defaultValue map[string]interface{}) 
 }
 
 func (c *VConfig) GetStringSlice(key string, defaultValue []string) ([]string, error) {
-	if !c.Viper.IsSet(key) {
+	vKey := c.getConfigKey(key)
+
+	if !c.Viper.IsSet(vKey) {
 		return defaultValue, nil
 	}
 
-	v := c.Viper.Get(key)
+	v := c.Viper.Get(vKey)
 	value, err := cast.ToStringSliceE(v)
 	if err != nil {
 		return nil, err

@@ -14,52 +14,52 @@ import (
 )
 
 func initIpGeo() error {
-	ipStackAccessKey, err := configuration.Config.GetString("ip_geo_ipstack_key", "")
+	ipStackAccessKey, err := configuration.Config.GetString("ip_geo.ipstack_key", "")
 	if err != nil {
-		return errors.New("ip_geo_ipstack_key [string] in config.json err," + err.Error())
+		return errors.New("ip_geo.ipstack_key [string] in config.json err," + err.Error())
 	}
-	upgradeUrl, err := configuration.Config.GetString("ip_geo_ip2l_upgrade_url", "")
+	upgradeUrl, err := configuration.Config.GetString("ip_geo.ip2l.upgrade_url", "")
 	if err != nil {
-		return errors.New("ip_geo_ip2l_upgrade_url [string] in config.json err," + err.Error())
+		return errors.New("ip_geo.ip2l.upgrade_url [string] in config.json err," + err.Error())
 	}
-	upgradeInterval, err := configuration.Config.GetInt("ip_geo_ip2l_upgrade_interval", 172800)
+	upgradeInterval, err := configuration.Config.GetInt("ip_geo.ip2l.upgrade_interval", 172800)
 	if err != nil {
-		return errors.New("ip_geo_ip2l_upgrade_interval [string] in config.json err," + err.Error())
-	}
-
-	dbFilePath, err := configuration.Config.GetString("ip_geo_ip2l_db_path", "")
-	if err != nil {
-		return errors.New("ip_geo_ip2l_db_path [string] in config.json err," + err.Error())
+		return errors.New("ip_geo.ip2l.upgrade_interval [string] in config.json err," + err.Error())
 	}
 
-	redis_addr, err := configuration.Config.GetString("ip_geo_redis_addr", "127.0.0.1")
+	dbFilePath, err := configuration.Config.GetString("ip_geo.ip2l.db_path", "")
 	if err != nil {
-		return errors.New("ip_geo_redis_addr [string] in config.json err," + err.Error())
+		return errors.New("ip_geo.ip2l.db_path [string] in config.json err," + err.Error())
 	}
 
-	redis_username, err := configuration.Config.GetString("ip_geo_redis_username", "")
+	redis_addr, err := configuration.Config.GetString("ip_geo.redis.host", "127.0.0.1")
 	if err != nil {
-		return errors.New("ip_geo_redis_username [string] in config.json err," + err.Error())
+		return errors.New("ip_geo.redis.host [string] in config.json err," + err.Error())
 	}
 
-	redis_password, err := configuration.Config.GetString("ip_geo_redis_password", "")
+	redis_username, err := configuration.Config.GetString("ip_geo.redis.username", "")
 	if err != nil {
-		return errors.New("ip_geo_redis_password [string] in config.json err," + err.Error())
+		return errors.New("ip_geo.redis.username [string] in config.json err," + err.Error())
 	}
 
-	redis_port, err := configuration.Config.GetInt("ip_geo_redis_port", 6379)
+	redis_password, err := configuration.Config.GetString("ip_geo.redis.password", "")
 	if err != nil {
-		return errors.New("ip_geo_redis_port [int] in config.json err," + err.Error())
+		return errors.New("ip_geo.redis.password [string] in config.json err," + err.Error())
 	}
 
-	redis_prefix, err := configuration.Config.GetString("ip_geo_redis_prefix", "")
+	redis_port, err := configuration.Config.GetInt("ip_geo.redis.port", 6379)
 	if err != nil {
-		return errors.New("ip_geo_redis_prefix [string] in config err," + err.Error())
+		return errors.New("ip_geo.redis.port [int] in config.json err," + err.Error())
 	}
 
-	redis_useTls, err := configuration.Config.GetBool("ip_geo_redis_usetls", false)
+	redis_prefix, err := configuration.Config.GetString("ip_geo.redis.prefix", "")
 	if err != nil {
-		return errors.New("ip_geo_redis_usetls [bool] in config err," + err.Error())
+		return errors.New("ip_geo.redis.prefix [string] in config err," + err.Error())
+	}
+
+	redis_useTls, err := configuration.Config.GetBool("ip_geo.redis.use_tls", false)
+	if err != nil {
+		return errors.New("ip_geo.redis.use_tls [bool] in config err," + err.Error())
 	}
 
 	dbFilePath_abs, dbFilePath_abs_exist, _ := path_util.SmartPathExist(dbFilePath)

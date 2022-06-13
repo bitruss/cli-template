@@ -1,0 +1,21 @@
+
+local_log_level: INFO
+  
+  http:
+    enable: true
+    port: 80
+    html_dir: ''
+
+  https:
+    enable: true
+    port: 443
+    crt_path: assets/cert/crt.crt
+    key_path: assets/cert/key.key
+    html_dir: assets/html
+
+  auto_cert:
+    crt_path: ""
+    key_path: ""
+    url: ""
+    init_download: true
+    check_interval: 3600

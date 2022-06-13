@@ -28,9 +28,17 @@ func ConfigSetting(clictx *cli.Context) {
 		}
 	}
 
-	for _, v := range boolConfPrams {
+	for _, v := range boolConfParams {
 		if clictx.IsSet(v) {
 			newValue := clictx.Bool(v)
+			configuration.Config.Set(v, newValue)
+			configModify = true
+		}
+	}
+
+	for _, v := range intConfParams {
+		if clictx.IsSet(v) {
+			newValue := clictx.Int(v)
 			configuration.Config.Set(v, newValue)
 			configModify = true
 		}

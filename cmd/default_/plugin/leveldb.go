@@ -10,14 +10,14 @@ package plugin
 
 // func initLevelDB() error {
 
-// 	dbf, dbf_err := configuration.Config.GetString("leveldb_folder", "")
+// 	dbf, dbf_err := configuration.Config.GetString("leveldb.path", "")
 // 	if dbf_err != nil || dbf == "" {
 // 		return errors.New("leveldb_folder not configured correctly")
 // 	}
 
 // 	leveldb_abs_folder_path, leveldb_abs_folder_path_exist, _ := path_util.SmartPathExist(dbf)
 // 	if !leveldb_abs_folder_path_exist {
-// 		return errors.New(dbf + " :leveldb_folder not exist , please reset your leveldb_folder :" + dbf)
+// 		return errors.New(dbf + " :leveldb.path not exist , please reset your leveldb.path :" + dbf)
 // 	}
 
 // 	return leveldb_plugin.Init(&leveldb_plugin.Config{

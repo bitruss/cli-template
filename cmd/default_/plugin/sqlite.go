@@ -11,14 +11,14 @@ import (
 
 func initSqlite() error {
 
-	sf, sf_err := configuration.Config.GetString("sqlite_path", "")
+	sf, sf_err := configuration.Config.GetString("sqlite.path", "")
 	if sf_err != nil || sf == "" {
-		return errors.New("sqlite_path not configured correctly")
+		return errors.New("sqlite.path not configured correctly")
 	}
 
 	sqlite_abs_path, sqlite_abs_path_exist, _ := path_util.SmartPathExist(sf)
 	if !sqlite_abs_path_exist {
-		return errors.New(sf + " :sqlite_path not exist , please reset your sqlite_path :" + sf)
+		return errors.New(sf + " :sqlite.path not exist , please reset your sqlite.path :" + sf)
 	}
 
 	return sqlite_plugin.Init(&sqlite_plugin.Config{
