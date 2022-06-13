@@ -7,7 +7,7 @@ import (
 
 var allKeysMap = map[string]string{}
 
-func getConfigKeys(config interface{}, keysMap map[string]string, keyPre string) {
+func assignConfigKeys(config interface{}, keysMap map[string]string, keyPre string) {
 	if keyPre != "" {
 		keyPre = keyPre + "."
 	}
@@ -30,7 +30,7 @@ func getConfigKeys(config interface{}, keysMap map[string]string, keyPre string)
 		}
 		for k, v := range configMap {
 			keysMap[keyPre+k] = ""
-			getConfigKeys(v, keysMap, keyPre+k)
+			assignConfigKeys(v, keysMap, keyPre+k)
 		}
 	}
 }
@@ -55,7 +55,7 @@ func GetFlags() (allflags []cli.Flag) {
 			continue
 		}
 
-		getConfigKeys(configsInType, keysMap, "")
+		assignConfigKeys(configsInType, keysMap, "")
 	}
 
 	for k := range modeType {

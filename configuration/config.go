@@ -1,6 +1,7 @@
 package configuration
 
 import (
+	"errors"
 	"io/ioutil"
 
 	"github.com/coreservice-io/cli-template/basic"
@@ -31,8 +32,11 @@ func ReadConfig(configPath string) (*VConfig, error) {
 		v := c.Viper.Get("mode")
 		value, err := cast.ToStringE(v)
 		if err != nil {
-			basic.Logger.Errorln("read mode in config err:", err)
+			return nil, errors.New("read mode in config err" + err.Error())
 		} else {
+			if value == "" {
+				return nil, errors.New("mode value can not be empty")
+			}
 			mode = value
 		}
 	}

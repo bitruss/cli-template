@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 
+	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/configuration"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
@@ -26,8 +27,7 @@ func ConfigSetting(clictx *cli.Context) {
 				newValue := clictx.Int(k)
 				configuration.Config.Viper.Set(k, newValue)
 			default:
-				newValue := clictx.Value(k)
-				configuration.Config.Viper.Set(k, newValue)
+				basic.Logger.Fatalln("wrong config", "key:", k, "value:", clictx.Value(k))
 			}
 		}
 	}
