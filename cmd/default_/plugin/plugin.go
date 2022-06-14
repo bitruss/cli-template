@@ -7,13 +7,8 @@ import (
 //todo: ---
 func InitPlugin() {
 
-	err := initHub()
-	if err != nil {
-		basic.Logger.Fatalln("initHub err:", err)
-	}
-
 	/////////////////////////
-	err = initReference()
+	err := initReference()
 	if err != nil {
 		basic.Logger.Fatalln("initReference err:", err)
 	}

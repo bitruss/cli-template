@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"github.com/coreservice-io/cli-template/basic"
-	"github.com/coreservice-io/cli-template/configuration"
 	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
 	tool_errors "github.com/coreservice-io/cli-template/tools/errors"
 	"github.com/coreservice-io/utils/path_util"
@@ -12,52 +11,35 @@ import (
 
 func init_http_echo_server() error {
 
-	http_on, _ := configuration.Config.GetBool("http.enable", false)
-	if http_on {
-		http_port, err := configuration.Config.GetInt("http.port", 80)
-		if err != nil {
-			return errors.New("http.port [int] in config error," + err.Error())
-		}
+	toml_conf := basic.Get_config().Toml_config
 
-		return echo_plugin.Init_("http", echo_plugin.Config{Port: http_port, Tls: false, Crt_path: "", Key_path: ""},
+	if toml_conf.Http.Enable {
+		return echo_plugin.Init_("http", echo_plugin.Config{Port: toml_conf.Http.Port, Tls: false, Crt_path: "", Key_path: ""},
 			tool_errors.PanicHandler, basic.Logger)
 	}
+
 	return nil
 }
 
 func init_https_echo_server() error {
 
-	https_on, _ := configuration.Config.GetBool("https.enable", false)
-	if https_on {
-		https_port, err := configuration.Config.GetInt("https.port", 443)
-		if err != nil {
-			return errors.New("https.port [int] in config error," + err.Error())
-		}
+	toml_conf := basic.Get_config().Toml_config
+	if toml_conf.Https.Enable {
 
-		crt, err := configuration.Config.GetString("https.crt_path", "")
-		if err != nil || crt == "" {
-			return errors.New("https.crt_path [string] in config.json err")
-		}
-
-		key, err := configuration.Config.GetString("https.key_path", "")
-		if err != nil || key == "" {
-			return errors.New("https.key_path [string] in config.json err")
-		}
-
-		crt_path, crt_path_exist, _ := path_util.SmartPathExist(crt)
+		crt_abs_path, crt_path_exist, _ := path_util.SmartPathExist(toml_conf.Https.Crt_path)
 		if !crt_path_exist {
-			return errors.New("https crt file path error:" + crt)
+			return errors.New("https crt file path error:" + toml_conf.Https.Crt_path)
 		}
 
-		key_path, key_path_exist, _ := path_util.SmartPathExist(key)
+		key_abs_path, key_path_exist, _ := path_util.SmartPathExist(toml_conf.Https.Key_path)
 		if !key_path_exist {
-			return errors.New("https key file path error:" + key)
+			return errors.New("https key file path error:" + toml_conf.Https.Key_path)
 		}
 
-		return echo_plugin.Init_("https",
-			echo_plugin.Config{Port: https_port, Tls: true, Crt_path: crt_path, Key_path: key_path},
+		return echo_plugin.Init_("https", echo_plugin.Config{Port: toml_conf.Https.Port, Tls: true, Crt_path: crt_abs_path, Key_path: key_abs_path},
 			tool_errors.PanicHandler, basic.Logger)
 	}
+
 	return nil
 }
 

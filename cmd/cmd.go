@@ -10,12 +10,8 @@ import (
 	"github.com/coreservice-io/cli-template/cmd/default_"
 	"github.com/coreservice-io/cli-template/cmd/default_/http/api"
 	"github.com/coreservice-io/cli-template/cmd/log"
-	"github.com/coreservice-io/cli-template/cmd/service"
-	"github.com/coreservice-io/cli-template/configuration"
-	"github.com/coreservice-io/cli-template/plugin/daemon_plugin"
 	ilog "github.com/coreservice-io/log"
-	"github.com/coreservice-io/utils/path_util"
-	daemonService "github.com/kardianos/service"
+	"github.com/kardianos/service"
 	"github.com/urfave/cli/v2"
 )
 
@@ -25,76 +21,44 @@ const CMD_NAME_LOG = "log"
 const CMD_NAME_SERVICE = "service"
 const CMD_NAME_CONFIG = "config"
 
-type Program struct {
-	Clictx *cli.Context
-}
-
-func (p *Program) Start(s daemonService.Service) error {
-	// Start should not block. Do the actual work async.
-	go p.run()
-	return nil
-}
-func (p *Program) run() {
-	// Do work here
-	default_.StartDefault(p.Clictx)
-}
-func (p *Program) Stop(s daemonService.Service) error {
-	// Stop should not block. Return with a few seconds.
-	//basic.Logger.Infoln("service will stop in 5 seconds...")
-	//<-time.After(time.Second * 5)
-	return nil
-}
-
 ////////config to do cmd ///////////
 func ConfigCmd() *cli.App {
-	//check is dev or pro
-	confShow := false
+
+	//////////init config/////////////
+	toml_conf_path := "configs/default.toml"
+
 	real_args := []string{}
-
 	for _, arg := range os.Args {
+		arg_lower := strings.ToLower(arg)
+		if strings.HasPrefix(arg_lower, "-conf=") || strings.HasPrefix(arg_lower, "--conf=") {
 
-		s := strings.ToLower(arg)
-
-		if strings.Contains(s, "-conf=show") || strings.Contains(s, "--conf=show") {
-			confShow = true
+			toml_target := strings.Trim(arg_lower, "-conf=")
+			toml_target = strings.Trim(toml_target, "--conf=")
+			toml_conf_path = "configs/" + toml_target + ".toml"
+			fmt.Println("toml_conf_path", toml_conf_path)
 			continue
 		}
-
-		if strings.Contains(s, "-conf=hide") || strings.Contains(s, "--conf=hide") {
-			confShow = false
-			continue
-		}
-
 		real_args = append(real_args, arg)
 	}
 
 	os.Args = real_args
 
-	conferr := iniConfig(confShow)
-	if conferr != nil {
-		basic.Logger.Panicln(conferr)
+	conf_err := basic.Init_config(toml_conf_path)
+	if conf_err != nil {
+		basic.Logger.Fatalln("config err", conf_err)
 	}
 
-	daemon_name, err := configuration.Config.GetString("daemon_name", "")
-	if err != nil {
-		basic.Logger.Fatalln("daemon_name [string] in config error," + err.Error())
-	}
+	conf := basic.Get_config()
 
-	if daemon_name == "" {
-		basic.Logger.Fatalln("daemon_name in config should not be vacant")
-	}
-
-	p := &Program{}
-	err = daemon_plugin.Init(daemon_name, p)
-	if err != nil {
-		basic.Logger.Fatalln("daemon_plugin.Init error:", err)
-	}
-	s := daemon_plugin.GetInstance(daemon_name)
+	/////set loglevel//////
+	basic.Logger.SetLevel(ilog.ParseLogLevel(conf.Toml_config.Log_level))
+	////////////////////////////////
 
 	return &cli.App{
 		Action: func(clictx *cli.Context) error {
-			p.Clictx = clictx
-			s.Run()
+			OS_service_start(conf.Toml_config.Daemon_name, "run", func() {
+				default_.StartDefault(clictx)
+			})
 			return nil
 		},
 
@@ -126,7 +90,7 @@ func ConfigCmd() *cli.App {
 						Usage: "show configs",
 						Action: func(clictx *cli.Context) error {
 							fmt.Println("======== start of config ========")
-							configs, _ := configuration.Config.GetConfigAsString()
+							configs, _ := basic.Get_config().Read_config_file()
 							fmt.Println(configs)
 							fmt.Println("======== end  of  config ========")
 							return nil
@@ -136,9 +100,9 @@ func ConfigCmd() *cli.App {
 					{
 						Name:  "set",
 						Usage: "set config",
-						Flags: config.GetFlags(),
+						Flags: append(config.Cli_get_flags(), &cli.StringFlag{Name: "config", Required: false}),
 						Action: func(clictx *cli.Context) error {
-							config.ConfigSetting(clictx)
+							config.Cli_set_config(clictx)
 							return nil
 						},
 					},
@@ -153,7 +117,7 @@ func ConfigCmd() *cli.App {
 						Name:  "install",
 						Usage: "install service",
 						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx, s)
+							OS_service_start(conf.Toml_config.Daemon_name, "install", nil)
 							return nil
 						},
 					},
@@ -162,7 +126,7 @@ func ConfigCmd() *cli.App {
 						Name:  "remove",
 						Usage: "remove service",
 						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx, s)
+							OS_service_start(conf.Toml_config.Daemon_name, "remove", nil)
 							return nil
 						},
 					},
@@ -171,7 +135,7 @@ func ConfigCmd() *cli.App {
 						Name:  "start",
 						Usage: "run",
 						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx, s)
+							OS_service_start(conf.Toml_config.Daemon_name, "start", nil)
 							return nil
 						},
 					},
@@ -180,7 +144,7 @@ func ConfigCmd() *cli.App {
 						Name:  "stop",
 						Usage: "stop",
 						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx, s)
+							OS_service_start(conf.Toml_config.Daemon_name, "stop", nil)
 							return nil
 						},
 					},
@@ -189,7 +153,7 @@ func ConfigCmd() *cli.App {
 						Name:  "restart",
 						Usage: "restart",
 						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx, s)
+							OS_service_start(conf.Toml_config.Daemon_name, "restart", nil)
 							return nil
 						},
 					},
@@ -198,7 +162,7 @@ func ConfigCmd() *cli.App {
 						Name:  "status",
 						Usage: "show process status",
 						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx, s)
+							OS_service_start(conf.Toml_config.Daemon_name, "status", nil)
 							return nil
 						},
 					},
@@ -208,66 +172,133 @@ func ConfigCmd() *cli.App {
 	}
 }
 
-////////end config to do app ///////////
-func readDefaultConfig(confShow bool) (*configuration.VConfig, string, error) {
-	var defaultConfigPath string
-	var err error
+/////////service/////////////
 
-	c_p, c_p_exist, _ := path_util.SmartPathExist("configs/config.yaml")
-	if !c_p_exist {
-		basic.Logger.Errorln("no config.yaml under /configs folder")
-		return nil, "", err
+func OS_service_start(name string, action string, exe_func func()) {
+	os_service_conf := &service.Config{
+		Name:        name,
+		DisplayName: name,
+		Description: name + ":description",
+
+		Option: map[string]interface{}{
+			"OnFailure":              "restart",
+			"OnFailureDelayDuration": "15s",
+			"SystemdScript":          systemdScript,
+			"Restart":                "on-failure", // or use "always"
+		},
 	}
-	defaultConfigPath = c_p
 
-	if confShow {
-		basic.Logger.Infoln("using config:", defaultConfigPath)
-	}
-
-	config, err := configuration.ReadConfig(defaultConfigPath)
+	oss, err := service.New(OS_service_program{Exe_func: exe_func}, os_service_conf)
 	if err != nil {
-		basic.Logger.Errorln("config err", err)
-		return nil, "", err
+		basic.Logger.Fatalln(err)
 	}
 
-	return config, defaultConfigPath, nil
+	os_service_run(&oss, action)
 }
 
-func iniConfig(confShow bool) error {
-	//path_util.ExEPathPrintln()
-	////read default config
-	config, _, err := readDefaultConfig(confShow)
-	if err != nil {
-		return err
-	}
+type OS_service_program struct {
+	Exe_func func()
+}
 
-	configuration.Config = config
-	logerr := setLoggerLevel()
-	if logerr != nil {
-		return logerr
+func (p OS_service_program) Start(s service.Service) error {
+	if p.Exe_func != nil {
+		go p.Exe_func()
 	}
-
-	if confShow {
-		basic.Logger.Infoln("======== start of config ========")
-		configs, _ := config.GetConfigAsString()
-		basic.Logger.Infoln(configs)
-		basic.Logger.Infoln("======== end  of  config ========")
-	}
-
 	return nil
 }
 
-func setLoggerLevel() error {
-	logLevel := "INFO"
-	if configuration.Config != nil {
-		var err error
-		logLevel, err = configuration.Config.GetString("log_level", "INFO")
+func (p OS_service_program) Stop(s service.Service) error {
+	return nil
+}
+
+func os_service_run(s *service.Service, action string) {
+	switch action {
+	case "install":
+		err := (*s).Install()
 		if err != nil {
-			return err
+			basic.Logger.Fatalln("install service error:", err)
+		} else {
+			basic.Logger.Infoln("service installed")
 		}
+	case "remove":
+		err := (*s).Uninstall()
+		if err != nil {
+			basic.Logger.Fatalln("remove service error:", err)
+		} else {
+			basic.Logger.Infoln("service removed")
+		}
+	case "start":
+		err := (*s).Start()
+		if err != nil {
+			basic.Logger.Fatalln("start service error:", err)
+		} else {
+			basic.Logger.Infoln("service started")
+		}
+	case "run":
+		err := (*s).Run()
+		if err != nil {
+			basic.Logger.Fatalln("run service error:", err)
+		} else {
+			basic.Logger.Infoln("service run")
+		}
+	case "stop":
+		err := (*s).Stop()
+		if err != nil {
+			basic.Logger.Fatalln("stop service error:", err)
+		} else {
+			basic.Logger.Infoln("service stopped")
+		}
+	case "restart":
+		err := (*s).Restart()
+		if err != nil {
+			basic.Logger.Fatalln("restart service error:", err)
+		} else {
+			basic.Logger.Infoln("service restarted")
+		}
+	case "status":
+		status, err := (*s).Status()
+		if err != nil {
+			basic.Logger.Fatalln(err)
+		}
+		switch status {
+		case service.StatusRunning:
+			basic.Logger.Infoln("service status:", "RUNNING")
+		case service.StatusStopped:
+			basic.Logger.Infoln("service status:", "STOPPED")
+		default:
+			basic.Logger.Infoln("service status:", "UNKNOWN")
+		}
+	default:
+		basic.Logger.Warnln("no sub command")
+		return
 	}
-
-	l := ilog.ParseLogLevel(logLevel)
-	basic.Logger.SetLevel(l)
-	return nil
 }
+
+const systemdScript = `[Unit]
+Description={{.Description}}
+ConditionFileIsExecutable={{.Path|cmdEscape}}
+{{range $i, $dep := .Dependencies}} 
+{{$dep}} {{end}}
+
+[Service]
+StartLimitInterval=15
+StartLimitBurst=15
+ExecStart={{.Path|cmdEscape}}{{range .Arguments}} {{.|cmd}}{{end}}
+{{if .ChRoot}}RootDirectory={{.ChRoot|cmd}}{{end}}
+{{if .WorkingDirectory}}WorkingDirectory={{.WorkingDirectory|cmdEscape}}{{end}}
+{{if .UserName}}User={{.UserName}}{{end}}
+{{if .ReloadSignal}}ExecReload=/bin/kill -{{.ReloadSignal}} "$MAINPID"{{end}}
+{{if .PIDFile}}PIDFile={{.PIDFile|cmd}}{{end}}
+{{if and .LogOutput .HasOutputFileSupport -}}
+StandardOutput=file:/var/log/{{.Name}}.out
+StandardError=file:/var/log/{{.Name}}.err
+{{- end}}
+{{if gt .LimitNOFILE -1 }}LimitNOFILE={{.LimitNOFILE}}{{end}}
+{{if .Restart}}Restart={{.Restart}}{{end}}
+{{if .SuccessExitStatus}}SuccessExitStatus={{.SuccessExitStatus}}{{end}}
+RestartSec=60
+EnvironmentFile=-/etc/sysconfig/{{.Name}}
+
+[Install]
+WantedBy=multi-user.target
+`

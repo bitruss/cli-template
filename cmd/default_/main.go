@@ -6,6 +6,7 @@ import (
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/cmd/default_/http"
 	"github.com/coreservice-io/cli-template/cmd/default_/plugin"
+	"github.com/coreservice-io/cli-template/plugin/auto_cert_plugin"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 )
@@ -45,13 +46,15 @@ func start_jobs() {
 	}
 
 	// //start the auto_cert auto-updating job
-	// auto_cert_plugin.GetInstance().AutoUpdate(func(new_crt_str, new_key_str string) {
-	// 	//reload server
-	// 	sre := http.ServerReloadCert()
-	// 	if sre != nil {
-	// 		basic.Logger.Errorln("cert change reload echo server error:" + sre.Error())
-	// 	}
-	// })
+	if basic.Get_config().Toml_config.Auto_cert.Enable {
+		auto_cert_plugin.GetInstance().AutoUpdate(func(new_crt_str, new_key_str string) {
+			//reload server
+			sre := http.ServerReloadCert()
+			if sre != nil {
+				basic.Logger.Errorln("cert change reload echo server error:" + sre.Error())
+			}
+		})
+	}
 
 	basic.Logger.Infoln("start your jobs below")
 }

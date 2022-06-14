@@ -8,7 +8,6 @@ import (
 
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/cmd/default_/http/api"
-	"github.com/coreservice-io/cli-template/configuration"
 	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
 	"github.com/coreservice-io/utils/path_util"
 	"github.com/labstack/echo/v4"
@@ -16,6 +15,8 @@ import (
 
 //httpServer example
 func ServerStart() {
+
+	toml_conf := basic.Get_config().Toml_config
 
 	//init matched echo
 
@@ -30,22 +31,15 @@ func ServerStart() {
 		api.ConfigApi(api_echo.Echo)
 	}
 
-	////////////////////
+	///////html echo /////////////
 	html_echo, err := echo_plugin.InitMatchedEcho("www", func(host, req_uri string) bool {
 		return strings.HasPrefix(host, "www")
 	})
 
-	if err != nil {
-		basic.Logger.Fatalln(err)
-	} else {
-		https_html_dir, https_html_dir_err := configuration.Config.GetString("https.html_dir", "")
-		if https_html_dir_err != nil || https_html_dir == "" {
-			basic.Logger.Fatalln("https.html_dir config error")
-		}
-
-		https_html_abs_dir, https_html_abs_dir_exist, _ := path_util.SmartPathExist(https_html_dir)
+	if err == nil {
+		https_html_abs_dir, https_html_abs_dir_exist, _ := path_util.SmartPathExist(toml_conf.Https.Html_dir)
 		if !https_html_abs_dir_exist {
-			basic.Logger.Fatalln("https.html_dir:" + https_html_dir + " not exist on disk")
+			basic.Logger.Fatalln("https.html_dir:" + toml_conf.Https.Html_dir + " not exist on disk")
 		}
 
 		html_file := filepath.Join(https_html_abs_dir, "index.html")
@@ -60,6 +54,8 @@ func ServerStart() {
 			ctx.File(html_file)
 		}
 	}
+
+	/////////////////////
 
 	//config https server
 	https_srv := echo_plugin.GetInstance_("https")
