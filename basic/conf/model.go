@@ -1,18 +1,8 @@
-package basic
-
-import (
-	"errors"
-	"io/ioutil"
-	"os"
-
-	"github.com/coreservice-io/utils/path_util"
-	"github.com/creasty/defaults"
-	"github.com/pelletier/go-toml/v2"
-)
+package conf
 
 type TomlConfig struct {
 	Daemon_name   string        `toml:"daemon_name"`
-	Log_level     string        `toml:"log_level" default:"INFO"`
+	Log_level     string        `toml:"log_level"`
 	Http          HttpConfig    `toml:"http"`
 	Https         HttpsConfig   `toml:"https"`
 	Auto_cert     AutoCert      `toml:"auto_cert"`
@@ -27,19 +17,19 @@ type TomlConfig struct {
 }
 
 type API struct {
-	Doc_gen_search_dir string `toml:"doc_gen_search_dir" default:"cmd/default_/http/api"`
-	Doc_gen_mainfile   string `toml:"doc_gen_mainfile" default:"api.go"`
-	Doc_gen_output_dir string `toml:"doc_gen_output_dir" default:"cmd/default_/http/api_docs"`
+	Doc_gen_search_dir string `toml:"doc_gen_search_dir"`
+	Doc_gen_mainfile   string `toml:"doc_gen_mainfile"`
+	Doc_gen_output_dir string `toml:"doc_gen_output_dir"`
 }
 
 type HttpConfig struct {
 	Enable bool `toml:"enable"`
-	Port   int  `toml:"port" default:"80"`
+	Port   int  `toml:"port"`
 }
 
 type HttpsConfig struct {
 	Enable   bool   `toml:"enable"`
-	Port     int    `toml:"port" default:"443"`
+	Port     int    `toml:"port"`
 	Crt_path string `toml:"crt_path" `
 	Key_path string `toml:"key_path"`
 	Html_dir string `toml:"html_dir"`
@@ -118,94 +108,4 @@ type SMTP struct {
 type Sqlite struct {
 	Enable bool   `toml:"enable"`
 	Path   string `toml:"path"`
-}
-
-/////////////////////////////
-type Config struct {
-	Toml_config *TomlConfig
-	Abs_path    string
-}
-
-var config *Config
-
-func Get_config() *Config {
-	return config
-}
-
-func (config *Config) Read_config_file() (string, error) {
-
-	doc, err := ioutil.ReadFile(config.Abs_path)
-	if err != nil {
-		return "", err
-	}
-
-	return string(doc), nil
-}
-
-func (config *Config) Save_config() error {
-
-	result, err := toml.Marshal(config.Toml_config)
-	if err != nil {
-		return err
-	}
-
-	f, err := os.OpenFile(config.Abs_path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
-	if err != nil {
-		return err
-	}
-
-	defer f.Close()
-
-	err = f.Truncate(0)
-	if err != nil {
-		return err
-	}
-	_, err = f.Seek(0, 0)
-	if err != nil {
-		return err
-	}
-
-	_, err = f.Write(result)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Init_config(config_path string) error {
-
-	if config != nil {
-		return nil
-	}
-
-	c_p, c_p_exist, _ := path_util.SmartPathExist(config_path)
-	if !c_p_exist {
-		return errors.New("no config file:" + config_path)
-	}
-
-	var cfg Config
-	cfg.Abs_path = c_p
-	cfg.Toml_config = &TomlConfig{}
-
-	//default value
-	if err := defaults.Set(cfg.Toml_config); err != nil {
-		return err
-	}
-
-	config_str, err := cfg.Read_config_file()
-	if err != nil {
-		return err
-	}
-
-	err = toml.Unmarshal([]byte(config_str), cfg.Toml_config)
-	if err != nil {
-		return err
-	}
-
-	Logger.Infoln("using config:", cfg.Abs_path)
-
-	config = &cfg
-
-	return nil
 }

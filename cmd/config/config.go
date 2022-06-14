@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 )
@@ -16,7 +16,7 @@ func Cli_get_flags() []cli.Flag {
 }
 
 func Cli_set_config(clictx *cli.Context) {
-	config := basic.Get_config()
+	config := conf.Get_config()
 
 	if clictx.IsSet("log_level") {
 		config.Toml_config.Log_level = clictx.String("log_level")

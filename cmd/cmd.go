@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/coreservice-io/cli-template/cmd/config"
 	"github.com/coreservice-io/cli-template/cmd/default_"
 	"github.com/coreservice-io/cli-template/cmd/default_/http/api"
@@ -42,20 +43,20 @@ func ConfigCmd() *cli.App {
 
 	os.Args = real_args
 
-	conf_err := basic.Init_config(toml_conf_path)
+	conf_err := conf.Init_config(toml_conf_path)
 	if conf_err != nil {
 		basic.Logger.Fatalln("config err", conf_err)
 	}
 
-	conf := basic.Get_config()
+	configuration := conf.Get_config()
 
 	/////set loglevel//////
-	basic.Logger.SetLevel(ilog.ParseLogLevel(conf.Toml_config.Log_level))
+	basic.Logger.SetLevel(ilog.ParseLogLevel(configuration.Toml_config.Log_level))
 	////////////////////////////////
 
 	return &cli.App{
 		Action: func(clictx *cli.Context) error {
-			OS_service_start(conf.Toml_config.Daemon_name, "run", func() {
+			OS_service_start(configuration.Toml_config.Daemon_name, "run", func() {
 				default_.StartDefault(clictx)
 			})
 			return nil
@@ -89,7 +90,7 @@ func ConfigCmd() *cli.App {
 						Usage: "show configs",
 						Action: func(clictx *cli.Context) error {
 							fmt.Println("======== start of config ========")
-							configs, _ := basic.Get_config().Read_config_file()
+							configs, _ := conf.Get_config().Read_config_file()
 							fmt.Println(configs)
 							fmt.Println("======== end  of  config ========")
 							return nil
@@ -116,7 +117,7 @@ func ConfigCmd() *cli.App {
 						Name:  "install",
 						Usage: "install service",
 						Action: func(clictx *cli.Context) error {
-							OS_service_start(conf.Toml_config.Daemon_name, "install", nil)
+							OS_service_start(configuration.Toml_config.Daemon_name, "install", nil)
 							return nil
 						},
 					},
@@ -125,7 +126,7 @@ func ConfigCmd() *cli.App {
 						Name:  "remove",
 						Usage: "remove service",
 						Action: func(clictx *cli.Context) error {
-							OS_service_start(conf.Toml_config.Daemon_name, "remove", nil)
+							OS_service_start(configuration.Toml_config.Daemon_name, "remove", nil)
 							return nil
 						},
 					},
@@ -134,7 +135,7 @@ func ConfigCmd() *cli.App {
 						Name:  "start",
 						Usage: "run",
 						Action: func(clictx *cli.Context) error {
-							OS_service_start(conf.Toml_config.Daemon_name, "start", nil)
+							OS_service_start(configuration.Toml_config.Daemon_name, "start", nil)
 							return nil
 						},
 					},
@@ -143,7 +144,7 @@ func ConfigCmd() *cli.App {
 						Name:  "stop",
 						Usage: "stop",
 						Action: func(clictx *cli.Context) error {
-							OS_service_start(conf.Toml_config.Daemon_name, "stop", nil)
+							OS_service_start(configuration.Toml_config.Daemon_name, "stop", nil)
 							return nil
 						},
 					},
@@ -152,7 +153,7 @@ func ConfigCmd() *cli.App {
 						Name:  "restart",
 						Usage: "restart",
 						Action: func(clictx *cli.Context) error {
-							OS_service_start(conf.Toml_config.Daemon_name, "restart", nil)
+							OS_service_start(configuration.Toml_config.Daemon_name, "restart", nil)
 							return nil
 						},
 					},
@@ -161,7 +162,7 @@ func ConfigCmd() *cli.App {
 						Name:  "status",
 						Usage: "show process status",
 						Action: func(clictx *cli.Context) error {
-							OS_service_start(conf.Toml_config.Daemon_name, "status", nil)
+							OS_service_start(configuration.Toml_config.Daemon_name, "status", nil)
 							return nil
 						},
 					},

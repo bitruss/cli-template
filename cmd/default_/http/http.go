@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/coreservice-io/cli-template/cmd/default_/http/api"
 	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
 	"github.com/coreservice-io/utils/path_util"
@@ -16,7 +17,7 @@ import (
 //httpServer example
 func ServerStart() {
 
-	toml_conf := basic.Get_config().Toml_config
+	toml_conf := conf.Get_config().Toml_config
 
 	//init matched echo
 

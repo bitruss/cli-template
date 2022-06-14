@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
 	tool_errors "github.com/coreservice-io/cli-template/tools/errors"
 	"github.com/coreservice-io/utils/path_util"
@@ -11,7 +12,7 @@ import (
 
 func init_http_echo_server() error {
 
-	toml_conf := basic.Get_config().Toml_config
+	toml_conf := conf.Get_config().Toml_config
 
 	if toml_conf.Http.Enable {
 		return echo_plugin.Init_("http", echo_plugin.Config{Port: toml_conf.Http.Port, Tls: false, Crt_path: "", Key_path: ""},
@@ -23,7 +24,7 @@ func init_http_echo_server() error {
 
 func init_https_echo_server() error {
 
-	toml_conf := basic.Get_config().Toml_config
+	toml_conf := conf.Get_config().Toml_config
 	if toml_conf.Https.Enable {
 
 		crt_abs_path, crt_path_exist, _ := path_util.SmartPathExist(toml_conf.Https.Crt_path)

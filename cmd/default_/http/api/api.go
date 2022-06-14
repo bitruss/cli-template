@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/labstack/echo/v4"
 
 	_ "github.com/coreservice-io/cli-template/cmd/default_/http/api_docs"
@@ -41,7 +42,7 @@ func ConfigApi(httpServer *echo.Echo) {
 
 func Gen_Api_Docs() {
 
-	toml_config := basic.Get_config().Toml_config
+	toml_config := conf.Get_config().Toml_config
 
 	// api_doc_gen_search_dir, _ := configuration.Config.GetString("api_doc_gen_search_dir", "")
 	// api_doc_gen_mainfile, _ := configuration.Config.GetString("api_doc_gen_mainfile", "")

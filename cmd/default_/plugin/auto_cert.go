@@ -3,13 +3,13 @@ package plugin
 import (
 	"errors"
 
-	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/coreservice-io/cli-template/plugin/auto_cert_plugin"
 	"github.com/coreservice-io/utils/path_util"
 )
 
 func initAutoCert() error {
-	toml_conf := basic.Get_config().Toml_config
+	toml_conf := conf.Get_config().Toml_config
 
 	if toml_conf.Auto_cert.Enable {
 		auto_cert_crt_path_abs, auto_cert_crt_path_abs_exist, _ := path_util.SmartPathExist(toml_conf.Auto_cert.Crt_path)

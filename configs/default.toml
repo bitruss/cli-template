@@ -2,7 +2,7 @@ daemon_name = 'cli-template-service'
 log_level = 'INFO'
 [http]
 enable = true
-# port = 88
+port = 80
 
 [https]
 enable = true

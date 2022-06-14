@@ -1,12 +1,12 @@
 package plugin
 
 import (
-	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/coreservice-io/cli-template/plugin/mail_plugin"
 )
 
 func initSmtpMail() error {
-	toml_conf := basic.Get_config().Toml_config
+	toml_conf := conf.Get_config().Toml_config
 
 	if toml_conf.Smtp.Enable {
 		return mail_plugin.Init(&mail_plugin.Config{

@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/coreservice-io/cli-template/plugin/ip_geo_plugin"
 	"github.com/coreservice-io/cli-template/plugin/reference_plugin"
 	tool_errors "github.com/coreservice-io/cli-template/tools/errors"
@@ -13,7 +14,7 @@ import (
 
 func initIpGeo() error {
 
-	toml_conf := basic.Get_config().Toml_config
+	toml_conf := conf.Get_config().Toml_config
 
 	if toml_conf.Ip_geo.Enable {
 		dbFilePath_abs, dbFilePath_abs_exist, _ := path_util.SmartPathExist(toml_conf.Ip_geo.Ip2l.Db_path)
