@@ -33,8 +33,10 @@ require (
 	github.com/coreservice-io/redis_spr v0.1.20
 	github.com/coreservice-io/reference v0.0.8
 	github.com/coreservice-io/utils v0.1.12
+	github.com/creasty/defaults v1.6.0
 	github.com/kardianos/service v1.2.1
 	github.com/pelletier/go-toml/v2 v2.0.2
+	github.com/syndtr/goleveldb v1.0.0
 	gorm.io/driver/sqlite v1.2.6
 )
 
@@ -56,6 +58,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+	github.com/golang/snappy v0.0.0-20180518054509-2e65f85255db // indirect
 	github.com/ip2location/ip2location-go v8.3.0+incompatible // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect

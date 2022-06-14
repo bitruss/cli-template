@@ -6,12 +6,13 @@ import (
 	"os"
 
 	"github.com/coreservice-io/utils/path_util"
+	"github.com/creasty/defaults"
 	"github.com/pelletier/go-toml/v2"
 )
 
 type TomlConfig struct {
 	Daemon_name   string        `toml:"daemon_name"`
-	Log_level     string        `toml:"log_level"`
+	Log_level     string        `toml:"log_level" default:"INFO"`
 	Http          HttpConfig    `toml:"http"`
 	Https         HttpsConfig   `toml:"https"`
 	Auto_cert     AutoCert      `toml:"auto_cert"`
@@ -26,20 +27,20 @@ type TomlConfig struct {
 }
 
 type API struct {
-	Doc_gen_search_dir string `toml:"doc_gen_search_dir"`
-	Doc_gen_mainfile   string `toml:"doc_gen_mainfile"`
-	Doc_gen_output_dir string `toml:"doc_gen_output_dir"`
+	Doc_gen_search_dir string `toml:"doc_gen_search_dir" default:"cmd/default_/http/api"`
+	Doc_gen_mainfile   string `toml:"doc_gen_mainfile" default:"api.go"`
+	Doc_gen_output_dir string `toml:"doc_gen_output_dir" default:"cmd/default_/http/api_docs"`
 }
 
 type HttpConfig struct {
 	Enable bool `toml:"enable"`
-	Port   int  `toml:"port"`
+	Port   int  `toml:"port" default:"80"`
 }
 
 type HttpsConfig struct {
 	Enable   bool   `toml:"enable"`
-	Port     int    `toml:"port"`
-	Crt_path string `toml:"crt_path"`
+	Port     int    `toml:"port" default:"443"`
+	Crt_path string `toml:"crt_path" `
 	Key_path string `toml:"key_path"`
 	Html_dir string `toml:"html_dir"`
 }
@@ -186,6 +187,11 @@ func Init_config(config_path string) error {
 	var cfg Config
 	cfg.Abs_path = c_p
 	cfg.Toml_config = &TomlConfig{}
+
+	//default value
+	if err := defaults.Set(cfg.Toml_config); err != nil {
+		return err
+	}
 
 	config_str, err := cfg.Read_config_file()
 	if err != nil {

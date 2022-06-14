@@ -1,49 +1,23 @@
 package plugin
 
-// import (
-// 	"errors"
+import (
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
+)
 
-// 	"github.com/coreservice-io/cli-template/configuration"
-// 	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
-// )
+func initRedis() error {
+	toml_conf := basic.Get_config().Toml_config
 
-// func initRedis() error {
-// 	redis_addr, err := configuration.Config.GetString("redis.host", "127.0.0.1")
-// 	if err != nil {
-// 		return errors.New("redis.host [string] in config err," + err.Error())
-// 	}
+	if toml_conf.Redis.Enable {
+		return redis_plugin.Init(&redis_plugin.Config{
+			Address:   toml_conf.Redis.Host,
+			UserName:  toml_conf.Redis.Username,
+			Password:  toml_conf.Redis.Password,
+			Port:      toml_conf.Redis.Port,
+			KeyPrefix: toml_conf.Redis.Prefix,
+			UseTLS:    toml_conf.Redis.Use_tls,
+		})
+	}
 
-// 	redis_username, err := configuration.Config.GetString("redis.username", "")
-// 	if err != nil {
-// 		return errors.New("redis.username [string] in config err," + err.Error())
-// 	}
-
-// 	redis_password, err := configuration.Config.GetString("redis.password", "")
-// 	if err != nil {
-// 		return errors.New("redis.password [string] in config err," + err.Error())
-// 	}
-
-// 	redis_port, err := configuration.Config.GetInt("redis.port", 6379)
-// 	if err != nil {
-// 		return errors.New("redis.port [int] in config err," + err.Error())
-// 	}
-
-// 	redis_prefix, err := configuration.Config.GetString("redis.prefix", "")
-// 	if err != nil {
-// 		return errors.New("redis.prefix [string] in config err," + err.Error())
-// 	}
-
-// 	redis_useTls, err := configuration.Config.GetBool("redis.use_tls", false)
-// 	if err != nil {
-// 		return errors.New("redis.use_tls [bool] in config err," + err.Error())
-// 	}
-
-// 	return redis_plugin.Init(&redis_plugin.Config{
-// 		Address:   redis_addr,
-// 		UserName:  redis_username,
-// 		Password:  redis_password,
-// 		Port:      redis_port,
-// 		KeyPrefix: redis_prefix,
-// 		UseTLS:    redis_useTls,
-// 	})
-// }
+	return nil
+}
