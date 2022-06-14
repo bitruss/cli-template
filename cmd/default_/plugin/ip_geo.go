@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"errors"
+	"strconv"
 
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/basic/conf"
@@ -21,6 +22,7 @@ func initIpGeo() error {
 		if !dbFilePath_abs_exist {
 			return errors.New("ip2Location db file path error," + toml_conf.Ip_geo.Ip2l.Db_path)
 		}
+
 		ip_geo_redis_config := ip_geo.RedisConfig{
 			Addr:     toml_conf.Redis.Host,
 			UserName: toml_conf.Redis.Username,
@@ -31,8 +33,15 @@ func initIpGeo() error {
 		}
 
 		reference_plugin.Init_("ip_geo")
+		ip_geo_ref := reference_plugin.GetInstance_("ip_geo")
+
+		basic.Logger.Infoln("init ecs uploader plugin with ipstack_key:", toml_conf.Ip_geo.Ipstack_key,
+			"localDbFile:", dbFilePath_abs, "Upgrade_url:", toml_conf.Ip_geo.Ip2l.Upgrade_url,
+			"upgrade_interval:", strconv.Itoa(toml_conf.Ip_geo.Ip2l.Upgrade_interval),
+			"ip_geo_redis_config:", ip_geo_redis_config)
+
 		return ip_geo_plugin.Init(toml_conf.Ip_geo.Ipstack_key, dbFilePath_abs, toml_conf.Ip_geo.Ip2l.Upgrade_url, int64(toml_conf.Ip_geo.Ip2l.Upgrade_interval),
-			reference_plugin.GetInstance_("ip_geo"), ip_geo_redis_config, basic.Logger, tool_errors.PanicHandler)
+			ip_geo_ref, ip_geo_redis_config, basic.Logger, tool_errors.PanicHandler)
 	}
 	return nil
 }

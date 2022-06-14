@@ -10,13 +10,15 @@ func initDB() error {
 	toml_conf := conf.Get_config().Toml_config
 
 	if toml_conf.Db.Enable {
-		return sqldb_plugin.Init(sqldb_plugin.Config{
+		db_conf := sqldb_plugin.Config{
 			Host:     toml_conf.Db.Host,
 			Port:     toml_conf.Db.Port,
 			DbName:   toml_conf.Db.Name,
 			UserName: toml_conf.Db.Username,
 			Password: toml_conf.Db.Password,
-		}, basic.Logger)
+		}
+		basic.Logger.Infoln("init db plugin with config:", db_conf)
+		return sqldb_plugin.Init(&db_conf, basic.Logger)
 	}
 
 	return nil

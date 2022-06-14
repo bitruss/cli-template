@@ -36,14 +36,14 @@ type Config struct {
 	Password string
 }
 
-func Init(dbConfig Config, logger log.Logger) error {
+func Init(dbConfig *Config, logger log.Logger) error {
 	return Init_("default", dbConfig, logger)
 }
 
 // Init a new instance.
 //  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
 //  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
-func Init_(name string, dbConfig Config, logger log.Logger) error {
+func Init_(name string, dbConfig *Config, logger log.Logger) error {
 	if name == "" {
 		name = "default"
 	}
