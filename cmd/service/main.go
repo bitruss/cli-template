@@ -12,12 +12,6 @@ import (
 
 func RunServiceCmd(clictx *cli.Context, daemon_name string, action string, s service.Service) {
 
-	// daemon_name, err := configuration.Config.GetString("daemon_name", "")
-	// if err != nil {
-	// 	basic.Logger.Errorln("daemon_name [string] in config error," + err.Error())
-	// 	return
-	// }
-
 	if daemon_name == "" {
 		basic.Logger.Fatalln("daemon_name in config should not be vacant")
 		return
@@ -40,14 +34,6 @@ func RunServiceCmd(clictx *cli.Context, daemon_name string, action string, s ser
 	}
 
 	basic.Logger.Infoln("exefile:" + exe_path + " to be service target")
-
-	//check command
-	// subCmds := clictx.Command.Names()
-	// if len(subCmds) == 0 {
-	// 	basic.Logger.Fatalln("no sub command")
-	// }
-
-	// action := subCmds[0]
 
 	switch action {
 	case "install":
