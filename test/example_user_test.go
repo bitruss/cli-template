@@ -15,7 +15,7 @@ func initialize_exampleuser() {
 	basic.InitLogger()
 
 	//db
-	err := sqldb_plugin.Init(sqldb_plugin.Config{
+	err := sqldb_plugin.Init(&sqldb_plugin.Config{
 		Host:     "127.0.0.1",
 		Port:     3306,
 		DbName:   "testdb",
