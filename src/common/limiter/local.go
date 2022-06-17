@@ -1,4 +1,4 @@
-package local_rate_limiter
+package limiter
 
 import (
 	"time"
@@ -11,26 +11,29 @@ type limitInfo struct {
 	LastSetUnixTime int64
 }
 
-func CheckRateAllow(key string, durationSecond int64, limitCount int) bool {
+//check key allowed to pass
+func Allow(key string, duration_second int64, Count int) bool {
+
+	if duration_second <= 0 {
+		return true
+	}
 
 	lKey := "rateLimit:" + key
 	value, _ := reference_plugin.GetInstance().Get(lKey)
 
+	var limit_info *limitInfo
 	nowTime := time.Now().UTC().Unix()
 
-	var limit_info *limitInfo
 	if value == nil {
 		limit_info = &limitInfo{
-			CountLeft:       limitCount,
+			CountLeft:       Count,
 			LastSetUnixTime: nowTime,
 		}
 	} else {
 		limit_info = value.(*limitInfo)
-		timePast := nowTime - limit_info.LastSetUnixTime
-
 		//if time past , add count
-		if timePast >= durationSecond {
-			limit_info.CountLeft = limitCount
+		if nowTime-limit_info.LastSetUnixTime >= duration_second {
+			limit_info.CountLeft = Count
 			limit_info.LastSetUnixTime = nowTime
 		}
 	}
@@ -44,8 +47,6 @@ func CheckRateAllow(key string, durationSecond int64, limitCount int) bool {
 		allow = false
 	}
 
-	reference_plugin.GetInstance().Set(lKey, limit_info, durationSecond*5)
-
+	reference_plugin.GetInstance().Set(lKey, limit_info, duration_second*5)
 	return allow
-
 }
