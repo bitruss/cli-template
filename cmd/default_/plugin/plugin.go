@@ -38,9 +38,15 @@ func InitPlugin() {
 	}
 
 	////////////////////////
-	err = initIpGeo()
+	err = initIpLocal()
 	if err != nil {
-		basic.Logger.Fatalln("initIpGeo err:", err)
+		basic.Logger.Fatalln("initIpLocal err:", err)
+	}
+
+	////////////////////////
+	err = initIpRemote()
+	if err != nil {
+		basic.Logger.Fatalln("initIpRemote err:", err)
 	}
 
 	/////////////////////////

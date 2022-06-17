@@ -10,7 +10,8 @@ type TomlConfig struct {
 	Redis         Redis         `toml:"redis"`
 	Db            DB            `toml:"db"`
 	Elasticsearch ElasticSearch `toml:"elasticsearch"`
-	Ip_geo        IpGeo         `toml:"ip_geo"`
+	IpLocal       IpLocal       `toml:"ip_local"`
+	IpRemote      IpRemote      `toml:"ip_remote"`
 	Leveldb       LevelDB       `toml:"leveldb"`
 	Smtp          SMTP          `toml:"smtp"`
 	Sqlite        Sqlite        `toml:"sqlite"`
@@ -70,20 +71,20 @@ type ElasticSearch struct {
 	Password string `toml:"password"`
 }
 
-type IpGeo struct {
-	Enable      bool        `toml:"enable"`
-	Ipstack_key string      `toml:"ipstack_key"`
-	Ip2l        IpGeo_Ip2l  `toml:"ip2l"`
-	Redis       IpGeo_Redis `toml:"redis"`
-}
-
-type IpGeo_Ip2l struct {
+type IpLocal struct {
+	Enable           bool   `toml:"enable"`
 	Db_path          string `toml:"db_path"`
 	Upgrade_interval int    `toml:"upgrade_interval"`
 	Upgrade_url      string `toml:"upgrade_url"`
 }
 
-type IpGeo_Redis struct {
+type IpRemote struct {
+	Enable      bool           `toml:"enable"`
+	Ipstack_key string         `toml:"ipstack_key"`
+	Redis       IpRemote_Redis `toml:"redis"`
+}
+
+type IpRemote_Redis struct {
 	Host     string `toml:"host"`
 	Port     int    `toml:"port"`
 	Prefix   string `toml:"prefix"`
