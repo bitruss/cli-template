@@ -7,7 +7,7 @@
 
 #### 1.1 run default program with {config_name}
 ##### ```go run . --conf={config_name}``` // will use the {config_name}.toml inside configs folder
-##### ```go run .``  // just use defalut.toml
+##### ```go run .```  // just use defalut.toml
 
 #### 2."config" application:
 ##### config is the program used to show or set config file
