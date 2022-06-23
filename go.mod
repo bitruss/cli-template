@@ -31,7 +31,6 @@ require (
 	github.com/coreservice-io/redis_spr v0.1.20
 	github.com/coreservice-io/reference v0.0.8
 	github.com/coreservice-io/utils v0.1.12
-	github.com/kardianos/service v1.2.1
 	github.com/pelletier/go-toml/v2 v2.0.2
 	github.com/syndtr/goleveldb v1.0.0
 	gorm.io/driver/sqlite v1.2.6
