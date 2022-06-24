@@ -1,7 +1,10 @@
 #!/bin/bash
 
 #install|remove|start|stop|restart|status
-command=$1
+command=$2
+
+#service name
+service_name=$1
 
 #dir path
 project_path=$(
@@ -9,27 +12,26 @@ project_path=$(
     pwd
 )
 
-#sh file name
-project_name="${project_path##*/}"
+
 
 
 function install {
 
-    if [ -f /etc/systemd/system/$project_name.service ]; then
+    if [ -f /etc/systemd/system/$service_name.service ]; then
         echo "service already exist"
     else
 
         echo "install..."
 
-        sudo cat >/etc/systemd/system/$project_name.service <<EOF
+        sudo cat >/etc/systemd/system/$service_name.service <<EOF
 [Unit]
-Description=$project_name
+Description=$service_name
 After=network.target
 
 [Service]
 StartLimitInterval=15s
 StartLimitBurst=5
-ExecStart=$project_path/$project_name
+ExecStart=$project_path/$service_name
 StandardOutput=null
 StandardError=null
 Restart=on-failure
@@ -40,43 +42,43 @@ WantedBy=multi-user.target
 EOF
 
         sudo systemctl daemon-reload
-        sudo systemctl enable $project_name.service
+        sudo systemctl enable $service_name.service
     fi
 }
 
 function remove {
     stop
     echo "remove..."
-    sudo systemctl disable $project_name.service
-    sudo rm -f /etc/systemd/system/$project_name.service
+    sudo systemctl disable $service_name.service
+    sudo rm -f /etc/systemd/system/$service_name.service
     sudo systemctl daemon-reload
 }
 
 function start {
     echo "start..."
-    sudo service $project_name start
+    sudo service $service_name start
 }
 
 function stop {
     echo "stop..."
-    sudo service $project_name stop
+    sudo service $service_name stop
 }
 
 function restart {
     echo "Restarting server.."
-    sudo service $project_name restart
+    sudo service $service_name restart
 
 }
 
 function status {
     echo "status"
-    sudo service $project_name status
+    sudo service $service_name status
 }
 
 function test {
-    echo $project_path
-    echo $project_name
-    echo $project_path/$project_name
+    echo "project_path:"$project_path
+    echo "service_name:"$service_name
+    echo "exe_path:"$project_path/$service_name
 }
 
 case "$command" in
