@@ -11,7 +11,6 @@ import (
 	"github.com/coreservice-io/cli-template/cmd/default_"
 	"github.com/coreservice-io/cli-template/cmd/default_/http/api"
 	"github.com/coreservice-io/cli-template/cmd/log"
-	"github.com/coreservice-io/cli-template/cmd/service"
 	ilog "github.com/coreservice-io/log"
 	"github.com/urfave/cli/v2"
 )
@@ -20,7 +19,6 @@ const CMD_NAME_DEFAULT = "default"
 const CMD_NAME_GEN_API = "gen_api"
 const CMD_NAME_LOG = "log"
 const CMD_NAME_CONFIG = "config"
-const CMD_NAME_SERVICE = "service"
 
 ////////config to do cmd ///////////
 func ConfigCmd() *cli.App {
@@ -63,7 +61,7 @@ func ConfigCmd() *cli.App {
 		defaultAction = nil
 	}
 
-	app := &cli.App{
+	return &cli.App{
 		Action: defaultAction, //only run if no sub command
 
 		//run if sub command not correct
@@ -117,67 +115,6 @@ func ConfigCmd() *cli.App {
 					},
 				},
 			},
-			{
-				Name:  CMD_NAME_SERVICE,
-				Usage: "service command",
-				Subcommands: []*cli.Command{
-					//service install
-					{
-						Name:  "install",
-						Usage: "install service",
-						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx)
-							return nil
-						},
-					},
-					//service remove
-					{
-						Name:  "remove",
-						Usage: "remove service",
-						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx)
-							return nil
-						},
-					},
-					//service start
-					{
-						Name:  "start",
-						Usage: "run",
-						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx)
-							return nil
-						},
-					},
-					//service stop
-					{
-						Name:  "stop",
-						Usage: "stop",
-						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx)
-							return nil
-						},
-					},
-					//service restart
-					{
-						Name:  "restart",
-						Usage: "restart",
-						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx)
-							return nil
-						},
-					},
-					//service status
-					{
-						Name:  "status",
-						Usage: "show process status",
-						Action: func(clictx *cli.Context) error {
-							service.RunServiceCmd(clictx)
-							return nil
-						},
-					},
-				},
-			},
 		},
 	}
-	return app
 }
