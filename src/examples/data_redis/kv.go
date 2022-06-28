@@ -6,7 +6,7 @@ import (
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
 	"github.com/coreservice-io/cli-template/plugin/reference_plugin"
-	"github.com/coreservice-io/cli-template/tools/smart_cache"
+	"github.com/coreservice-io/cli-template/src/common/smart_cache"
 	"github.com/go-redis/redis/v8"
 )
 

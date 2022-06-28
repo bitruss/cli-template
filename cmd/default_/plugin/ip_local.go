@@ -7,7 +7,7 @@ import (
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/coreservice-io/cli-template/plugin/ip_local_plugin"
-	tool_errors "github.com/coreservice-io/cli-template/tools/errors"
+	common_errors "github.com/coreservice-io/cli-template/src/common/errors"
 	"github.com/coreservice-io/utils/path_util"
 )
 
@@ -35,7 +35,7 @@ func initIpLocal() error {
 		)
 
 		return ip_local_plugin.Init(dbFilePath_abs, toml_conf.IpLocal.Upgrade_url, int64(toml_conf.IpLocal.Upgrade_interval),
-			basic.Logger, tool_errors.PanicHandler)
+			basic.Logger, common_errors.PanicHandler)
 	}
 	return nil
 }

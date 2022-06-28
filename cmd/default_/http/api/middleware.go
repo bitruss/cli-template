@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/coreservice-io/cli-template/tools/http"
+	"github.com/coreservice-io/cli-template/src/common/http"
 	"github.com/labstack/echo/v4"
 )
 

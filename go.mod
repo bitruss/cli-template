@@ -33,7 +33,6 @@ require (
 	github.com/coreservice-io/utils v0.1.12
 	github.com/pelletier/go-toml/v2 v2.0.2
 	github.com/syndtr/goleveldb v1.0.0
-	github.com/takama/daemon v1.0.0
 	gorm.io/driver/sqlite v1.2.6
 )
 

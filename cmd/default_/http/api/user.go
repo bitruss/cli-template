@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/coreservice-io/cli-template/basic"
-	"github.com/coreservice-io/cli-template/tools/data"
-	"github.com/coreservice-io/cli-template/tools/http/api"
+	"github.com/coreservice-io/cli-template/src/common/data"
+	"github.com/coreservice-io/cli-template/src/common/http/api"
 	"github.com/fatih/structs"
 	"github.com/labstack/echo/v4"
 )
