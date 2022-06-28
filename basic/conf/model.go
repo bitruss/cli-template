@@ -1,8 +1,7 @@
 package conf
 
 type TomlConfig struct {
-	Daemon_name   string        `toml:"daemon_name"`
-	Log_level     string        `toml:"log_level"`
+	Log           Log           `toml:"log"`
 	Http          HttpConfig    `toml:"http"`
 	Https         HttpsConfig   `toml:"https"`
 	Auto_cert     AutoCert      `toml:"auto_cert"`
@@ -15,6 +14,10 @@ type TomlConfig struct {
 	Leveldb       LevelDB       `toml:"leveldb"`
 	Smtp          SMTP          `toml:"smtp"`
 	Sqlite        Sqlite        `toml:"sqlite"`
+}
+
+type Log struct {
+	Level string `toml:"level"`
 }
 
 type API struct {

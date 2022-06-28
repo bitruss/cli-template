@@ -7,9 +7,8 @@ import (
 )
 
 func Cli_get_flags() []cli.Flag {
-
 	allflags := []cli.Flag{}
-	allflags = append(allflags, &cli.StringFlag{Name: "log_level", Required: false})
+	allflags = append(allflags, &cli.StringFlag{Name: "log.level", Required: false})
 	allflags = append(allflags, &cli.StringFlag{Name: "http.enable", Required: false})
 	allflags = append(allflags, &cli.StringFlag{Name: "https.enable", Required: false})
 	return allflags
@@ -18,8 +17,8 @@ func Cli_get_flags() []cli.Flag {
 func Cli_set_config(clictx *cli.Context) {
 	config := conf.Get_config()
 
-	if clictx.IsSet("log_level") {
-		config.Toml_config.Log_level = clictx.String("log_level")
+	if clictx.IsSet("log.level") {
+		config.Toml_config.Log.Level = clictx.String("log.level")
 	}
 
 	if clictx.IsSet("http.enable") {

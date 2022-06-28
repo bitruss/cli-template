@@ -1,5 +1,6 @@
-daemon_name = 'cli-template-service'
-log_level = 'INFO'
+[log]
+level = 'TRAC'
+
 [http]
 enable = true
 port = 80
@@ -56,7 +57,6 @@ upgrade_url = ''
 [ip_remote]
 enable = false
 ipstack_key = ''
-
 [ip_remote.redis]
 host = 'localhost'
 port = 6379
