@@ -1,5 +1,5 @@
 [log]
-level = 'TRAC'
+level = 'INFO'
 
 [http]
 enable = true
