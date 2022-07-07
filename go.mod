@@ -24,13 +24,14 @@ require (
 	github.com/coreservice-io/echo_middleware v0.1.17
 	github.com/coreservice-io/ecs_uploader v0.0.5
 	github.com/coreservice-io/gorm_log v0.1.4
-	github.com/coreservice-io/ip_geo v0.0.12
+	github.com/coreservice-io/ip_geo v0.0.17
 	github.com/coreservice-io/job v0.1.20
 	github.com/coreservice-io/log v0.1.18
 	github.com/coreservice-io/logrus_log v0.1.20
 	github.com/coreservice-io/redis_spr v0.1.20
 	github.com/coreservice-io/reference v0.0.8
 	github.com/coreservice-io/utils v0.1.12
+	github.com/pelletier/go-toml v1.9.5
 	github.com/pelletier/go-toml/v2 v2.0.2
 	github.com/syndtr/goleveldb v1.0.0
 	gorm.io/driver/sqlite v1.2.6

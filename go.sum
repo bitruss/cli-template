@@ -30,8 +30,8 @@ github.com/coreservice-io/ecs_uploader v0.0.5 h1:AAGp9YfoYXbjLd8hDDhbfC/OSXEs5dD
 github.com/coreservice-io/ecs_uploader v0.0.5/go.mod h1:6BlykKtAqlXOQULX3YaQ/aSS7n0pU76TkBCF0Q/lxSo=
 github.com/coreservice-io/gorm_log v0.1.4 h1:C3Xlu1TlfUvYtobJgEF5eWeQroawSqafxDubnkuSlE8=
 github.com/coreservice-io/gorm_log v0.1.4/go.mod h1:KhA2B4emVBneXuWlPQZ//PyrJIBLXbbhkFr/llPtUSI=
-github.com/coreservice-io/ip_geo v0.0.12 h1:l2UoBqaaZo8MiSUzK9VXSXj9oR+Dz3EOcmll/a/uRzM=
-github.com/coreservice-io/ip_geo v0.0.12/go.mod h1:XxQMiMgiy3c2tr28e1xzAC09YXxSymB1RyzWPrJtb1k=
+github.com/coreservice-io/ip_geo v0.0.17 h1:StcQ4mZ69dxvTvx418PsuY0l9SEEnNL3OWeGblNzlWA=
+github.com/coreservice-io/ip_geo v0.0.17/go.mod h1:XxQMiMgiy3c2tr28e1xzAC09YXxSymB1RyzWPrJtb1k=
 github.com/coreservice-io/job v0.1.20 h1:eCtVkB5MrCK9K7XFUu2X6D894H3mzy+puLl3HFC6yic=
 github.com/coreservice-io/job v0.1.20/go.mod h1:79+xxo1XzAYSyFXmOhsSzgzqKL0J40dVOtH0fhu3ORs=
 github.com/coreservice-io/log v0.1.18 h1:hZ8MXvnxtchnjap36ac4Cpe63W8Mg2eRahBtP9ykAHE=
@@ -223,6 +223,8 @@ github.com/otiai10/curr v0.0.0-20150429015615-9b4961190c95/go.mod h1:9qAhocn7zKJ
 github.com/otiai10/curr v1.0.0/go.mod h1:LskTG5wDwr8Rs+nNQ+1LlxRjAtTZZjtJW4rMXl6j4vs=
 github.com/otiai10/mint v1.3.0/go.mod h1:F5AjcsTsWUqX+Na9fpHb52P8pcRX2CI6A3ctIT91xUo=
 github.com/otiai10/mint v1.3.3/go.mod h1:/yxELlJQ0ufhjUwhshSj+wFjZ78CnZ48/1wtmBH1OTc=
+github.com/pelletier/go-toml v1.9.5 h1:4yBQzkHv+7BHq2PQUZF3Mx0IYxG7LsP222s7Agd3ve8=
+github.com/pelletier/go-toml v1.9.5/go.mod h1:u1nR/EPcESfeI/szUZKdtJ0xRNbUoANCkoOuaOx1Y+c=
 github.com/pelletier/go-toml/v2 v2.0.2 h1:+jQXlF3scKIcSEKkdHzXhCTDLPFi5r1wnK6yPS+49Gw=
 github.com/pelletier/go-toml/v2 v2.0.2/go.mod h1:MovirKjgVRESsAvNZlAjtFwV867yGuwRkXbG66OzopI=
 github.com/pkg/diff v0.0.0-20210226163009-20ebb0f2a09e/go.mod h1:pJLUxLENpZxwdsKMEsNbx1VGcRFpLqf3715MtcvvzbA=
