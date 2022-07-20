@@ -36,7 +36,7 @@ func Init_(name string, localDbFile string, ip2LUpgradeUrl string, upgradeInterv
 	}
 
 	ipClient := &IpLocal{}
-	//new instance ipStackAndIp2Location
+	//new instance IpDataAndIp2Location
 	ipLocalClient, err := ip2l.New(localDbFile, ip2LUpgradeUrl, upgradeInterval, logger, panicHandler)
 	if err != nil {
 		return err

@@ -68,6 +68,12 @@ func InitPlugin() {
 	}
 
 	/////////////////////////
+	err = initSpr()
+	if err != nil {
+		basic.Logger.Fatalln("initSpr err:", err)
+	}
+
+	/////////////////////////
 	err = initReference()
 	if err != nil {
 		basic.Logger.Fatalln("initReference err:", err)

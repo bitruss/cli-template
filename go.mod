@@ -24,14 +24,13 @@ require (
 	github.com/coreservice-io/echo_middleware v0.1.17
 	github.com/coreservice-io/ecs_uploader v0.0.5
 	github.com/coreservice-io/gorm_log v0.1.4
-	github.com/coreservice-io/ip_geo v0.0.17
+	github.com/coreservice-io/ip_geo v0.0.18
 	github.com/coreservice-io/job v0.1.20
 	github.com/coreservice-io/log v0.1.18
 	github.com/coreservice-io/logrus_log v0.1.20
 	github.com/coreservice-io/redis_spr v0.1.20
 	github.com/coreservice-io/reference v0.0.8
 	github.com/coreservice-io/utils v0.1.12
-	github.com/pelletier/go-toml v1.9.5
 	github.com/pelletier/go-toml/v2 v2.0.2
 	github.com/syndtr/goleveldb v1.0.0
 	gorm.io/driver/sqlite v1.2.6
@@ -57,6 +56,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/snappy v0.0.0-20180518054509-2e65f85255db // indirect
 	github.com/ip2location/ip2location-go v8.3.0+incompatible // indirect
+	github.com/ipdata/go v0.7.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/josharian/intern v1.0.0 // indirect

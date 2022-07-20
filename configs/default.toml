@@ -34,6 +34,9 @@ username = 'xxxx'
 password = 'xxxx'
 prefix = 'template'
 
+[spr]
+enable = false
+
 [db]
 enable = false
 host = 'localhost'
@@ -56,7 +59,7 @@ upgrade_url = ''
 
 [ip_remote]
 enable = false
-ipstack_key = ''
+key = ''
 [ip_remote.redis]
 host = 'localhost'
 port = 6379

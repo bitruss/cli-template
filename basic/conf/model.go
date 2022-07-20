@@ -7,6 +7,7 @@ type TomlConfig struct {
 	Auto_cert     AutoCert      `toml:"auto_cert"`
 	Api           API           `toml:"api"`
 	Redis         Redis         `toml:"redis"`
+	Spr           Spr           `tome:"spr"`
 	Db            DB            `toml:"db"`
 	Elasticsearch ElasticSearch `toml:"elasticsearch"`
 	IpLocal       IpLocal       `toml:"ip_local"`
@@ -48,6 +49,10 @@ type AutoCert struct {
 	Url            string `toml:"url"`
 }
 
+type Spr struct {
+	Enable bool `toml:"enable"`
+}
+
 type Redis struct {
 	Enable   bool   `toml:"enable"`
 	Use_tls  bool   `toml:"use_tls"`
@@ -82,9 +87,9 @@ type IpLocal struct {
 }
 
 type IpRemote struct {
-	Enable      bool           `toml:"enable"`
-	Ipstack_key string         `toml:"ipstack_key"`
-	Redis       IpRemote_Redis `toml:"redis"`
+	Enable bool           `toml:"enable"`
+	Key    string         `toml:"key"`
+	Redis  IpRemote_Redis `toml:"redis"`
 }
 
 type IpRemote_Redis struct {

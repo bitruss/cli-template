@@ -11,9 +11,9 @@ func initSpr() error {
 
 	toml_conf := conf.Get_config().Toml_config
 
-	if toml_conf.Redis.Enable {
+	if toml_conf.Spr.Enable {
 
-		redis_conf := redis_spr.RedisConfig{
+		spr_redis_conf := redis_spr.RedisConfig{
 			Addr:     toml_conf.Redis.Host,
 			UserName: toml_conf.Redis.Username,
 			Password: toml_conf.Redis.Password,
@@ -22,8 +22,8 @@ func initSpr() error {
 			UseTLS:   toml_conf.Redis.Use_tls,
 		}
 
-		basic.Logger.Infoln("init redis plugin with config:", redis_conf)
-		return spr_plugin.Init(&redis_conf, basic.Logger)
+		basic.Logger.Infoln("init spr plugin with config:", spr_redis_conf)
+		return spr_plugin.Init(&spr_redis_conf, basic.Logger)
 	}
 
 	return nil
