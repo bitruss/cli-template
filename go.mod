@@ -29,7 +29,7 @@ require (
 	github.com/coreservice-io/log v0.1.18
 	github.com/coreservice-io/logrus_log v0.1.20
 	github.com/coreservice-io/redis_spr v0.1.20
-	github.com/coreservice-io/reference v0.0.8
+	github.com/coreservice-io/reference v0.0.9
 	github.com/coreservice-io/utils v0.1.12
 	github.com/pelletier/go-toml/v2 v2.0.2
 	github.com/syndtr/goleveldb v1.0.0
