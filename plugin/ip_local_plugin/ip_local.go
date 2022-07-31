@@ -3,12 +3,12 @@ package ip_local_plugin
 import (
 	"fmt"
 
-	"github.com/coreservice-io/ip_geo/ip2l"
+	"github.com/coreservice-io/ip_geo/local"
 	"github.com/coreservice-io/log"
 )
 
 type IpLocal struct {
-	Client *ip2l.Ip2LClient
+	Client local.IpGeoLocal
 }
 
 var instanceMap = map[string]*IpLocal{}
@@ -36,8 +36,8 @@ func Init_(name string, localDbFile string, ip2LUpgradeUrl string, upgradeInterv
 	}
 
 	ipClient := &IpLocal{}
-	//new instance IpDataAndIp2Location
-	ipLocalClient, err := ip2l.New(localDbFile, ip2LUpgradeUrl, upgradeInterval, logger, panicHandler)
+	//new instance
+	ipLocalClient, err := local.NewIp2L(logger, localDbFile, ip2LUpgradeUrl, upgradeInterval, panicHandler)
 	if err != nil {
 		return err
 	}

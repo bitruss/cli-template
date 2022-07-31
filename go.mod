@@ -24,7 +24,7 @@ require (
 	github.com/coreservice-io/echo_middleware v0.1.17
 	github.com/coreservice-io/ecs_uploader v0.0.5
 	github.com/coreservice-io/gorm_log v0.1.4
-	github.com/coreservice-io/ip_geo v0.0.19
+	github.com/coreservice-io/ip_geo v0.0.20
 	github.com/coreservice-io/job v0.1.20
 	github.com/coreservice-io/log v0.1.18
 	github.com/coreservice-io/logrus_log v0.1.20
