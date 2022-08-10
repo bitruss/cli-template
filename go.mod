@@ -15,13 +15,13 @@ require (
 	github.com/olivere/elastic/v7 v7.0.32
 	github.com/swaggo/echo-swagger v1.3.0
 	github.com/swaggo/swag v1.8.1
-	github.com/urfave/cli/v2 v2.10.3
+	github.com/urfave/cli/v2 v2.11.1
 	gorm.io/driver/mysql v1.3.3
 	gorm.io/gorm v1.23.4
 )
 
 require (
-	github.com/coreservice-io/daemon v0.0.0-20220801091130-8821cc4e2904
+	github.com/coreservice-io/daemon v0.0.1
 	github.com/coreservice-io/echo_middleware v0.1.17
 	github.com/coreservice-io/ecs_uploader v0.0.5
 	github.com/coreservice-io/gorm_log v0.1.4
