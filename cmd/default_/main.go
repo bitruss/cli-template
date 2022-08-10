@@ -26,6 +26,13 @@ func StartDefault(clictx *cli.Context) {
 
 	start_components()
 
+	go func() {
+		for {
+			basic.Logger.Infoln("running")
+			time.Sleep(3 * time.Second)
+		}
+	}()
+
 	for {
 		//never quit
 		time.Sleep(time.Duration(1) * time.Hour)
