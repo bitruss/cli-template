@@ -25,8 +25,6 @@ github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5P
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
-github.com/coreservice-io/daemon v0.0.1 h1:8+ct39jYissHtIZoYfskQkRpRhCGPtg1tnzPvJoTlZ0=
-github.com/coreservice-io/daemon v0.0.1/go.mod h1:n0rqffp2SNSKn1drSo6mEtwpYz+55s8BvLXX/C9j4pU=
 github.com/coreservice-io/echo_middleware v0.1.17 h1:2KU8tA5eZ4DBD2lfWJnziT7H6o4FXl7ZIvO3DcKTRLE=
 github.com/coreservice-io/echo_middleware v0.1.17/go.mod h1:GX4QcjRde7GA2nY8mp1WvU8YHGtef9n96KAreq+cRZ4=
 github.com/coreservice-io/ecs_uploader v0.0.5 h1:AAGp9YfoYXbjLd8hDDhbfC/OSXEs5dDOZPLhk5hCqiM=

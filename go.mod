@@ -21,7 +21,6 @@ require (
 )
 
 require (
-	github.com/coreservice-io/daemon v0.0.1
 	github.com/coreservice-io/echo_middleware v0.1.17
 	github.com/coreservice-io/ecs_uploader v0.0.5
 	github.com/coreservice-io/gorm_log v0.1.4

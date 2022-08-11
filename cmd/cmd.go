@@ -3,9 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"os/exec"
-	"path/filepath"
-	"runtime"
 	"strings"
 
 	"github.com/coreservice-io/cli-template/basic"
@@ -14,7 +11,6 @@ import (
 	"github.com/coreservice-io/cli-template/cmd/default_"
 	"github.com/coreservice-io/cli-template/cmd/default_/http/api"
 	"github.com/coreservice-io/cli-template/cmd/log"
-	daemon "github.com/coreservice-io/daemon/daemon_util"
 	ilog "github.com/coreservice-io/log"
 	"github.com/urfave/cli/v2"
 )
@@ -23,28 +19,6 @@ const CMD_NAME_DEFAULT = "default"
 const CMD_NAME_GEN_API = "gen_api"
 const CMD_NAME_LOG = "log"
 const CMD_NAME_CONFIG = "config"
-
-type DaemonProcess struct {
-	cliContext *cli.Context
-}
-
-func (dp *DaemonProcess) Start() {
-	go dp.Run()
-	return
-}
-
-func (dp *DaemonProcess) Stop() {
-
-}
-
-func (dp *DaemonProcess) Run() {
-	// Do work here
-	default_.StartDefault(dp.cliContext)
-}
-
-type Service struct {
-	daemon.Daemon
-}
 
 ////////config to do cmd ///////////
 func ConfigCmd() *cli.App {
@@ -82,39 +56,7 @@ func ConfigCmd() *cli.App {
 	////////////////////////////////
 
 	var defaultAction = func(clictx *cli.Context) error {
-		//get exe path
-		file, err := exec.LookPath(os.Args[0])
-		if err != nil {
-			basic.Logger.Fatalln("exec.LookPath err", err)
-		}
-		runPath, err := filepath.Abs(file)
-		if err != nil {
-			basic.Logger.Fatalln("filepath.Abs err", err)
-		}
-		//basic.Logger.Infoln("running file:", runPath)
-		appName := filepath.Base(runPath)
-		//basic.Logger.Infoln("fileName:", appName)
-
-		//new daemon instance
-		//daemon kind
-		kind := daemon.SystemDaemon
-		if runtime.GOOS == "darwin" {
-			kind = daemon.UserAgent
-		}
-		daemonInstance, err := daemon.New(appName, appName+"service", kind)
-		if err != nil {
-			basic.Logger.Fatalln("daemon.New err", err)
-		}
-		dp := &DaemonProcess{
-			cliContext: clictx,
-		}
-		s := &Service{
-			Daemon: daemonInstance,
-		}
-		_, err = s.Run(dp)
-		if err != nil {
-			return err
-		}
+		default_.StartDefault(clictx)
 		return nil
 	}
 
