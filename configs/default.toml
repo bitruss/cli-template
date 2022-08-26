@@ -51,23 +51,9 @@ host = 'localhost'
 username = 'xxxx'
 password = 'xxxx'
 
-[ip_local]
-enable = false
-db_path = 'assets/ip2l/IP2LOCATION-LITE-DB1.BIN'
-upgrade_interval = 172800
-upgrade_url = ''
-
-[ip_remote]
-enable = false
-key = ''
-[ip_remote.redis]
-host = 'localhost'
-port = 6379
-prefix = 'core:ipgeo:'
-username = ''
-password = ''
-use_tls = false
-
+[geo_ip]
+enable = true
+db_path = 'assets/geo_ip/geo_ip.csv'
 
 [leveldb]
 enable = false

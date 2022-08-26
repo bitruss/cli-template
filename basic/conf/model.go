@@ -10,8 +10,7 @@ type TomlConfig struct {
 	Spr           Spr           `tome:"spr"`
 	Db            DB            `toml:"db"`
 	Elasticsearch ElasticSearch `toml:"elasticsearch"`
-	IpLocal       IpLocal       `toml:"ip_local"`
-	IpRemote      IpRemote      `toml:"ip_remote"`
+	GeoIp         GeoIp         `toml:"geo_ip"`
 	Leveldb       LevelDB       `toml:"leveldb"`
 	Smtp          SMTP          `toml:"smtp"`
 	Sqlite        Sqlite        `toml:"sqlite"`
@@ -79,26 +78,9 @@ type ElasticSearch struct {
 	Password string `toml:"password"`
 }
 
-type IpLocal struct {
-	Enable           bool   `toml:"enable"`
-	Db_path          string `toml:"db_path"`
-	Upgrade_interval int    `toml:"upgrade_interval"`
-	Upgrade_url      string `toml:"upgrade_url"`
-}
-
-type IpRemote struct {
-	Enable bool           `toml:"enable"`
-	Key    string         `toml:"key"`
-	Redis  IpRemote_Redis `toml:"redis"`
-}
-
-type IpRemote_Redis struct {
-	Host     string `toml:"host"`
-	Port     int    `toml:"port"`
-	Prefix   string `toml:"prefix"`
-	Username string `toml:"username"`
-	Password string `toml:"password"`
-	Use_tls  bool   `toml:"use_tls"`
+type GeoIp struct {
+	Enable  bool   `toml:"enable"`
+	Db_path string `toml:"db_path"`
 }
 
 type LevelDB struct {

@@ -8,6 +8,7 @@ import (
 	"github.com/coreservice-io/cli-template/cmd/default_/http"
 	"github.com/coreservice-io/cli-template/cmd/default_/plugin"
 	"github.com/coreservice-io/cli-template/plugin/auto_cert_plugin"
+	"github.com/coreservice-io/cli-template/plugin/geo_ip_plugin"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 )
@@ -25,6 +26,11 @@ func StartDefault(clictx *cli.Context) {
 	go start_jobs()
 
 	start_components()
+
+	basic.Logger.Infoln(geo_ip_plugin.GetInstance().GetInfo("129.146.243.246"))
+	basic.Logger.Infoln(geo_ip_plugin.GetInstance().GetInfo("192.168.189.125"))
+	basic.Logger.Infoln(geo_ip_plugin.GetInstance().GetInfo("2600:4040:a912:a200:a438:9968:96d9:c3e4"))
+	basic.Logger.Infoln(geo_ip_plugin.GetInstance().GetInfo("2600:387:1:809::3a"))
 
 	go func() {
 		for {
