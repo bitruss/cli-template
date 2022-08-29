@@ -45,7 +45,7 @@ func GetPeer(tag string) (*PeerInfo, error) {
 		smart_cache.Ref_Set(reference_plugin.GetInstance(), key, redis_result)
 		return redis_result, nil
 	} else if err == redis.Nil || err == smart_cache.TempNil {
-		return nil, nil
+		return nil, redis.Nil
 	} else {
 		return nil, err
 	}

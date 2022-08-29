@@ -2,6 +2,7 @@ package smart_cache
 
 import (
 	"context"
+	"errors"
 	"math/rand"
 	"reflect"
 	"time"
@@ -19,11 +20,22 @@ const TempNil = temp_nil_error("temp_nil")
 const temp_nil = "temp_nil"
 const local_reference_secs = 5 //don't change this number as 5 is the proper number
 
+var RedisRefresh = errors.New("redis_refresh")
+
 // check weather we need do refresh
 // the probobility becomes lager when left seconds close to 0
 // this goal of this function is to avoid big traffic glitch
-func CheckTtlRefresh(secleft int64) bool {
+func checkTtlRefresh(secleft int64) bool {
 	if secleft > 0 && secleft <= 3 {
+		if rand.Intn(int(secleft)*10) == 1 {
+			return true
+		}
+	}
+	return false
+}
+
+func checkRedisTtlRefresh(secleft int64) bool {
+	if secleft > 0 && secleft <= 15 {
 		if rand.Intn(int(secleft)*10) == 1 {
 			return true
 		}
@@ -33,7 +45,7 @@ func CheckTtlRefresh(secleft int64) bool {
 
 func Ref_Get(localRef *reference.Reference, keystr string) (result interface{}) {
 	localvalue, ttl := localRef.Get(keystr)
-	if !CheckTtlRefresh(ttl) && localvalue != nil {
+	if !checkTtlRefresh(ttl) && localvalue != nil {
 		return localvalue
 	}
 	return nil
@@ -49,6 +61,17 @@ func Ref_Set_RTTL(localRef *reference.Reference, keystr string, value interface{
 
 // //first try from localRef if not found then try from remote redis
 func Redis_Get(ctx context.Context, Redis *redis.ClusterClient, isJSON bool, keystr string, result interface{}) error {
+	// 1/20 check ttl
+	if rand.Intn(20) == 0 {
+		ttl, err := Redis.TTL(context.Background(), keystr).Result()
+		// if ttl==-1 means no expire
+
+		// if has expire time
+		if err == nil && ttl != -1 && checkRedisTtlRefresh(int64(ttl.Seconds())) {
+			//need refresh
+			return RedisRefresh
+		}
+	}
 
 	scmd := Redis.Get(ctx, keystr) //trigger remote redis get
 	r_bytes, err := scmd.Bytes()

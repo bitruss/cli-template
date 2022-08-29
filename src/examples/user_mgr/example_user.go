@@ -2,6 +2,7 @@ package user_mgr
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/coreservice-io/cli-template/basic"
@@ -82,11 +83,12 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 			basic.Logger.Debugln("QueryUser hit from redis")
 			smart_cache.Ref_Set(reference_plugin.GetInstance(), key, redis_result)
 			return redis_result, nil
-		} else if err == redis.Nil {
+		} else if err == redis.Nil || err == smart_cache.RedisRefresh {
 			//continue to get from db part
 		} else if err == smart_cache.TempNil {
 			//won't happen actually unless you set a nil pointer of queryResult when update
 			basic.Logger.Errorln("QueryUser smart_cache.TempNil")
+			return nil, errors.New("temp_nil")
 		} else {
 			//redis may broken, just return to keep db safe
 			return redis_result, err
