@@ -7,7 +7,6 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
 	"github.com/coreservice-io/cli-template/plugin/reference_plugin"
 	"github.com/coreservice-io/cli-template/src/common/smart_cache"
-	"github.com/go-redis/redis/v8"
 )
 
 //example for GormDB and tools cache
@@ -44,9 +43,12 @@ func GetPeer(tag string) (*PeerInfo, error) {
 		basic.Logger.Debugln("GetPeer hit from redis")
 		smart_cache.Ref_Set(reference_plugin.GetInstance(), key, redis_result)
 		return redis_result, nil
-	} else if err == redis.Nil || err == smart_cache.TempNil {
-		return nil, redis.Nil
 	} else {
 		return nil, err
 	}
+	// } else if err == redis.Nil || err == smart_cache.TempNil {
+	// 	return nil, redis.Nil
+	// } else {
+	// 	return nil, err
+	// }
 }
