@@ -53,7 +53,7 @@ func GetDBKV(tx *gorm.DB, keyStr string, fromCache bool, updateCache bool) (*DBK
 		} else if err == redis.Nil {
 			//continue to get from db part
 		} else if err == smart_cache.TempNil {
-			return nil, nil
+			return nil, smart_cache.TempNil
 		} else {
 			//redis may broken, just return to keep db safe
 			return redis_result, err
@@ -72,9 +72,9 @@ func GetDBKV(tx *gorm.DB, keyStr string, fromCache bool, updateCache bool) (*DBK
 	} else {
 		if len(queryResults) == 0 {
 			if updateCache {
-				smart_cache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, nil, 300)
+				smart_cache.RR_Set_TempNil(context.Background(), redis_plugin.GetInstance().ClusterClient, key)
 			}
-			return nil, nil
+			return nil, smart_cache.TempNil
 		} else {
 			if updateCache {
 				smart_cache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, queryResults[0], 300)
