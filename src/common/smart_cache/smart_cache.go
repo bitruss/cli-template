@@ -16,14 +16,14 @@ type temp_nil_error string
 
 func (e temp_nil_error) Error() string { return string(e) }
 
-const TempNil = temp_nil_error("temp_nil")
+const ErrTempNil = temp_nil_error("temp_nil")
 const temp_nil = "temp_nil"
 const local_reference_secs = 5 //don't change this number as 5 is the proper number
 
 // check weather we need do refresh
 // the probobility becomes lager when left seconds close to 0
 // this goal of this function is to avoid big traffic glitch
-func checkRefTtlRefresh(secleft int64) bool {
+func check_ref_ttl_refresh(secleft int64) bool {
 	if secleft == 0 {
 		return true
 	}
@@ -36,7 +36,7 @@ func checkRefTtlRefresh(secleft int64) bool {
 	return false
 }
 
-func checkRedisTtlRefresh(secleft int64) bool {
+func check_redis_ttl_refresh(secleft int64) bool {
 	if secleft == 0 {
 		return true
 	}
@@ -50,17 +50,17 @@ func checkRedisTtlRefresh(secleft int64) bool {
 
 func Ref_Get(localRef *reference.Reference, keystr string) (result interface{}) {
 	localvalue, ttl := localRef.Get(keystr)
-	if !checkRefTtlRefresh(ttl) && localvalue != nil {
+	if !check_ref_ttl_refresh(ttl) && localvalue != nil {
 		return localvalue
 	}
 	return nil
 }
 
 func Ref_Set(localRef *reference.Reference, keystr string, value interface{}) error {
-	return Ref_Set_RTTL(localRef, keystr, value, local_reference_secs)
+	return Ref_Set_TTL(localRef, keystr, value, local_reference_secs)
 }
 
-func Ref_Set_RTTL(localRef *reference.Reference, keystr string, value interface{}, ref_ttl_second int64) error {
+func Ref_Set_TTL(localRef *reference.Reference, keystr string, value interface{}, ref_ttl_second int64) error {
 	return localRef.Set(keystr, value, ref_ttl_second)
 }
 
@@ -72,7 +72,7 @@ func Redis_Get(ctx context.Context, Redis *redis.ClusterClient, isJSON bool, key
 		// if ttl==-1 means no expire
 
 		// if has expire time
-		if err == nil && ttl != -1 && checkRedisTtlRefresh(int64(ttl.Seconds())) {
+		if err == nil && ttl != -1 && check_redis_ttl_refresh(int64(ttl.Seconds())) {
 			//need refresh
 			return redis.Nil
 		}
@@ -85,7 +85,7 @@ func Redis_Get(ctx context.Context, Redis *redis.ClusterClient, isJSON bool, key
 	}
 
 	if string(r_bytes) == temp_nil {
-		return TempNil
+		return ErrTempNil
 	}
 
 	if isJSON {
@@ -96,16 +96,20 @@ func Redis_Get(ctx context.Context, Redis *redis.ClusterClient, isJSON bool, key
 }
 
 func RR_Set(ctx context.Context, Redis *redis.ClusterClient, localRef *reference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64) error {
-	return RR_Set_RTTL(ctx, Redis, localRef, isJSON, keystr, value, redis_ttl_second, local_reference_secs)
+	return RR_Set_TTL(ctx, Redis, localRef, isJSON, keystr, value, redis_ttl_second, local_reference_secs)
 }
 
-func RR_Set_TempNil(ctx context.Context, Redis *redis.ClusterClient, keystr string) error {
+func RR_SetErrTempNil(ctx context.Context, Redis *redis.ClusterClient, keystr string) error {
 	return Redis.Set(ctx, keystr, temp_nil, time.Duration(5)*time.Second).Err()
+}
+
+func RR_SetErrTempNil_TTL(ctx context.Context, Redis *redis.ClusterClient, keystr string, ttl_second int64) error {
+	return Redis.Set(ctx, keystr, temp_nil, time.Duration(ttl_second)*time.Second).Err()
 }
 
 // reference set && redis set
 // set both value to both local reference & remote redis
-func RR_Set_RTTL(ctx context.Context, Redis *redis.ClusterClient, localRef *reference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64, ref_ttl_second int64) error {
+func RR_Set_TTL(ctx context.Context, Redis *redis.ClusterClient, localRef *reference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64, ref_ttl_second int64) error {
 	if value == nil {
 		return errors.New("value nil not allowed")
 	}

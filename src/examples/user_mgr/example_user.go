@@ -84,10 +84,10 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 			return redis_result, nil
 		} else if err == redis.Nil {
 			//continue to get from db part
-		} else if err == smart_cache.TempNil {
+		} else if err == smart_cache.ErrTempNil {
 			//won't happen actually unless you set a nil pointer of queryResult when update
 			basic.Logger.Errorln("QueryUser smart_cache.TempNil")
-			return nil, smart_cache.TempNil
+			return nil, smart_cache.ErrTempNil
 		} else {
 			//redis may broken, just return to keep db safe
 			return redis_result, err
