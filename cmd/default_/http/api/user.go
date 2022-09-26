@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func config_user(httpServer *echo.Echo) {
+func configUser(httpServer *echo.Echo) {
 	//create
 	httpServer.POST("/api/user/create", createUser, MidToken)
 

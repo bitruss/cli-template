@@ -24,7 +24,7 @@ func healthCheck(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, &MSG_RESP_HEALTH{Unixtime: time.Now().Unix()})
 }
 
-func config_health(httpServer *echo.Echo) {
+func configHealth(httpServer *echo.Echo) {
 	//health
 	httpServer.GET("/api/health", healthCheck)
 }

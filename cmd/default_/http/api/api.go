@@ -31,16 +31,16 @@ import (
 
 func DeclareApi(httpServer *echo.Echo) {
 	//health
-	config_health(httpServer)
+	configHealth(httpServer)
 	//user
-	config_user(httpServer)
+	configUser(httpServer)
 }
 
 func ConfigApi(httpServer *echo.Echo) {
 	httpServer.GET("/*", echoSwagger.WrapHandler)
 }
 
-func Gen_Api_Docs() {
+func GenApiDocs() {
 
 	toml_config := conf.Get_config().Toml_config
 

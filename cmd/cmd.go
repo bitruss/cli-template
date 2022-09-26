@@ -20,7 +20,7 @@ const CMD_NAME_GEN_API = "gen_api"
 const CMD_NAME_LOG = "log"
 const CMD_NAME_CONFIG = "config"
 
-////////config to do cmd ///////////
+// //////config to do cmd ///////////
 func ConfigCmd() *cli.App {
 
 	//////////init config/////////////
@@ -86,7 +86,7 @@ func ConfigCmd() *cli.App {
 				Name:  CMD_NAME_GEN_API,
 				Usage: "api command",
 				Action: func(clictx *cli.Context) error {
-					api.Gen_Api_Docs()
+					api.GenApiDocs()
 					return nil
 				},
 			},
