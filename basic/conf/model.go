@@ -1,19 +1,19 @@
 package conf
 
 type TomlConfig struct {
-	Log           Log           `toml:"log"`
-	Http          HttpConfig    `toml:"http"`
-	Https         HttpsConfig   `toml:"https"`
-	Auto_cert     AutoCert      `toml:"auto_cert"`
-	Api           API           `toml:"api"`
-	Redis         Redis         `toml:"redis"`
-	Spr           Spr           `tome:"spr"`
-	Db            DB            `toml:"db"`
-	Elasticsearch ElasticSearch `toml:"elasticsearch"`
-	GeoIp         GeoIp         `toml:"geo_ip"`
-	Leveldb       LevelDB       `toml:"leveldb"`
-	Smtp          SMTP          `toml:"smtp"`
-	Sqlite        Sqlite        `toml:"sqlite"`
+	Log            Log           `toml:"log"`
+	Http           HttpConfig    `toml:"http"`
+	Https          HttpsConfig   `toml:"https"`
+	Auto_cert      AutoCert      `toml:"auto_cert"`
+	Api            API           `toml:"api"`
+	Redis          Redis         `toml:"redis"`
+	Spr            Spr           `tome:"spr"`
+	Db             DB            `toml:"db"`
+	Elastic_search ElasticSearch `toml:"elastic_search"`
+	Geo_ip         GeoIp         `toml:"geo_ip"`
+	Leveldb        LevelDB       `toml:"leveldb"`
+	Smtp           SMTP          `toml:"smtp"`
+	Sqlite         Sqlite        `toml:"sqlite"`
 }
 
 type Log struct {

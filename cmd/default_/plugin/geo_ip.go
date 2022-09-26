@@ -12,10 +12,10 @@ import (
 func initGeoIp() error {
 	toml_conf := conf.Get_config().Toml_config
 
-	if toml_conf.GeoIp.Enable {
-		dbFilePath_abs, dbFilePath_abs_exist, _ := path_util.SmartPathExist(toml_conf.GeoIp.Db_path)
+	if toml_conf.Geo_ip.Enable {
+		dbFilePath_abs, dbFilePath_abs_exist, _ := path_util.SmartPathExist(toml_conf.Geo_ip.Db_path)
 		if !dbFilePath_abs_exist {
-			return errors.New("geo_ip db file path error," + toml_conf.GeoIp.Db_path)
+			return errors.New("geo_ip db file path error," + toml_conf.Geo_ip.Db_path)
 		}
 
 		basic.Logger.Infoln("init geo_ip plugin with ",

@@ -9,12 +9,12 @@ import (
 func initEcsUploader() error {
 	toml_conf := conf.Get_config().Toml_config
 
-	if toml_conf.Elasticsearch.Enable {
+	if toml_conf.Elastic_search.Enable {
 
 		ecs_uploader_conf := ecs_uploader_plugin.Config{
-			Address:  toml_conf.Elasticsearch.Host,
-			UserName: toml_conf.Elasticsearch.Username,
-			Password: toml_conf.Elasticsearch.Password}
+			Address:  toml_conf.Elastic_search.Host,
+			UserName: toml_conf.Elastic_search.Username,
+			Password: toml_conf.Elastic_search.Password}
 
 		basic.Logger.Infoln("init ecs uploader plugin with config:", ecs_uploader_conf)
 		return ecs_uploader_plugin.Init(&ecs_uploader_conf, basic.Logger)
