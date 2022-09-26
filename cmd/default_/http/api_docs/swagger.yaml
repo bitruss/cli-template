@@ -6,17 +6,17 @@ definitions:
       meta_status:
         type: integer
     type: object
-  api.MSG_REQ_CREATE_USER:
+  api.MSG_REQ_create_user:
     properties:
       email:
         type: string
       name:
         type: string
     type: object
-  api.MSG_REQ_SearchUser:
+  api.MSG_REQ_search_user:
     properties:
       filter:
-        $ref: '#/definitions/api.MSG_REQ_SearchUser_Filter'
+        $ref: '#/definitions/api.MSG_REQ_search_user_Filter'
       limit:
         description: required
         type: integer
@@ -24,7 +24,7 @@ definitions:
         description: required
         type: integer
     type: object
-  api.MSG_REQ_SearchUser_Filter:
+  api.MSG_REQ_search_user_Filter:
     properties:
       email:
         description: optional  email can be like condition e.g " LIKE `%jack%` "
@@ -38,35 +38,35 @@ definitions:
         description: optional
         type: string
     type: object
-  api.MSG_REQ_UpdateUser:
+  api.MSG_REQ_update_user:
     properties:
       filter:
-        $ref: '#/definitions/api.MSG_REQ_UpdateUser_Filter'
+        $ref: '#/definitions/api.MSG_REQ_update_user_Filter'
       update:
-        $ref: '#/definitions/api.Msg_Req_UpdateUser_To'
+        $ref: '#/definitions/api.Msg_Req_update_user_to'
     type: object
-  api.MSG_REQ_UpdateUser_Filter:
+  api.MSG_REQ_update_user_Filter:
     properties:
       id:
         items:
           type: integer
         type: array
     type: object
-  api.MSG_RESP_CREATE_USER:
+  api.MSG_RESP_HEALTH:
+    properties:
+      unixtime:
+        type: integer
+    type: object
+  api.MSG_RESP_create_user:
     properties:
       meta_message:
         type: string
       meta_status:
         type: integer
       user:
-        $ref: '#/definitions/api.MSG_User'
+        $ref: '#/definitions/api.MSG_user'
     type: object
-  api.MSG_RESP_HEALTH:
-    properties:
-      unixtime:
-        type: integer
-    type: object
-  api.MSG_RESP_SearchUser:
+  api.MSG_RESP_search_user:
     properties:
       meta_message:
         type: string
@@ -74,10 +74,10 @@ definitions:
         type: integer
       result:
         items:
-          $ref: '#/definitions/api.MSG_User'
+          $ref: '#/definitions/api.MSG_user'
         type: array
     type: object
-  api.MSG_User:
+  api.MSG_user:
     properties:
       email:
         type: string
@@ -86,7 +86,7 @@ definitions:
       name:
         type: string
     type: object
-  api.Msg_Req_UpdateUser_To:
+  api.Msg_Req_update_user_to:
     properties:
       email:
         type: string
@@ -132,14 +132,14 @@ paths:
         name: msg
         required: true
         schema:
-          $ref: '#/definitions/api.MSG_REQ_CREATE_USER'
+          $ref: '#/definitions/api.MSG_REQ_create_user'
       produces:
       - application/json
       responses:
         "200":
           description: result
           schema:
-            $ref: '#/definitions/api.MSG_RESP_CREATE_USER'
+            $ref: '#/definitions/api.MSG_RESP_create_user'
       security:
       - ApiKeyAuth: []
       summary: creat user
@@ -154,14 +154,14 @@ paths:
         name: msg
         required: true
         schema:
-          $ref: '#/definitions/api.MSG_REQ_SearchUser'
+          $ref: '#/definitions/api.MSG_REQ_search_user'
       produces:
       - application/json
       responses:
         "200":
           description: result
           schema:
-            $ref: '#/definitions/api.MSG_RESP_SearchUser'
+            $ref: '#/definitions/api.MSG_RESP_search_user'
       security:
       - ApiKeyAuth: []
       summary: search user
@@ -178,7 +178,7 @@ paths:
         name: msg
         required: true
         schema:
-          $ref: '#/definitions/api.MSG_REQ_UpdateUser'
+          $ref: '#/definitions/api.MSG_REQ_update_user'
       produces:
       - application/json
       responses:

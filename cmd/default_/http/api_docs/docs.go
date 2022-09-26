@@ -70,7 +70,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.MSG_REQ_CREATE_USER"
+                            "$ref": "#/definitions/api.MSG_REQ_create_user"
                         }
                     }
                 ],
@@ -78,7 +78,7 @@ const docTemplate = `{
                     "200": {
                         "description": "result",
                         "schema": {
-                            "$ref": "#/definitions/api.MSG_RESP_CREATE_USER"
+                            "$ref": "#/definitions/api.MSG_RESP_create_user"
                         }
                     }
                 }
@@ -106,7 +106,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.MSG_REQ_SearchUser"
+                            "$ref": "#/definitions/api.MSG_REQ_search_user"
                         }
                     }
                 ],
@@ -114,7 +114,7 @@ const docTemplate = `{
                     "200": {
                         "description": "result",
                         "schema": {
-                            "$ref": "#/definitions/api.MSG_RESP_SearchUser"
+                            "$ref": "#/definitions/api.MSG_RESP_search_user"
                         }
                     }
                 }
@@ -145,7 +145,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.MSG_REQ_UpdateUser"
+                            "$ref": "#/definitions/api.MSG_REQ_update_user"
                         }
                     }
                 ],
@@ -172,7 +172,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.MSG_REQ_CREATE_USER": {
+        "api.MSG_REQ_create_user": {
             "type": "object",
             "properties": {
                 "email": {
@@ -183,11 +183,11 @@ const docTemplate = `{
                 }
             }
         },
-        "api.MSG_REQ_SearchUser": {
+        "api.MSG_REQ_search_user": {
             "type": "object",
             "properties": {
                 "filter": {
-                    "$ref": "#/definitions/api.MSG_REQ_SearchUser_Filter"
+                    "$ref": "#/definitions/api.MSG_REQ_search_user_Filter"
                 },
                 "limit": {
                     "description": "required",
@@ -199,7 +199,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.MSG_REQ_SearchUser_Filter": {
+        "api.MSG_REQ_search_user_Filter": {
             "type": "object",
             "properties": {
                 "email": {
@@ -219,18 +219,18 @@ const docTemplate = `{
                 }
             }
         },
-        "api.MSG_REQ_UpdateUser": {
+        "api.MSG_REQ_update_user": {
             "type": "object",
             "properties": {
                 "filter": {
-                    "$ref": "#/definitions/api.MSG_REQ_UpdateUser_Filter"
+                    "$ref": "#/definitions/api.MSG_REQ_update_user_Filter"
                 },
                 "update": {
-                    "$ref": "#/definitions/api.Msg_Req_UpdateUser_To"
+                    "$ref": "#/definitions/api.Msg_Req_update_user_to"
                 }
             }
         },
-        "api.MSG_REQ_UpdateUser_Filter": {
+        "api.MSG_REQ_update_user_Filter": {
             "type": "object",
             "properties": {
                 "id": {
@@ -238,20 +238,6 @@ const docTemplate = `{
                     "items": {
                         "type": "integer"
                     }
-                }
-            }
-        },
-        "api.MSG_RESP_CREATE_USER": {
-            "type": "object",
-            "properties": {
-                "meta_message": {
-                    "type": "string"
-                },
-                "meta_status": {
-                    "type": "integer"
-                },
-                "user": {
-                    "$ref": "#/definitions/api.MSG_User"
                 }
             }
         },
@@ -263,7 +249,21 @@ const docTemplate = `{
                 }
             }
         },
-        "api.MSG_RESP_SearchUser": {
+        "api.MSG_RESP_create_user": {
+            "type": "object",
+            "properties": {
+                "meta_message": {
+                    "type": "string"
+                },
+                "meta_status": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/api.MSG_user"
+                }
+            }
+        },
+        "api.MSG_RESP_search_user": {
             "type": "object",
             "properties": {
                 "meta_message": {
@@ -275,12 +275,12 @@ const docTemplate = `{
                 "result": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/api.MSG_User"
+                        "$ref": "#/definitions/api.MSG_user"
                     }
                 }
             }
         },
-        "api.MSG_User": {
+        "api.MSG_user": {
             "type": "object",
             "properties": {
                 "email": {
@@ -294,7 +294,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.Msg_Req_UpdateUser_To": {
+        "api.Msg_Req_update_user_to": {
             "type": "object",
             "properties": {
                 "email": {
