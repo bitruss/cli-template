@@ -8,7 +8,7 @@ import (
 )
 
 type MSG_RESP_HEALTH struct {
-	UnixTime int64 `json:"unixtime"`
+	Unixtime int64 `json:"unixtime"`
 }
 
 // @Summary      /api/health
@@ -21,7 +21,7 @@ func healthCheck(ctx echo.Context) error {
 	// o := 0
 	// v := 5 / o
 	// return errors.New(strconv.Itoa(v))
-	return ctx.JSON(http.StatusOK, &MSG_RESP_HEALTH{UnixTime: time.Now().Unix()})
+	return ctx.JSON(http.StatusOK, &MSG_RESP_HEALTH{Unixtime: time.Now().Unix()})
 }
 
 func config_health(httpServer *echo.Echo) {
