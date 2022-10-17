@@ -13,6 +13,6 @@ func main() {
 	//config app to run
 	errRun := cmd.ConfigCmd().Run(os.Args)
 	if errRun != nil {
-		basic.Logger.Panicln(errRun)
+		basic.Logger.Fatalln(errRun)
 	}
 }
