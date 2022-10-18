@@ -7,7 +7,6 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
 	"github.com/coreservice-io/cli-template/plugin/reference_plugin"
 	"github.com/coreservice-io/cli-template/src/common/smart_cache"
-	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -50,7 +49,7 @@ func GetDBKV(tx *gorm.DB, keyStr string, fromCache bool, updateCache bool) (*DBK
 			basic.Logger.Debugln("GetDBKV hit from redis")
 			smart_cache.Ref_Set(reference_plugin.GetInstance(), key, redis_result)
 			return redis_result, nil
-		} else if err == redis.Nil {
+		} else if err == smart_cache.ErrNil {
 			//continue to get from db part
 		} else if err == smart_cache.ErrTempNil {
 			return nil, smart_cache.ErrTempNil

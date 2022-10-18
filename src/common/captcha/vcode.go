@@ -33,10 +33,10 @@ func GenVCode(vCodeKey string) (string, error) {
 func ValidateVCode(vCodeKey string, code string) bool {
 	key := redis_plugin.GetInstance().GenKey(redis_vcode_prefix, vCodeKey)
 	value, err := redis_plugin.GetInstance().Get(context.Background(), key).Result()
-	if err != nil && err != goredis.Nil {
-		basic.Logger.Debugln("ValidateVCode from redis err", "err", err, "vCodeKey", vCodeKey)
+	if err == goredis.Nil {
 		return false
-	} else if err == goredis.Nil {
+	} else if err != nil {
+		basic.Logger.Debugln("ValidateVCode from redis err", "err", err, "vCodeKey", vCodeKey)
 		return false
 	}
 

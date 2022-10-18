@@ -11,11 +11,11 @@ import (
 
 /////////////////////////////
 type Config struct {
-	Static_config_tree *toml.Tree
-	Static_config_path string
+	Const_config_tree *toml.Tree
+	Const_config_path string
 
-	Custom_config_tree *toml.Tree
-	Custom_config_path string
+	User_config_tree *toml.Tree
+	User_config_path string
 
 	Merge_config_tree *toml.Tree
 	Toml_config       *TomlConfig
@@ -36,13 +36,13 @@ func (config *Config) Read_merge_config() (string, error) {
 	return string(config_str), nil
 }
 
-func (config *Config) Save_custom_config() error {
-	custom_config_str, err := config.Custom_config_tree.ToTomlString()
+func (config *Config) Save_user_config() error {
+	user_config_str, err := config.User_config_tree.ToTomlString()
 	if err != nil {
 		return err
 	}
 
-	f, err := os.OpenFile(config.Custom_config_path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+	f, err := os.OpenFile(config.User_config_path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
 	if err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func (config *Config) Save_custom_config() error {
 		return err
 	}
 
-	_, err = f.Write([]byte(custom_config_str))
+	_, err = f.Write([]byte(user_config_str))
 	if err != nil {
 		return err
 	}
@@ -66,7 +66,7 @@ func (config *Config) Save_custom_config() error {
 	return nil
 }
 
-func Init_config(static_config_path string, custom_config_path string) error {
+func Init_config(const_config_path string, user_config_path string) error {
 
 	if config != nil {
 		return nil
@@ -75,33 +75,33 @@ func Init_config(static_config_path string, custom_config_path string) error {
 	var cfg Config
 	var err error
 
-	//read static config
-	s_c_p, s_c_p_exist, _ := path_util.SmartPathExist(static_config_path)
-	if !s_c_p_exist {
-		return errors.New("no config file:" + static_config_path)
-	}
-	cfg.Static_config_path = s_c_p
-	cfg.Static_config_tree, err = toml.LoadFile(s_c_p)
-	if err != nil {
-		return err
-	}
-
-	//read custom config
-	c_c_p := path_util.ExE_Path(custom_config_path)
-	cfg.Custom_config_path = c_c_p
-	_, c_c_p_exist, _ := path_util.SmartPathExist(c_c_p)
+	//read const config
+	c_c_p, c_c_p_exist, _ := path_util.SmartPathExist(const_config_path)
 	if !c_c_p_exist {
-		dir := filepath.Dir(c_c_p)
+		return errors.New("no config file:" + const_config_path)
+	}
+	cfg.Const_config_path = c_c_p
+	cfg.Const_config_tree, err = toml.LoadFile(c_c_p)
+	if err != nil {
+		return err
+	}
+
+	//read user config
+	u_c_p := path_util.ExE_Path(user_config_path)
+	cfg.User_config_path = u_c_p
+	_, u_c_p_exist, _ := path_util.SmartPathExist(u_c_p)
+	if !u_c_p_exist {
+		dir := filepath.Dir(u_c_p)
 		os.MkdirAll(dir, 0777)
-		cfg.Custom_config_tree, err = toml.Load("")
+		cfg.User_config_tree, err = toml.Load("")
 	} else {
-		cfg.Custom_config_tree, err = toml.LoadFile(c_c_p)
+		cfg.User_config_tree, err = toml.LoadFile(u_c_p)
 	}
 	if err != nil {
 		return err
 	}
 
-	cfg.Merge_config_tree, err = mergeConfig(cfg.Custom_config_tree, cfg.Static_config_tree)
+	cfg.Merge_config_tree, err = mergeConfig(cfg.User_config_tree, cfg.Const_config_tree)
 	if err != nil {
 		return err
 	}

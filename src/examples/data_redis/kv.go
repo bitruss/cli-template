@@ -46,9 +46,4 @@ func GetPeer(tag string) (*PeerInfo, error) {
 	} else {
 		return nil, err
 	}
-	// } else if err == redis.Nil || err == smart_cache.TempNil {
-	// 	return nil, redis.Nil
-	// } else {
-	// 	return nil, err
-	// }
 }

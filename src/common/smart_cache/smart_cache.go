@@ -16,6 +16,7 @@ type temp_nil_error string
 
 func (e temp_nil_error) Error() string { return string(e) }
 
+const ErrNil = redis.Nil
 const ErrTempNil = temp_nil_error("temp_nil")
 const temp_nil = "temp_nil"
 const local_reference_secs = 5 //don't change this number as 5 is the proper number
@@ -74,12 +75,15 @@ func Redis_Get(ctx context.Context, Redis *redis.ClusterClient, isJSON bool, key
 		// if has expire time
 		if err == nil && ttl != -1 && check_redis_ttl_refresh(int64(ttl.Seconds())) {
 			//need refresh
-			return redis.Nil
+			return ErrNil
 		}
 	}
 
 	scmd := Redis.Get(ctx, keystr) //trigger remote redis get
 	r_bytes, err := scmd.Bytes()
+	if err == redis.Nil {
+		return ErrNil
+	}
 	if err != nil {
 		return err
 	}

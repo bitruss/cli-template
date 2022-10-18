@@ -9,7 +9,6 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/reference_plugin"
 	"github.com/coreservice-io/cli-template/plugin/sqldb_plugin"
 	"github.com/coreservice-io/cli-template/src/common/smart_cache"
-	"github.com/go-redis/redis/v8"
 )
 
 //example for GormDB and tools cache
@@ -82,7 +81,7 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 			basic.Logger.Debugln("QueryUser hit from redis")
 			smart_cache.Ref_Set(reference_plugin.GetInstance(), key, redis_result)
 			return redis_result, nil
-		} else if err == redis.Nil {
+		} else if err == smart_cache.ErrNil {
 			//continue to get from db part
 		} else if err == smart_cache.ErrTempNil {
 			//won't happen actually unless you set a nil pointer of queryResult when update

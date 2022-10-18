@@ -42,25 +42,25 @@ func Cli_set_config(clictx *cli.Context) error {
 			return errors.New("log level error")
 		}
 
-		config.Custom_config_tree.Set("log.level", log_level)
+		config.User_config_tree.Set("log.level", log_level)
 	}
 
 	if clictx.IsSet("http.enable") {
 		http_enable := clictx.Bool("http.enable")
-		config.Custom_config_tree.Set("http.enable", http_enable)
+		config.User_config_tree.Set("http.enable", http_enable)
 	}
 
 	if clictx.IsSet("https.enable") {
 		https_enable := clictx.Bool("https.enable")
-		config.Custom_config_tree.Set("https.enable", https_enable)
+		config.User_config_tree.Set("https.enable", https_enable)
 	}
 
-	err := config.Save_custom_config()
+	err := config.Save_user_config()
 	if err != nil {
-		color.Red("save custom config error:", err)
+		color.Red("save user config error:", err)
 		return err
 	} else {
-		color.Green("new config set success")
+		color.Green("new config set success, restart app to use new config")
 	}
 	return nil
 }
