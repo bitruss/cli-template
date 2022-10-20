@@ -14,7 +14,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-//httpServer example
+// httpServer example
 func ServerStart() {
 
 	toml_conf := conf.Get_config().Toml_config
@@ -38,6 +38,7 @@ func ServerStart() {
 	})
 
 	if err == nil {
+
 		https_html_abs_dir, https_html_abs_dir_exist, _ := path_util.SmartPathExist(toml_conf.Https.Html_dir)
 		if !https_html_abs_dir_exist {
 			basic.Logger.Fatalln("https.html_dir:" + toml_conf.Https.Html_dir + " not exist on disk")

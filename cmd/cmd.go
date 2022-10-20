@@ -24,29 +24,21 @@ const CMD_NAME_CONFIG = "config"
 func ConfigCmd() *cli.App {
 
 	//////////init config/////////////
-	const_toml_conf_path := "configs/default.toml"
-	user_toml_conf_path := "user_configs/default.toml"
+	toml_target := "default"
 
 	real_args := []string{}
 	for _, arg := range os.Args {
 		arg_lower := strings.ToLower(arg)
 		if strings.HasPrefix(arg_lower, "-conf=") || strings.HasPrefix(arg_lower, "--conf=") {
-
 			toml_target := strings.TrimPrefix(arg_lower, "--conf=")
 			toml_target = strings.TrimPrefix(toml_target, "-conf=")
-			const_toml_conf_path = "configs/" + toml_target + ".toml"
-			fmt.Println("const_toml_conf_path", const_toml_conf_path)
-			//user config
-			user_toml_conf_path = "user_configs/" + toml_target + ".toml"
-			fmt.Println("user_toml_conf_path", user_toml_conf_path)
 			continue
 		}
 		real_args = append(real_args, arg)
 	}
 
 	os.Args = real_args
-
-	conf_err := conf.Init_config(const_toml_conf_path, user_toml_conf_path)
+	conf_err := conf.Init_config(toml_target)
 	if conf_err != nil {
 		basic.Logger.Fatalln("config err", conf_err)
 	}

@@ -3,16 +3,18 @@ package conf
 import (
 	"errors"
 	"os"
+	"path"
 	"path/filepath"
 
+	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/utils/path_util"
 	"github.com/pelletier/go-toml"
 )
 
-/////////////////////////////
+// ///////////////////////////
 type Config struct {
-	Const_config_tree *toml.Tree
-	Const_config_path string
+	Root_config_tree *toml.Tree
+	Root_config_path string
 
 	User_config_tree *toml.Tree
 	User_config_path string
@@ -66,7 +68,7 @@ func (config *Config) Save_user_config() error {
 	return nil
 }
 
-func Init_config(const_config_path string, user_config_path string) error {
+func Init_config(conf_target string) error {
 
 	if config != nil {
 		return nil
@@ -75,33 +77,42 @@ func Init_config(const_config_path string, user_config_path string) error {
 	var cfg Config
 	var err error
 
-	//read const config
-	c_c_p, c_c_p_exist, _ := path_util.SmartPathExist(const_config_path)
-	if !c_c_p_exist {
-		return errors.New("no config file:" + const_config_path)
+	//read root config
+	root_conf_toml_rel_path := path.Join("root_conf", conf_target+".toml")
+	r_c_p, r_c_p_exist, _ := path_util.SmartPathExist(root_conf_toml_rel_path)
+	if !r_c_p_exist {
+		return errors.New("no root config file:" + root_conf_toml_rel_path)
 	}
-	cfg.Const_config_path = c_c_p
-	cfg.Const_config_tree, err = toml.LoadFile(c_c_p)
+	cfg.Root_config_path = r_c_p
+	cfg.Root_config_tree, err = toml.LoadFile(r_c_p)
 	if err != nil {
 		return err
 	}
 
+	basic.Logger.Infoln("using root config toml file:", r_c_p)
+
 	//read user config
-	u_c_p := path_util.ExE_Path(user_config_path)
-	cfg.User_config_path = u_c_p
-	_, u_c_p_exist, _ := path_util.SmartPathExist(u_c_p)
+	user_conf_toml_abs_path := path.Join(path.Dir(path.Dir(r_c_p)), "user_conf", conf_target+".toml")
+	cfg.User_config_path = user_conf_toml_abs_path
+	basic.Logger.Infoln("using user config toml file:", user_conf_toml_abs_path)
+
+	u_c_p_exist, err := path_util.AbsPathExist(user_conf_toml_abs_path)
+	if err != nil {
+		return err
+	}
+
 	if !u_c_p_exist {
-		dir := filepath.Dir(u_c_p)
+		dir := filepath.Dir(user_conf_toml_abs_path)
 		os.MkdirAll(dir, 0777)
 		cfg.User_config_tree, err = toml.Load("")
 	} else {
-		cfg.User_config_tree, err = toml.LoadFile(u_c_p)
+		cfg.User_config_tree, err = toml.LoadFile(user_conf_toml_abs_path)
 	}
 	if err != nil {
 		return err
 	}
 
-	cfg.Merge_config_tree, err = mergeConfig(cfg.User_config_tree, cfg.Const_config_tree)
+	cfg.Merge_config_tree, err = mergeConfig(cfg.User_config_tree, cfg.Root_config_tree)
 	if err != nil {
 		return err
 	}
@@ -146,10 +157,7 @@ func readToFlat(tree *toml.Tree, parent_key string, flat_map map[string]interfac
 		switch value.(type) {
 		case *toml.Tree:
 			readToFlat(value.(*toml.Tree), newKey, flat_map)
-		//case []*toml.Tree:
-		//	for _, t := range value.([]*toml.Tree) {
-		//		FlatRead(t, newKey, flat_map)
-		//	}
+
 		default:
 			flat_map[newKey] = value
 		}

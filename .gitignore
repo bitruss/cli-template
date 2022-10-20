@@ -31,9 +31,8 @@ default_dev
 
 logs
 cli-template
+user_conf
 
  
-# don't forget to remove your pro.json
 
-#.configs/pro.json
 
