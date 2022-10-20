@@ -154,6 +154,7 @@ func readToFlat(tree *toml.Tree, parent_key string, flat_map map[string]interfac
 			newKey = parent_key + "." + key
 		}
 		value := tree.Get(key)
+		//todo
 		switch value.(type) {
 		case *toml.Tree:
 			readToFlat(value.(*toml.Tree), newKey, flat_map)
