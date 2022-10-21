@@ -6,7 +6,6 @@ import (
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
-	common_errors "github.com/coreservice-io/cli-template/src/common/errors"
 )
 
 func init_http_echo_server() error {
@@ -15,7 +14,9 @@ func init_http_echo_server() error {
 
 	if toml_conf.Http.Enable {
 		return echo_plugin.Init_("http", echo_plugin.Config{Port: toml_conf.Http.Port, Tls: false, Crt_path: "", Key_path: ""},
-			common_errors.PanicHandler, basic.Logger)
+			func(panic_err interface{}) {
+				basic.Logger.Errorln(panic_err)
+			}, basic.Logger)
 	}
 
 	return nil
@@ -37,7 +38,9 @@ func init_https_echo_server() error {
 		}
 
 		return echo_plugin.Init_("https", echo_plugin.Config{Port: toml_conf.Https.Port, Tls: true, Crt_path: crt_abs_path, Key_path: key_abs_path},
-			common_errors.PanicHandler, basic.Logger)
+			func(panic_err interface{}) {
+				basic.Logger.Errorln(panic_err)
+			}, basic.Logger)
 	}
 
 	return nil
