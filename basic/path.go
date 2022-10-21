@@ -8,6 +8,10 @@ import (
 
 var WORK_DIR string
 
+func AbsPath(rel_path string) string {
+	return filepath.Join(WORK_DIR, rel_path)
+}
+
 // 1.if input is an abs path just return it if exist return true
 // 2.if input is a relative path to working dir return abs_path if exist return true
 func PathExist(abs_or_rel_path string) (string, bool, error) {

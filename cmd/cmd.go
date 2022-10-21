@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+
 	"os"
 	"strings"
 
@@ -10,7 +12,7 @@ import (
 	"github.com/coreservice-io/cli-template/cmd/config"
 	"github.com/coreservice-io/cli-template/cmd/default_"
 	"github.com/coreservice-io/cli-template/cmd/default_/http/api"
-	"github.com/coreservice-io/cli-template/cmd/log"
+	cmd_log "github.com/coreservice-io/cli-template/cmd/log"
 	ilog "github.com/coreservice-io/log"
 	"github.com/urfave/cli/v2"
 )
@@ -40,10 +42,13 @@ func ConfigCmd() *cli.App {
 	os.Args = real_args
 	conf_err := conf.Init_config(toml_target)
 	if conf_err != nil {
-		basic.Logger.Fatalln("config err", conf_err)
+		log.Fatal("config err", conf_err)
 	}
 
 	configuration := conf.Get_config()
+
+	/////set up basic logger ///////
+	basic.InitLogger()
 
 	/////set loglevel//////
 	loglevel := ilog.ParseLogLevel(configuration.Toml_config.Log.Level)
@@ -72,9 +77,9 @@ func ConfigCmd() *cli.App {
 			{
 				Name:  CMD_NAME_LOG,
 				Usage: "print all logs",
-				Flags: log.GetFlags(),
+				Flags: cmd_log.GetFlags(),
 				Action: func(clictx *cli.Context) error {
-					log.StartLog(clictx)
+					cmd_log.StartLog(clictx)
 					return nil
 				},
 			},

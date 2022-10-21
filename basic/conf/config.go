@@ -2,6 +2,7 @@ package conf
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -88,13 +89,13 @@ func Init_config(conf_target string) error {
 		return err
 	}
 
-	basic.Logger.Infoln("using root config toml file:", r_c_p)
+	fmt.Println("using root config toml file:", r_c_p)
 
 	basic.WORK_DIR = filepath.Dir(filepath.Dir(r_c_p))
 
-	basic.Logger.Infoln("--------------------------------------")
-	basic.Logger.Infoln("working dir:", basic.WORK_DIR)
-	basic.Logger.Infoln("--------------------------------------")
+	fmt.Println("--------------------------------------")
+	fmt.Println("working dir:", basic.WORK_DIR)
+	fmt.Println("--------------------------------------")
 
 	//read user config
 
@@ -105,7 +106,7 @@ func Init_config(conf_target string) error {
 	}
 
 	cfg.User_config_path = user_conf_toml_abs_path
-	basic.Logger.Infoln("using user config toml file:", user_conf_toml_abs_path)
+	fmt.Println("using user config toml file:", user_conf_toml_abs_path)
 
 	if !u_c_p_exist {
 		dir := filepath.Dir(user_conf_toml_abs_path)
