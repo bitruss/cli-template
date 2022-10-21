@@ -6,14 +6,13 @@ import (
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/coreservice-io/cli-template/plugin/geo_ip_plugin"
-	"github.com/coreservice-io/utils/path_util"
 )
 
 func initGeoIp() error {
 	toml_conf := conf.Get_config().Toml_config
 
 	if toml_conf.Geo_ip.Enable {
-		dbFilePath_abs, dbFilePath_abs_exist, _ := path_util.SmartPathExist(toml_conf.Geo_ip.Db_path)
+		dbFilePath_abs, dbFilePath_abs_exist, _ := basic.PathExist(toml_conf.Geo_ip.Db_path)
 		if !dbFilePath_abs_exist {
 			return errors.New("geo_ip db file path error," + toml_conf.Geo_ip.Db_path)
 		}

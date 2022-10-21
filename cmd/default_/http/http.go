@@ -10,7 +10,6 @@ import (
 	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/coreservice-io/cli-template/cmd/default_/http/api"
 	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
-	"github.com/coreservice-io/utils/path_util"
 	"github.com/labstack/echo/v4"
 )
 
@@ -39,7 +38,7 @@ func ServerStart() {
 
 	if err == nil {
 
-		https_html_abs_dir, https_html_abs_dir_exist, _ := path_util.SmartPathExist(toml_conf.Https.Html_dir)
+		https_html_abs_dir, https_html_abs_dir_exist, _ := basic.PathExist(toml_conf.Https.Html_dir)
 		if !https_html_abs_dir_exist {
 			basic.Logger.Fatalln("https.html_dir:" + toml_conf.Https.Html_dir + " not exist on disk")
 		}

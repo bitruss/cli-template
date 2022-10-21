@@ -6,7 +6,6 @@ import (
 	"github.com/labstack/echo/v4"
 
 	_ "github.com/coreservice-io/cli-template/cmd/default_/http/api_docs"
-	"github.com/coreservice-io/utils/path_util"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"github.com/swaggo/swag/gen"
 )
@@ -44,23 +43,12 @@ func GenApiDocs() {
 
 	toml_config := conf.Get_config().Toml_config
 
-	// api_doc_gen_search_dir, _ := configuration.Config.GetString("api_doc_gen_search_dir", "")
-	// api_doc_gen_mainfile, _ := configuration.Config.GetString("api_doc_gen_mainfile", "")
-	// api_doc_gen_output_dir, _ := configuration.Config.GetString("api_doc_gen_output_dir", "")
-
-	// if api_doc_gen_search_dir == "" ||
-	// 	api_doc_gen_mainfile == "" ||
-	// 	api_doc_gen_output_dir == "" {
-	// 	basic.Logger.Errorln("api_doc_gen_search_dir|api_doc_gen_mainfile|api_doc_gen_output_dir config errors")
-	// 	return
-	// }
-
-	api_f, api_f_exist, _ := path_util.SmartPathExist(toml_config.Api.Doc_gen_search_dir)
+	api_f, api_f_exist, _ := basic.PathExist(toml_config.Api.Doc_gen_search_dir)
 	if !api_f_exist {
 		basic.Logger.Errorln("api_doc_gen_search_dir folder not exist:" + toml_config.Api.Doc_gen_search_dir)
 		return
 	}
-	api_doc_f, api_doc_f_exist, _ := path_util.SmartPathExist(toml_config.Api.Doc_gen_output_dir)
+	api_doc_f, api_doc_f_exist, _ := basic.PathExist(toml_config.Api.Doc_gen_output_dir)
 	if !api_doc_f_exist {
 		basic.Logger.Errorln("api_doc_gen_output_dir folder not exist:" + toml_config.Api.Doc_gen_output_dir)
 		return

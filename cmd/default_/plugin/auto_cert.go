@@ -6,7 +6,6 @@ import (
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/coreservice-io/cli-template/plugin/auto_cert_plugin"
-	"github.com/coreservice-io/utils/path_util"
 )
 
 func initAutoCert() error {
@@ -14,13 +13,13 @@ func initAutoCert() error {
 
 	if toml_conf.Auto_cert.Enable {
 
-		auto_cert_crt_path_abs, auto_cert_crt_path_abs_exist, _ := path_util.SmartPathExist(toml_conf.Auto_cert.Crt_path)
+		auto_cert_crt_path_abs, auto_cert_crt_path_abs_exist, _ := basic.PathExist(toml_conf.Auto_cert.Crt_path)
 		if !auto_cert_crt_path_abs_exist {
 			return errors.New("auto_cert.crt_path error:" +
 				toml_conf.Auto_cert.Crt_path + ", please check crt file exist on your disk")
 		}
 
-		auto_cert_key_path_abs, auto_cert_key_path_abs_exist, _ := path_util.SmartPathExist(toml_conf.Auto_cert.Key_path)
+		auto_cert_key_path_abs, auto_cert_key_path_abs_exist, _ := basic.PathExist(toml_conf.Auto_cert.Key_path)
 		if !auto_cert_key_path_abs_exist {
 			return errors.New("auto_cert.key_path error:" + toml_conf.Auto_cert.Key_path + ",please check key file exist on your disk")
 		}

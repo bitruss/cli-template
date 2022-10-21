@@ -91,15 +91,22 @@ func Init_config(conf_target string) error {
 
 	basic.Logger.Infoln("using root config toml file:", r_c_p)
 
-	//read user config
-	user_conf_toml_abs_path := path.Join(path.Dir(path.Dir(r_c_p)), "user_conf", conf_target+".toml")
-	cfg.User_config_path = user_conf_toml_abs_path
-	basic.Logger.Infoln("using user config toml file:", user_conf_toml_abs_path)
+	basic.WORK_DIR = path.Dir(path.Dir(r_c_p))
 
-	u_c_p_exist, err := path_util.AbsPathExist(user_conf_toml_abs_path)
+	basic.Logger.Infoln("--------------------------------------")
+	basic.Logger.Infoln("working dir:", basic.WORK_DIR)
+	basic.Logger.Infoln("--------------------------------------")
+
+	//read user config
+
+	user_conf_toml_rel_path := path.Join("user_conf", conf_target+".toml")
+	user_conf_toml_abs_path, u_c_p_exist, err := basic.PathExist(user_conf_toml_rel_path)
 	if err != nil {
 		return err
 	}
+
+	cfg.User_config_path = user_conf_toml_abs_path
+	basic.Logger.Infoln("using user config toml file:", user_conf_toml_abs_path)
 
 	if !u_c_p_exist {
 		dir := filepath.Dir(user_conf_toml_abs_path)

@@ -7,7 +7,6 @@ import (
 	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
 	common_errors "github.com/coreservice-io/cli-template/src/common/errors"
-	"github.com/coreservice-io/utils/path_util"
 )
 
 func init_http_echo_server() error {
@@ -27,12 +26,12 @@ func init_https_echo_server() error {
 	toml_conf := conf.Get_config().Toml_config
 	if toml_conf.Https.Enable {
 
-		crt_abs_path, crt_path_exist, _ := path_util.SmartPathExist(toml_conf.Https.Crt_path)
+		crt_abs_path, crt_path_exist, _ := basic.PathExist(toml_conf.Https.Crt_path)
 		if !crt_path_exist {
 			return errors.New("https crt file path error:" + toml_conf.Https.Crt_path)
 		}
 
-		key_abs_path, key_path_exist, _ := path_util.SmartPathExist(toml_conf.Https.Key_path)
+		key_abs_path, key_path_exist, _ := basic.PathExist(toml_conf.Https.Key_path)
 		if !key_path_exist {
 			return errors.New("https key file path error:" + toml_conf.Https.Key_path)
 		}
