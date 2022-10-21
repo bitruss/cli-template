@@ -162,9 +162,9 @@ func readToFlat(tree *toml.Tree, parent_key string, flat_map map[string]interfac
 		}
 		value := tree.Get(key)
 		//todo
-		switch value.(type) {
+		switch value := value.(type) {
 		case *toml.Tree:
-			readToFlat(value.(*toml.Tree), newKey, flat_map)
+			readToFlat(value, newKey, flat_map)
 
 		default:
 			flat_map[newKey] = value
