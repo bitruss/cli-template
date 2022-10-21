@@ -1,7 +1,6 @@
 package basic
 
 import (
-	"path"
 	"path/filepath"
 
 	"github.com/coreservice-io/utils/path_util"
@@ -28,7 +27,7 @@ func PathExist(abs_or_rel_path string) (string, bool, error) {
 		}
 	} else {
 		//rel to working directory
-		abs_path := path.Join(WORK_DIR, abs_or_rel_path)
+		abs_path := filepath.Join(WORK_DIR, abs_or_rel_path)
 		exist, err := path_util.AbsPathExist(abs_path)
 		if err != nil {
 			return "", false, err

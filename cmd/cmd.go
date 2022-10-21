@@ -30,7 +30,7 @@ func ConfigCmd() *cli.App {
 	for _, arg := range os.Args {
 		arg_lower := strings.ToLower(arg)
 		if strings.HasPrefix(arg_lower, "-conf=") || strings.HasPrefix(arg_lower, "--conf=") {
-			toml_target := strings.TrimPrefix(arg_lower, "--conf=")
+			toml_target = strings.TrimPrefix(arg_lower, "--conf=")
 			toml_target = strings.TrimPrefix(toml_target, "-conf=")
 			continue
 		}

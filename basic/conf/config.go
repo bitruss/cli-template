@@ -3,7 +3,6 @@ package conf
 import (
 	"errors"
 	"os"
-	"path"
 	"path/filepath"
 
 	"github.com/coreservice-io/cli-template/basic"
@@ -78,7 +77,7 @@ func Init_config(conf_target string) error {
 	var err error
 
 	//read root config
-	root_conf_toml_rel_path := path.Join("root_conf", conf_target+".toml")
+	root_conf_toml_rel_path := filepath.Join("root_conf", conf_target+".toml")
 	r_c_p, r_c_p_exist, _ := path_util.SmartPathExist(root_conf_toml_rel_path)
 	if !r_c_p_exist {
 		return errors.New("no root config file:" + root_conf_toml_rel_path)
@@ -91,7 +90,7 @@ func Init_config(conf_target string) error {
 
 	basic.Logger.Infoln("using root config toml file:", r_c_p)
 
-	basic.WORK_DIR = path.Dir(path.Dir(r_c_p))
+	basic.WORK_DIR = filepath.Dir(filepath.Dir(r_c_p))
 
 	basic.Logger.Infoln("--------------------------------------")
 	basic.Logger.Infoln("working dir:", basic.WORK_DIR)
@@ -99,7 +98,7 @@ func Init_config(conf_target string) error {
 
 	//read user config
 
-	user_conf_toml_rel_path := path.Join("user_conf", conf_target+".toml")
+	user_conf_toml_rel_path := filepath.Join("user_conf", conf_target+".toml")
 	user_conf_toml_abs_path, u_c_p_exist, err := basic.PathExist(user_conf_toml_rel_path)
 	if err != nil {
 		return err
@@ -164,7 +163,6 @@ func readToFlat(tree *toml.Tree, parent_key string, flat_map map[string]interfac
 		switch value := value.(type) {
 		case *toml.Tree:
 			readToFlat(value, newKey, flat_map)
-
 		default:
 			flat_map[newKey] = value
 		}
