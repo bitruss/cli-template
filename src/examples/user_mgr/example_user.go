@@ -11,7 +11,7 @@ import (
 	"github.com/coreservice-io/cli-template/src/common/smart_cache"
 )
 
-//example for GormDB and tools cache
+// example for GormDB and tools cache
 type ExampleUserModel struct {
 	Id               int64  `json:"id"`
 	Status           string `json:"status"`
@@ -49,7 +49,7 @@ func UpdateUser(newData map[string]interface{}, id int64) error {
 	return nil
 }
 
-//query
+// query
 type QueryUserResult struct {
 	Users       []*ExampleUserModel `json:"users"`
 	Total_count int64               `json:"total_count"`
@@ -126,6 +126,8 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 	err := query.Find(&queryResult.Users).Error
 	if err != nil {
 		basic.Logger.Errorln("QueryUser err :", err)
+		//set err_nil for db fast re-query safety
+		smart_cache.RR_SetErrTempNil(context.Background(), redis_plugin.GetInstance().ClusterClient, key)
 		return nil, err
 	} else {
 		if updateCache {
