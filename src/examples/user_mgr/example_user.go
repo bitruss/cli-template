@@ -1,12 +1,9 @@
 package user_mgr
 
 import (
-	"context"
 	"time"
 
-	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
-	"github.com/coreservice-io/cli-template/plugin/reference_plugin"
 	"github.com/coreservice-io/cli-template/plugin/sqldb_plugin"
 	"github.com/coreservice-io/cli-template/src/common/smart_cache"
 )
@@ -55,6 +52,88 @@ type QueryUserResult struct {
 	Total_count int64               `json:"total_count"`
 }
 
+// func QueryUser(id *int64, status *string, name *string, email *string, limit int, offset int, fromCache bool, updateCache bool) (*QueryUserResult, error) {
+// 	//gen_key
+// 	ck := smart_cache.NewConnectKey("user")
+// 	ck.C_Int64_Ptr("id", id).C_Str_Ptr("status", status).
+// 		C_Str_Ptr("name", name).C_Str_Ptr("email", email).C_Int(limit).C_Int(offset)
+
+// 	key := redis_plugin.GetInstance().GenKey(ck.String())
+
+// 	if fromCache {
+// 		// try to get from reference
+// 		result := smart_cache.Ref_Get(reference_plugin.GetInstance(), key)
+// 		if result != nil {
+// 			basic.Logger.Debugln("QueryUser hit from reference")
+// 			return result.(*QueryUserResult), nil
+// 		}
+
+// 		// try to get from redis
+// 		redis_result := &QueryUserResult{
+// 			Users:       []*ExampleUserModel{},
+// 			Total_count: 0,
+// 		}
+// 		err := smart_cache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, redis_result)
+// 		if err == nil {
+// 			basic.Logger.Debugln("QueryUser hit from redis")
+// 			smart_cache.Ref_Set(reference_plugin.GetInstance(), key, redis_result)
+// 			return redis_result, nil
+// 		} else if err == smart_cache.ErrNil {
+// 			//continue to get from db part
+// 		} else if err == smart_cache.ErrTempNil {
+// 			//this happens when query db failed
+// 			basic.Logger.Errorln("QueryUser smart_cache.TempNil")
+// 			return nil, smart_cache.ErrTempNil
+// 		} else {
+// 			//redis may broken, just return to keep db safe
+// 			return redis_result, err
+// 		}
+// 	}
+
+// 	//after cache miss ,try from remote database
+// 	basic.Logger.Debugln("QueryUser try from database")
+
+// 	queryResult := &QueryUserResult{
+// 		Users:       []*ExampleUserModel{},
+// 		Total_count: 0,
+// 	}
+
+// 	query := sqldb_plugin.GetInstance().Table("example_user_models")
+// 	if id != nil {
+// 		query.Where("id = ?", *id)
+// 	}
+// 	if status != nil {
+// 		query.Where("status = ?", status)
+// 	}
+// 	if name != nil {
+// 		query.Where("name = ?", name)
+// 	}
+// 	if email != nil {
+// 		query.Where("email = ?", email)
+// 	}
+
+// 	query.Count(&queryResult.Total_count)
+// 	if limit > 0 {
+// 		query.Limit(limit)
+// 	}
+// 	if offset > 0 {
+// 		query.Offset(offset)
+// 	}
+
+// 	err := query.Find(&queryResult.Users).Error
+// 	if err != nil {
+// 		basic.Logger.Errorln("QueryUser err :", err)
+// 		//set err_nil for db fast re-query safety
+// 		smart_cache.RR_SetErrTempNil(context.Background(), redis_plugin.GetInstance().ClusterClient, key)
+// 		return nil, err
+// 	} else {
+// 		if updateCache {
+// 			smart_cache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, queryResult, 300)
+// 		}
+// 		return queryResult, nil
+// 	}
+// }
+
 func QueryUser(id *int64, status *string, name *string, email *string, limit int, offset int, fromCache bool, updateCache bool) (*QueryUserResult, error) {
 	//gen_key
 	ck := smart_cache.NewConnectKey("user")
@@ -63,76 +142,42 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 
 	key := redis_plugin.GetInstance().GenKey(ck.String())
 
-	if fromCache {
-		// try to get from reference
-		result := smart_cache.Ref_Get(reference_plugin.GetInstance(), key)
-		if result != nil {
-			basic.Logger.Debugln("QueryUser hit from reference")
-			return result.(*QueryUserResult), nil
-		}
-
-		// try to get from redis
-		redis_result := &QueryUserResult{
+	sq_result, sq_err := smart_cache.SmartQuery(key, fromCache, updateCache, func() interface{} {
+		return &QueryUserResult{
 			Users:       []*ExampleUserModel{},
 			Total_count: 0,
 		}
-		err := smart_cache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, redis_result)
-		if err == nil {
-			basic.Logger.Debugln("QueryUser hit from redis")
-			smart_cache.Ref_Set(reference_plugin.GetInstance(), key, redis_result)
-			return redis_result, nil
-		} else if err == smart_cache.ErrNil {
-			//continue to get from db part
-		} else if err == smart_cache.ErrTempNil {
-			//won't happen actually unless you set a nil pointer of queryResult when update
-			basic.Logger.Errorln("QueryUser smart_cache.TempNil")
-			return nil, smart_cache.ErrTempNil
-		} else {
-			//redis may broken, just return to keep db safe
-			return redis_result, err
+	}, 300, func(resultHolder interface{}) error {
+		queryResult := resultHolder.(*QueryUserResult)
+
+		query := sqldb_plugin.GetInstance().Table("example_user_models")
+		if id != nil {
+			query.Where("id = ?", *id)
 		}
-	}
+		if status != nil {
+			query.Where("status = ?", status)
+		}
+		if name != nil {
+			query.Where("name = ?", name)
+		}
+		if email != nil {
+			query.Where("email = ?", email)
+		}
 
-	//after cache miss ,try from remote database
-	basic.Logger.Debugln("QueryUser try from database")
+		query.Count(&queryResult.Total_count)
+		if limit > 0 {
+			query.Limit(limit)
+		}
+		if offset > 0 {
+			query.Offset(offset)
+		}
+		return query.Find(&queryResult.Users).Error
+	}, "UserQuery")
 
-	queryResult := &QueryUserResult{
-		Users:       []*ExampleUserModel{},
-		Total_count: 0,
-	}
-
-	query := sqldb_plugin.GetInstance().Table("example_user_models")
-	if id != nil {
-		query.Where("id = ?", *id)
-	}
-	if status != nil {
-		query.Where("status = ?", status)
-	}
-	if name != nil {
-		query.Where("name = ?", name)
-	}
-	if email != nil {
-		query.Where("email = ?", email)
-	}
-
-	query.Count(&queryResult.Total_count)
-	if limit > 0 {
-		query.Limit(limit)
-	}
-	if offset > 0 {
-		query.Offset(offset)
-	}
-
-	err := query.Find(&queryResult.Users).Error
-	if err != nil {
-		basic.Logger.Errorln("QueryUser err :", err)
-		//set err_nil for db fast re-query safety
-		smart_cache.RR_SetErrTempNil(context.Background(), redis_plugin.GetInstance().ClusterClient, key)
-		return nil, err
+	if sq_err != nil {
+		return nil, sq_err
 	} else {
-		if updateCache {
-			smart_cache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, queryResult, 300)
-		}
-		return queryResult, nil
+		return sq_result.(*QueryUserResult), nil
 	}
+
 }
