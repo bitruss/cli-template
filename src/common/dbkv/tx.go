@@ -67,6 +67,8 @@ func GetDBKV(tx *gorm.DB, keyStr string, fromCache bool, updateCache bool) (*DBK
 
 	if err != nil {
 		basic.Logger.Errorln("GetDBKV err :", err)
+		//set err_nil for db fast re-query safety
+		smart_cache.RR_SetErrTempNil(context.Background(), redis_plugin.GetInstance().ClusterClient, key)
 		return nil, err
 	} else {
 		if len(queryResults) == 0 {
