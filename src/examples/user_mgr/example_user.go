@@ -142,12 +142,12 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 
 	key := redis_plugin.GetInstance().GenKey(ck.String())
 
-	sq_result, sq_err := smart_cache.SmartQuery(key, fromCache, updateCache, func() interface{} {
+	sq_result, sq_err := smart_cache.SmartQuery(key, func() interface{} {
 		return &QueryUserResult{
 			Users:       []*ExampleUserModel{},
 			Total_count: 0,
 		}
-	}, 300, func(resultHolder interface{}) error {
+	}, fromCache, updateCache, 300, func(resultHolder interface{}) error {
 		queryResult := resultHolder.(*QueryUserResult)
 
 		query := sqldb_plugin.GetInstance().Table("example_user_models")
