@@ -12,7 +12,7 @@ import (
 
 const exec_count_limit = 100
 const exec_interval_limit_millisec = 2500
-const exec_thread_count = 8
+const exec_thread_count = 4
 const cmd_channel_limit = 20000
 
 var last_exec_time_unixmilli = time.Now().UTC().UnixMilli()
@@ -37,8 +37,6 @@ func ScheduleRedisPipelineExec() {
 				for {
 					if len(cmdListChannel) < 100 && time.Now().UTC().UnixMilli()-last_exec_time_unixmilli < exec_interval_limit_millisec {
 						time.Sleep(250 * time.Millisecond)
-						//basic.Logger.Debugln("sleep")
-
 						continue
 					}
 					exec()
@@ -69,7 +67,6 @@ func exec() {
 	last_exec_time_unixmilli = time.Now().UTC().UnixMilli()
 
 	pl := redis_plugin.GetInstance().Pipeline()
-	cmds := []*PipelineCmd{}
 
 outLoop:
 	for i := 0; i < exec_count_limit; i++ {
@@ -78,7 +75,6 @@ outLoop:
 			switch cmd.Operation {
 			case operation_Set:
 				pl.Set(cmd.Ctx, cmd.Key, cmd.Args[0], cmd.Args[1].(time.Duration))
-				cmds = append(cmds, cmd)
 
 			case operation_ZAdd:
 				z := []*redis.Z{}
@@ -86,7 +82,6 @@ outLoop:
 					z = append(z, v.(*redis.Z))
 				}
 				pl.ZAdd(cmd.Ctx, cmd.Key, z...)
-				cmds = append(cmds, cmd)
 
 			case operation_ZAddNX:
 				z := []*redis.Z{}
@@ -94,19 +89,15 @@ outLoop:
 					z = append(z, v.(*redis.Z))
 				}
 				pl.ZAddNX(cmd.Ctx, cmd.Key, z...)
-				cmds = append(cmds, cmd)
 
 			case operation_HSet:
 				pl.HSet(cmd.Ctx, cmd.Key, cmd.Args...)
-				cmds = append(cmds, cmd)
 
 			case operation_Expire:
 				pl.Expire(cmd.Ctx, cmd.Key, cmd.Args[0].(time.Duration))
-				cmds = append(cmds, cmd)
 
 			case operation_ZRemRangeByScore:
 				pl.ZRemRangeByScore(cmd.Ctx, cmd.Key, cmd.Args[0].(string), cmd.Args[1].(string))
-				cmds = append(cmds, cmd)
 
 			default:
 				basic.Logger.Errorln("unsupported cmd:", cmd.Operation)
@@ -124,6 +115,7 @@ outLoop:
 	_, err := pl.Exec(context.Background())
 	if err != nil {
 		basic.Logger.Errorln("exec pipeline error:", err)
+		time.Sleep(5 * time.Second) //sleep a while for exe err
 		return
 	}
 }
