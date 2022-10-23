@@ -28,7 +28,7 @@ func SmartQuery(key string, resultHolderAlloc func() interface{}, fromCache bool
 			basic.Logger.Debugln(queryDescription, " hit from redis")
 			Ref_Set(reference_plugin.GetInstance(), key, resultHolder)
 			return resultHolder, nil
-		} else if err == cacheNilErr {
+		} else if err == CacheNilErr {
 			//continue to get from db part
 		} else if err == QueryNilErr {
 			return nil, QueryNilErr
