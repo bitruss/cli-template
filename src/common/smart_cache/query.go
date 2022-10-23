@@ -45,6 +45,9 @@ func SmartQuery(key string, resultHolderAlloc func() interface{}, fromCache bool
 	//after cache miss ,try from remote database
 	basic.Logger.Debugln(queryDescription, " try from query")
 
+	if resultHolder == nil {
+		resultHolder = resultHolderAlloc()
+	}
 	err := Query(resultHolder)
 
 	if err != nil {
