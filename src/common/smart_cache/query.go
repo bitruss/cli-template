@@ -38,7 +38,7 @@ func SmartQuery(key string, resultHolderAlloc func() interface{}, fromCache bool
 			return nil, QueryErr
 		} else {
 			//redis may broken, just return to make slow query safe
-			return resultHolder, err
+			return nil, err
 		}
 	}
 
