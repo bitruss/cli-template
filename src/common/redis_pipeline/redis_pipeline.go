@@ -81,6 +81,8 @@ func exec() {
 
 	pl := redis_plugin.GetInstance().Pipeline()
 	cmds := []*PipelineCmd{}
+
+outLoop:
 	for i := 0; i < exec_count_limit; i++ {
 		select {
 		case cmd := <-cmdListChannel:
@@ -123,7 +125,7 @@ func exec() {
 
 		//todo default is not working
 		default:
-			break
+			break outLoop
 		}
 	}
 
