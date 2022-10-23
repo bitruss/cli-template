@@ -8,7 +8,7 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/reference_plugin"
 )
 
-// for Query ,if Query result is nil , return QueryNilErr as set nil to cache is not supported
+// for Query ,return QueryNilErr if Query result is nil  -> as set nil to cache is not supported
 func SmartQuery(key string, resultHolderAlloc func() interface{}, fromCache bool, updateCache bool, cacheTTLSecs int64, Query func(resultHolder interface{}) error, queryDescription string) (interface{}, error) {
 
 	var resultHolder interface{}
