@@ -8,7 +8,8 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/reference_plugin"
 )
 
-func SmartQuery(key string, resultHolderAlloc func() interface{}, fromCache bool, updateCache bool, cacheTTLSecs int64, DBQuery func(resultHolder interface{}) error, queryDescription string) (interface{}, error) {
+// for Query ,if Query result is nil , return QueryNilErr as set nil to cache is not supported
+func SmartQuery(key string, resultHolderAlloc func() interface{}, fromCache bool, updateCache bool, cacheTTLSecs int64, Query func(resultHolder interface{}) error, queryDescription string) (interface{}, error) {
 
 	var resultHolder interface{}
 
@@ -27,28 +28,34 @@ func SmartQuery(key string, resultHolderAlloc func() interface{}, fromCache bool
 			basic.Logger.Debugln(queryDescription, " hit from redis")
 			Ref_Set(reference_plugin.GetInstance(), key, resultHolder)
 			return resultHolder, nil
-		} else if err == ErrNil {
+		} else if err == CacheNilErr {
 			//continue to get from db part
-		} else if err == ErrTempNil {
-			//this happens when query db failed
-			basic.Logger.Errorln(queryDescription, " smart_cache.TempNil")
-			return nil, ErrTempNil
+		} else if err == QueryNilErr {
+			return nil, QueryNilErr
+		} else if err == QueryErr {
+			//this happens when query failed
+			basic.Logger.Errorln(queryDescription, " QueryErr")
+			return nil, QueryErr
 		} else {
-			//redis may broken, just return to keep db safe
+			//redis may broken, just return to make slow query safe
 			return resultHolder, err
 		}
 	}
 
 	//after cache miss ,try from remote database
-	basic.Logger.Debugln(queryDescription, " try from database")
+	basic.Logger.Debugln(queryDescription, " try from query")
 
-	err := DBQuery(resultHolder)
+	err := Query(resultHolder)
 
 	if err != nil {
-		basic.Logger.Errorln(queryDescription, " DBQuery err :", err)
-		//set err_nil for db fast re-query safety
-		RR_SetErrTempNil(context.Background(), redis_plugin.GetInstance().ClusterClient, key)
-		return nil, err
+		if err == QueryNilErr {
+			RR_SetQueryNilErr_TTL(context.Background(), redis_plugin.GetInstance().ClusterClient, key, cacheTTLSecs)
+			return nil, QueryNilErr
+		} else {
+			basic.Logger.Errorln(queryDescription, " Query err :", err)
+			RR_SetQueryErr(context.Background(), redis_plugin.GetInstance().ClusterClient, key)
+			return nil, QueryErr
+		}
 	} else {
 		if updateCache {
 			RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, resultHolder, cacheTTLSecs)

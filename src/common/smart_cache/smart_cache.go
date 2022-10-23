@@ -12,13 +12,21 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-type temp_nil_error string
+type query_err string
 
-func (e temp_nil_error) Error() string { return string(e) }
+func (e query_err) Error() string { return string(e) }
 
-const ErrNil = redis.Nil
-const ErrTempNil = temp_nil_error("temp_nil")
-const temp_nil = "temp_nil"
+type query_nil_err string
+
+func (e query_nil_err) Error() string { return string(e) }
+
+const query_err_str = "|query_err|"
+const query_nil_err_str = "|query_nil_err|"
+
+const CacheNilErr = redis.Nil
+const QueryErr = query_err(query_err_str)
+const QueryNilErr = query_nil_err(query_nil_err_str)
+
 const local_reference_secs = 5 //don't change this number as 5 is the proper number
 
 // check weather we need do refresh
@@ -75,21 +83,25 @@ func Redis_Get(ctx context.Context, Redis *redis.ClusterClient, isJSON bool, key
 		// if has expire time
 		if err == nil && ttl != -1 && check_redis_ttl_refresh(int64(ttl.Seconds())) {
 			//need refresh
-			return ErrNil
+			return CacheNilErr
 		}
 	}
 
 	scmd := Redis.Get(ctx, keystr) //trigger remote redis get
 	r_bytes, err := scmd.Bytes()
 	if err == redis.Nil {
-		return ErrNil
+		return CacheNilErr
 	}
 	if err != nil {
 		return err
 	}
 
-	if string(r_bytes) == temp_nil {
-		return ErrTempNil
+	switch string(r_bytes) {
+	case query_nil_err_str:
+		return QueryNilErr
+	case query_err_str:
+		return QueryErr
+	default:
 	}
 
 	if isJSON {
@@ -103,12 +115,16 @@ func RR_Set(ctx context.Context, Redis *redis.ClusterClient, localRef *reference
 	return RR_Set_TTL(ctx, Redis, localRef, isJSON, keystr, value, redis_ttl_second, local_reference_secs)
 }
 
-func RR_SetErrTempNil(ctx context.Context, Redis *redis.ClusterClient, keystr string) error {
-	return Redis.Set(ctx, keystr, temp_nil, time.Duration(5)*time.Second).Err()
+func RR_SetQueryErr(ctx context.Context, Redis *redis.ClusterClient, keystr string) error {
+	return Redis.Set(ctx, keystr, query_err_str, time.Duration(5)*time.Second).Err()
 }
 
-func RR_SetErrTempNil_TTL(ctx context.Context, Redis *redis.ClusterClient, keystr string, ttl_second int64) error {
-	return Redis.Set(ctx, keystr, temp_nil, time.Duration(ttl_second)*time.Second).Err()
+func RR_SetQueryErr_TTL(ctx context.Context, Redis *redis.ClusterClient, keystr string, ttl_second int64) error {
+	return Redis.Set(ctx, keystr, query_err_str, time.Duration(ttl_second)*time.Second).Err()
+}
+
+func RR_SetQueryNilErr_TTL(ctx context.Context, Redis *redis.ClusterClient, keystr string, ttl_second int64) error {
+	return Redis.Set(ctx, keystr, query_nil_err_str, time.Duration(ttl_second)*time.Second).Err()
 }
 
 // reference set && redis set

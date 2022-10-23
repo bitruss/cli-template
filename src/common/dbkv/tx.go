@@ -1,11 +1,7 @@
 package dbkv
 
 import (
-	"context"
-
-	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
-	"github.com/coreservice-io/cli-template/plugin/reference_plugin"
 	"github.com/coreservice-io/cli-template/src/common/smart_cache"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -34,53 +30,38 @@ func GetDBKV(tx *gorm.DB, keyStr string, fromCache bool, updateCache bool) (*DBK
 
 	key := redis_plugin.GetInstance().GenKey(ck.String())
 
-	if fromCache {
-		// try to get from reference
-		result := smart_cache.Ref_Get(reference_plugin.GetInstance(), key)
-		if result != nil {
-			basic.Logger.Debugln("GetDBKV hit from reference")
-			return result.(*DBKVModel), nil
-		}
-
-		redis_result := &DBKVModel{}
-		// try to get from redis
-		err := smart_cache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, redis_result)
-		if err == nil {
-			basic.Logger.Debugln("GetDBKV hit from redis")
-			smart_cache.Ref_Set(reference_plugin.GetInstance(), key, redis_result)
-			return redis_result, nil
-		} else if err == smart_cache.ErrNil {
-			//continue to get from db part
-		} else if err == smart_cache.ErrTempNil {
-			return nil, smart_cache.ErrTempNil
-		} else {
-			//redis may broken, just return to keep db safe
-			return redis_result, err
-		}
+	/////
+	resultHolderAlloc := func() interface{} {
+		return &DBKVModel{}
 	}
 
-	//after cache miss ,try from remote database
-	basic.Logger.Debugln("GetDBKV try from database")
+	/////
+	query := func(resultHolder interface{}) error {
+		queryResult := resultHolder.(*DBKVModel)
 
-	queryResults := []*DBKVModel{}
-	err := tx.Table("dbkv").Where("`key` = ?", keyStr).Find(&queryResults).Error
+		queryResults := []*DBKVModel{}
 
-	if err != nil {
-		basic.Logger.Errorln("GetDBKV err :", err)
-		//set err_nil for db fast re-query safety
-		smart_cache.RR_SetErrTempNil(context.Background(), redis_plugin.GetInstance().ClusterClient, key)
-		return nil, err
-	} else {
+		err := tx.Table("dbkv").Where("`key` = ?", keyStr).Find(&queryResults).Error
+		if err != nil {
+			return err
+		}
+
 		if len(queryResults) == 0 {
-			if updateCache {
-				smart_cache.RR_SetErrTempNil(context.Background(), redis_plugin.GetInstance().ClusterClient, key)
-			}
-			return nil, smart_cache.ErrTempNil
-		} else {
-			if updateCache {
-				smart_cache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, queryResults[0], 300)
-			}
-			return queryResults[0], nil
+			return smart_cache.QueryNilErr
 		}
+
+		*queryResult = *queryResults[0]
+		return nil
 	}
+
+	/////
+	sq_result, sq_err := smart_cache.SmartQuery(key, resultHolderAlloc, fromCache, updateCache, 300, query, "DBKV Query")
+
+	/////
+	if sq_err != nil {
+		return nil, sq_err
+	} else {
+		return sq_result.(*DBKVModel), nil
+	}
+
 }
