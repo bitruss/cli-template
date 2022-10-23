@@ -123,7 +123,6 @@ outLoop:
 				basic.Logger.Errorln("unsupported cmd:", cmd.Operation)
 			}
 
-		//todo default is not working
 		default:
 			break outLoop
 		}
