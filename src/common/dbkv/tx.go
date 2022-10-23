@@ -105,7 +105,7 @@ func GetDBKV(tx *gorm.DB, id *int64, key *string, fromCache bool, updateCache bo
 	}
 
 	/////
-	sq_result, sq_err := smart_cache.SmartQuery(_key, resultHolderAlloc, fromCache, updateCache, 300, query, "DBKV Query")
+	sq_result, sq_err := smart_cache.SmartQuery(_key, resultHolderAlloc, fromCache, updateCache, 300, query, "GetDBKV")
 
 	/////
 	if sq_err != nil {
