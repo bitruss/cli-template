@@ -23,7 +23,7 @@ func (e query_nil_err) Error() string { return string(e) }
 const query_err_str = "|query_err|"
 const query_nil_err_str = "|query_nil_err|"
 
-const CacheNilErr = redis.Nil
+const cacheNilErr = redis.Nil //won't be used outside module
 const QueryErr = query_err(query_err_str)
 const QueryNilErr = query_nil_err(query_nil_err_str)
 
@@ -84,14 +84,14 @@ func Redis_Get(ctx context.Context, Redis *redis.ClusterClient, isJSON bool, key
 		// if has expire time
 		if err == nil && ttl != -1 && check_redis_ttl_refresh(int64(ttl.Seconds())) {
 			//need refresh
-			return CacheNilErr
+			return cacheNilErr
 		}
 	}
 
 	scmd := Redis.Get(ctx, keystr) //trigger remote redis get
 	r_bytes, err := scmd.Bytes()
 	if err == redis.Nil {
-		return CacheNilErr
+		return cacheNilErr
 	}
 	if err != nil {
 		return err
