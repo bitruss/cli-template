@@ -64,6 +64,57 @@ func DeleteDBKV_Id(tx *gorm.DB, id int64) error {
 	return nil
 }
 
+func GetDBKV(tx *gorm.DB, id *int64, key *string, fromCache bool, updateCache bool) (*DBKVModel, error) {
+
+	//gen_key
+	ck := smart_cache.NewConnectKey("dbkv")
+	ck.C_Int64_Ptr("id", id).C_Str_Ptr("key", key)
+
+	_key := redis_plugin.GetInstance().GenKey(ck.String())
+
+	/////
+	resultHolderAlloc := func() interface{} {
+		return &DBKVModel{}
+	}
+
+	/////
+	query := func(resultHolder interface{}) error {
+		queryResult := resultHolder.(*DBKVModel)
+
+		query := tx.Table("dbkv")
+		if id != nil {
+			query.Where("id = ?", *id)
+		}
+		if key != nil {
+			query.Where("dbkv.key =?", *key)
+		}
+
+		var total_count int64
+		query.Count(&total_count)
+
+		err := query.Find(queryResult).Error
+		if err != nil {
+			return err
+		}
+
+		if total_count == 0 {
+			return smart_cache.QueryNilErr
+		}
+
+		return nil
+	}
+
+	/////
+	sq_result, sq_err := smart_cache.SmartQuery(_key, resultHolderAlloc, fromCache, updateCache, 300, query, "DBKV Query")
+
+	/////
+	if sq_err != nil {
+		return nil, sq_err
+	} else {
+		return sq_result.(*DBKVModel), nil
+	}
+}
+
 type DBKVQueryResults struct {
 	Kv         []*DBKVModel
 	TotalCount int64
@@ -73,8 +124,7 @@ func QueryDBKV(tx *gorm.DB, id *int64, keys *[]string, fromCache bool, updateCac
 
 	//gen_key
 	ck := smart_cache.NewConnectKey("dbkv")
-	ck.C_Int64_Ptr("id", id).
-		C_Str_Array_Ptr("keys", keys)
+	ck.C_Int64_Ptr("id", id).C_Str_Array_Ptr("keys", keys)
 
 	key := redis_plugin.GetInstance().GenKey(ck.String())
 
