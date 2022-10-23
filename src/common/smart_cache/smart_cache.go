@@ -28,6 +28,7 @@ const QueryErr = query_err(query_err_str)
 const QueryNilErr = query_nil_err(query_nil_err_str)
 
 const local_reference_secs = 5 //don't change this number as 5 is the proper number
+const query_err_secs = 5       //if query failed (not nil err) , set a temporary mark in redis
 
 // check weather we need do refresh
 // the probobility becomes lager when left seconds close to 0
@@ -116,7 +117,7 @@ func RR_Set(ctx context.Context, Redis *redis.ClusterClient, localRef *reference
 }
 
 func RR_SetQueryErr(ctx context.Context, Redis *redis.ClusterClient, keystr string) error {
-	return Redis.Set(ctx, keystr, query_err_str, time.Duration(5)*time.Second).Err()
+	return Redis.Set(ctx, keystr, query_err_str, time.Duration(query_err_secs)*time.Second).Err()
 }
 
 func RR_SetQueryErr_TTL(ctx context.Context, Redis *redis.ClusterClient, keystr string, ttl_second int64) error {
