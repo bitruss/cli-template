@@ -64,7 +64,12 @@ func DeleteDBKV_Id(tx *gorm.DB, id int64) error {
 	return nil
 }
 
-func QueryDBKV(tx *gorm.DB, id *int64, keys *[]string, fromCache bool, updateCache bool) (*DBKVModel, error) {
+type DBKVQueryResults struct {
+	Kv         []*DBKVModel
+	TotalCount int64
+}
+
+func QueryDBKV(tx *gorm.DB, id *int64, keys *[]string, fromCache bool, updateCache bool) (*DBKVQueryResults, error) {
 
 	//gen_key
 	ck := smart_cache.NewConnectKey("dbkv")
@@ -75,20 +80,15 @@ func QueryDBKV(tx *gorm.DB, id *int64, keys *[]string, fromCache bool, updateCac
 
 	/////
 	resultHolderAlloc := func() interface{} {
-		return &DBKVModel{}
+		return &DBKVQueryResults{
+			Kv:         []*DBKVModel{},
+			TotalCount: 0,
+		}
 	}
 
 	/////
 	query := func(resultHolder interface{}) error {
-		queryResult := resultHolder.(*DBKVModel)
-
-		queryResults := &struct {
-			Kv         []*DBKVModel
-			TotalCount int64
-		}{
-			Kv:         []*DBKVModel{},
-			TotalCount: 0,
-		}
+		queryResults := resultHolder.(*DBKVQueryResults)
 
 		query := tx.Table("dbkv")
 		if id != nil {
@@ -105,11 +105,6 @@ func QueryDBKV(tx *gorm.DB, id *int64, keys *[]string, fromCache bool, updateCac
 			return err
 		}
 
-		if queryResults.TotalCount == 0 {
-			return smart_cache.QueryNilErr
-		}
-
-		*queryResult = *queryResults.Kv[0]
 		return nil
 	}
 
@@ -120,7 +115,7 @@ func QueryDBKV(tx *gorm.DB, id *int64, keys *[]string, fromCache bool, updateCac
 	if sq_err != nil {
 		return nil, sq_err
 	} else {
-		return sq_result.(*DBKVModel), nil
+		return sq_result.(*DBKVQueryResults), nil
 	}
 
 }
