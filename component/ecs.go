@@ -1,4 +1,4 @@
-package plugin
+package component
 
 import (
 	"github.com/coreservice-io/cli-template/basic"
@@ -6,7 +6,7 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/ecs_plugin"
 )
 
-func initElasticSearch() error {
+func InitElasticSearch() error {
 	toml_conf := conf.Get_config().Toml_config
 
 	if toml_conf.Elastic_search.Enable {
@@ -16,9 +16,14 @@ func initElasticSearch() error {
 			UserName: toml_conf.Elastic_search.Username,
 			Password: toml_conf.Elastic_search.Password}
 
-		basic.Logger.Infoln("init elastic search plugin with config:", ecs_conf)
-		return ecs_plugin.Init(&ecs_conf)
+		basic.Logger.Infoln("Init elastic search plugin with config:", ecs_conf)
+		if err := ecs_plugin.Init(&ecs_conf); err == nil {
+			basic.Logger.Infoln("### InitElasticSearch success")
+			return nil
+		} else {
+			return err
+		}
+	} else {
+		return nil
 	}
-
-	return nil
 }

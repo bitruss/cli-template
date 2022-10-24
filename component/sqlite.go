@@ -1,4 +1,4 @@
-package plugin
+package component
 
 import (
 	"errors"
@@ -8,7 +8,7 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/sqlite_plugin"
 )
 
-func initSqlite() error {
+func InitSqlite() error {
 	toml_conf := conf.Get_config().Toml_config
 
 	if toml_conf.Sqlite.Enable {
@@ -21,9 +21,14 @@ func initSqlite() error {
 			Sqlite_abs_path: sqlite_abs_path,
 		}
 
-		basic.Logger.Infoln("init sqlite plugin with config:", sqlite_conf)
-		return sqlite_plugin.Init(&sqlite_conf, basic.Logger)
+		basic.Logger.Infoln("Init sqlite plugin with config:", sqlite_conf)
+		if err := sqlite_plugin.Init(&sqlite_conf, basic.Logger); err == nil {
+			basic.Logger.Infoln("### InitSqlite success")
+			return nil
+		} else {
+			return err
+		}
+	} else {
+		return nil
 	}
-
-	return nil
 }

@@ -1,4 +1,4 @@
-package plugin
+package component
 
 import (
 	"errors"
@@ -8,7 +8,7 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/geo_ip_plugin"
 )
 
-func initGeoIp() error {
+func InitGeoIp() error {
 	toml_conf := conf.Get_config().Toml_config
 
 	if toml_conf.Geo_ip.Enable {
@@ -17,11 +17,15 @@ func initGeoIp() error {
 			return errors.New("geo_ip db file path error," + toml_conf.Geo_ip.Db_path)
 		}
 
-		basic.Logger.Infoln("init geo_ip plugin with ",
-			"localDbFile:", dbFilePath_abs,
-		)
+		basic.Logger.Infoln("Init geo_ip plugin with localDbFile:", dbFilePath_abs)
 
-		return geo_ip_plugin.Init(dbFilePath_abs)
+		if err := geo_ip_plugin.Init(dbFilePath_abs); err == nil {
+			basic.Logger.Infoln("### Init geo_ip success")
+			return nil
+		} else {
+			return err
+		}
+	} else {
+		return nil
 	}
-	return nil
 }

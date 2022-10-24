@@ -10,12 +10,3 @@ type UserModel struct {
 	Permissions      string `json:"permissions"`
 	Created_unixtime int64  `json:"created_unixtime" gorm:"autoCreateTime"`
 }
-
-const (
-	USER_ROLE_ADMIN    = "admin"
-	USER_ROLE_USER     = "user"
-	USER_ROLE_READONLY = "read_only"
-)
-
-var UserRoles = []string{USER_ROLE_ADMIN, USER_ROLE_USER, USER_ROLE_READONLY}
-var UserPermissions = []string{}

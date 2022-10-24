@@ -1,4 +1,4 @@
-package plugin
+package component
 
 import (
 	"github.com/coreservice-io/cli-template/basic"
@@ -6,7 +6,7 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/ecs_uploader_plugin"
 )
 
-func initEcsUploader() error {
+func InitEcsUploader() error {
 	toml_conf := conf.Get_config().Toml_config
 
 	if toml_conf.Elastic_search.Enable {
@@ -16,9 +16,14 @@ func initEcsUploader() error {
 			UserName: toml_conf.Elastic_search.Username,
 			Password: toml_conf.Elastic_search.Password}
 
-		basic.Logger.Infoln("init ecs uploader plugin with config:", ecs_uploader_conf)
-		return ecs_uploader_plugin.Init(&ecs_uploader_conf, basic.Logger)
+		basic.Logger.Infoln("Init ecs uploader plugin with config:", ecs_uploader_conf)
+		if err := ecs_uploader_plugin.Init(&ecs_uploader_conf, basic.Logger); err == nil {
+			basic.Logger.Infoln("### InitEcsUploader success")
+			return nil
+		} else {
+			return err
+		}
+	} else {
+		return nil
 	}
-
-	return nil
 }

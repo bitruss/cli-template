@@ -14,6 +14,9 @@ func Cli_get_flags() []cli.Flag {
 	allflags = append(allflags, &cli.StringFlag{Name: "log.level", Required: false})
 	allflags = append(allflags, &cli.StringFlag{Name: "http.enable", Required: false})
 	allflags = append(allflags, &cli.StringFlag{Name: "https.enable", Required: false})
+	allflags = append(allflags, &cli.StringFlag{Name: "db.enable", Required: false})
+	allflags = append(allflags, &cli.StringFlag{Name: "redis.enable", Required: false})
+
 	return allflags
 }
 
@@ -53,6 +56,16 @@ func Cli_set_config(clictx *cli.Context) error {
 	if clictx.IsSet("https.enable") {
 		https_enable := clictx.Bool("https.enable")
 		config.User_config_tree.Set("https.enable", https_enable)
+	}
+
+	if clictx.IsSet("db.enable") {
+		db_enable := clictx.Bool("db.enable")
+		config.User_config_tree.Set("db.enable", db_enable)
+	}
+
+	if clictx.IsSet("redis.enable") {
+		redis_enable := clictx.Bool("redis.enable")
+		config.User_config_tree.Set("redis.enable", redis_enable)
 	}
 
 	err := config.Save_user_config()

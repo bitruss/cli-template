@@ -1,4 +1,4 @@
-package plugin
+package component
 
 import (
 	"github.com/coreservice-io/cli-template/basic"
@@ -6,7 +6,7 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
 )
 
-func initRedis() error {
+func InitRedis() error {
 
 	toml_conf := conf.Get_config().Toml_config
 
@@ -20,9 +20,14 @@ func initRedis() error {
 			UseTLS:    toml_conf.Redis.Use_tls,
 		}
 
-		basic.Logger.Infoln("init redis plugin with config:", redis_conf)
-		return redis_plugin.Init(&redis_conf)
+		basic.Logger.Infoln("Init redis plugin with config:", redis_conf)
+		if err := redis_plugin.Init(&redis_conf); err == nil {
+			basic.Logger.Infoln("### InitRedis success")
+			return nil
+		} else {
+			return err
+		}
+	} else {
+		return nil
 	}
-
-	return nil
 }

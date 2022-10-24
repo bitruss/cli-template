@@ -1,4 +1,4 @@
-package plugin
+package component
 
 import (
 	"errors"
@@ -8,7 +8,7 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/auto_cert_plugin"
 )
 
-func initAutoCert() error {
+func InitAutoCert() error {
 	toml_conf := conf.Get_config().Toml_config
 
 	if toml_conf.Auto_cert.Enable {
@@ -33,8 +33,13 @@ func initAutoCert() error {
 
 		basic.Logger.Infoln("init auto_cert plugin with config:", auto_cert_conf)
 
-		return auto_cert_plugin.Init(&auto_cert_conf, toml_conf.Auto_cert.Init_download)
+		if err := auto_cert_plugin.Init(&auto_cert_conf, toml_conf.Auto_cert.Init_download); err == nil {
+			basic.Logger.Infoln("### InitAutoCert success")
+			return nil
+		} else {
+			return err
+		}
+	} else {
+		return nil
 	}
-
-	return nil
 }

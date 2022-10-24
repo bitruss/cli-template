@@ -90,12 +90,22 @@ func ConfigCmd() *cli.App {
 				Usage: "db command",
 				Subcommands: []*cli.Command{
 					{
-						Name:  "init_data",
-						Usage: "create initial data",
+						Name:  "init",
+						Usage: "initialize db data",
 						Action: func(clictx *cli.Context) error {
-							fmt.Println("======== start of db init_data ========")
-							db.InitData()
-							fmt.Println("======== end  of  db init_data ========")
+							fmt.Println("======== start of db data initialization ========")
+							db.Initialize()
+							fmt.Println("======== end  of  db data initialization ========")
+							return nil
+						},
+					},
+					{
+						Name:  "reconfig",
+						Usage: "reconfig db data",
+						Action: func(clictx *cli.Context) error {
+							fmt.Println("======== start of db data reconfiguration ========")
+							db.Reconfig()
+							fmt.Println("======== end  of  db data reconfiguration ========")
 							return nil
 						},
 					},

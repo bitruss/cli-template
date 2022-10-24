@@ -41,8 +41,9 @@ func Init(dbConfig *Config, logger log.Logger) error {
 }
 
 // Init a new instance.
-//  If only need one instance, use empty name "". Use GetDefaultInstance() to get.
-//  If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
+//
+//	If only need one instance, use empty name "". Use GetDefaultInstance() to get.
+//	If you need several instance, run Init() with different <name>. Use GetInstance(<name>) to get.
 func Init_(name string, dbConfig *Config, logger log.Logger) error {
 	if name == "" {
 		name = "default"

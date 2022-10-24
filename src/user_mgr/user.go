@@ -6,11 +6,11 @@ import (
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
 	"github.com/coreservice-io/cli-template/plugin/sqldb_plugin"
-	"github.com/coreservice-io/cli-template/src/common/data"
 	"github.com/coreservice-io/cli-template/src/common/json"
 	"github.com/coreservice-io/cli-template/src/common/smart_cache"
 	"github.com/coreservice-io/utils/hash_util"
 	"github.com/coreservice-io/utils/rand_util"
+	"gorm.io/gorm"
 )
 
 func RolesToStr(roles ...string) string {
@@ -23,9 +23,13 @@ func PermissionsToStr(permissions ...string) string {
 	return string(p_str)
 }
 
-func CreateUser(email string, passwd string, roles string, permissions string) (*UserModel, error) {
+func GenRandUserToken() string {
+	return rand_util.GenRandStr(24)
+}
+
+func CreateUser(tx *gorm.DB, email string, passwd string, roles string, permissions string) (*UserModel, error) {
 	sha256_passwd := hash_util.SHA256String(passwd)
-	token := rand_util.GenRandStr(24)
+	token := GenRandUserToken()
 
 	user := &UserModel{
 		Email:       email,
@@ -35,14 +39,14 @@ func CreateUser(email string, passwd string, roles string, permissions string) (
 		Permissions: permissions,
 		Forbidden:   false,
 	}
-	if err := sqldb_plugin.GetInstance().Table("users").Create(&user).Error; err != nil {
+	if err := tx.Table("users").Create(&user).Error; err != nil {
 		return nil, err
 	}
 	return user, nil
 }
 
-func UpdateUser(updateData map[string]interface{}, id int64) error {
-	queryResult, err := QueryUser(&id, nil, nil, nil, nil, 1, 0, false, false)
+func UpdateUser(tx *gorm.DB, updateData map[string]interface{}, id int64) error {
+	queryResult, err := QueryUser(tx, &id, nil, nil, nil, nil, 1, 0, false, false)
 	if err != nil {
 		basic.Logger.Errorln("UpdateUser queryUsers error:", err, "id:", id)
 		return err
@@ -51,13 +55,13 @@ func UpdateUser(updateData map[string]interface{}, id int64) error {
 		return errors.New("user not exist")
 	}
 
-	err = sqldb_plugin.GetInstance().Table("users").Where("id =?", id).Updates(updateData).Error
+	err = tx.Table("users").Where("id =?", id).Updates(updateData).Error
 	if err != nil {
 		return err
 	}
 
 	//update cache , for fast api middleware token auth
-	QueryUser(nil, &queryResult.Users[0].Token, nil, nil, nil, 1, 0, false, true)
+	QueryUser(tx, nil, &queryResult.Users[0].Token, nil, nil, nil, 1, 0, false, true)
 	return nil
 }
 
@@ -66,7 +70,7 @@ type QueryUserResult struct {
 	Total_count int64
 }
 
-func QueryUser(id *int64, token *string, emailPattern *string, email *string, forbidden *bool, limit int, offset int, fromCache bool, updateCache bool) (*QueryUserResult, error) {
+func QueryUser(tx *gorm.DB, id *int64, token *string, emailPattern *string, email *string, forbidden *bool, limit int, offset int, fromCache bool, updateCache bool) (*QueryUserResult, error) {
 
 	if emailPattern != nil && email != nil {
 		return &QueryUserResult{
@@ -138,24 +142,4 @@ func QueryUser(id *int64, token *string, emailPattern *string, email *string, fo
 	} else {
 		return sq_result.(*QueryUserResult), nil
 	}
-}
-
-// return true if all element defined in array is a allowed permission definition
-func CheckPermissionList(permissions []string) bool {
-	for _, v := range permissions {
-		if !data.InArray(v, UserPermissions) {
-			return false
-		}
-	}
-	return true
-}
-
-// return true if all element defined in array is a allowed role definition
-func CheckRoleList(roles []string) bool {
-	for _, v := range roles {
-		if !data.InArray(v, UserRoles) {
-			return false
-		}
-	}
-	return true
 }

@@ -1,4 +1,4 @@
-package plugin
+package component
 
 import (
 	"errors"
@@ -8,21 +8,26 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
 )
 
-func init_http_echo_server() error {
+func Init_http_echo_server() error {
 
 	toml_conf := conf.Get_config().Toml_config
 
 	if toml_conf.Http.Enable {
-		return echo_plugin.Init_("http", echo_plugin.Config{Port: toml_conf.Http.Port, Tls: false, Crt_path: "", Key_path: ""},
+		if err := echo_plugin.Init_("http", echo_plugin.Config{Port: toml_conf.Http.Port, Tls: false, Crt_path: "", Key_path: ""},
 			func(panic_err interface{}) {
 				basic.Logger.Errorln(panic_err)
-			}, basic.Logger)
+			}, basic.Logger); err == nil {
+			basic.Logger.Infoln("### Init_http_echo_server success")
+			return nil
+		} else {
+			return err
+		}
+	} else {
+		return nil
 	}
-
-	return nil
 }
 
-func init_https_echo_server() error {
+func Init_https_echo_server() error {
 
 	toml_conf := conf.Get_config().Toml_config
 	if toml_conf.Https.Enable {
@@ -37,21 +42,26 @@ func init_https_echo_server() error {
 			return errors.New("https key file path error:" + toml_conf.Https.Key_path)
 		}
 
-		return echo_plugin.Init_("https", echo_plugin.Config{Port: toml_conf.Https.Port, Tls: true, Crt_path: crt_abs_path, Key_path: key_abs_path},
+		if err := echo_plugin.Init_("https", echo_plugin.Config{Port: toml_conf.Https.Port, Tls: true, Crt_path: crt_abs_path, Key_path: key_abs_path},
 			func(panic_err interface{}) {
 				basic.Logger.Errorln(panic_err)
-			}, basic.Logger)
+			}, basic.Logger); err == nil {
+			basic.Logger.Infoln("### Init_https_echo_server success")
+			return nil
+		} else {
+			return err
+		}
+	} else {
+		return nil
 	}
-
-	return nil
 }
 
-func initEchoServer() error {
-	http_err := init_http_echo_server()
+func InitEchoServer() error {
+	http_err := Init_http_echo_server()
 	if http_err != nil {
 		return http_err
 	}
-	https_err := init_https_echo_server()
+	https_err := Init_https_echo_server()
 	if https_err != nil {
 		return https_err
 	}

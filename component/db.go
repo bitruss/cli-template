@@ -1,4 +1,4 @@
-package plugin
+package component
 
 import (
 	"github.com/coreservice-io/cli-template/basic"
@@ -6,7 +6,7 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/sqldb_plugin"
 )
 
-func initDB() error {
+func InitDB() error {
 	toml_conf := conf.Get_config().Toml_config
 
 	if toml_conf.Db.Enable {
@@ -17,9 +17,14 @@ func initDB() error {
 			UserName: toml_conf.Db.Username,
 			Password: toml_conf.Db.Password,
 		}
-		basic.Logger.Infoln("init db plugin with config:", db_conf)
-		return sqldb_plugin.Init(&db_conf, basic.Logger)
+		basic.Logger.Infoln("Init db plugin with config:", db_conf)
+		if err := sqldb_plugin.Init(&db_conf, basic.Logger); err == nil {
+			basic.Logger.Infoln("### InitDB success")
+			return nil
+		} else {
+			return err
+		}
+	} else {
+		return nil
 	}
-
-	return nil
 }

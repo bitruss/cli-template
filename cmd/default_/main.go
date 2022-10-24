@@ -6,7 +6,6 @@ import (
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/basic/conf"
 	"github.com/coreservice-io/cli-template/cmd/default_/http"
-	"github.com/coreservice-io/cli-template/cmd/default_/plugin"
 	"github.com/coreservice-io/cli-template/plugin/auto_cert_plugin"
 	"github.com/coreservice-io/cli-template/plugin/geo_ip_plugin"
 	"github.com/fatih/color"
@@ -20,7 +19,7 @@ func StartDefault(clictx *cli.Context) {
 	//}()
 	color.Green(basic.Logo)
 	//ini components and run example
-	plugin.InitPlugin()
+	InitComponent()
 
 	//start threads jobs
 	go start_jobs()
