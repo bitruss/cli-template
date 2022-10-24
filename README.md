@@ -41,17 +41,17 @@ go run ./ config set --https.enable=false
 
 #### 1.1 run default program with {config_name}
 
-##### ```go run . --conf={config_name}``` // will use the {config_name}.toml inside configs folder
+##### ```go run . --conf={config_name}``` // will use the {config_name}.toml inside root_conf folder
 
-##### ```go run .```  // just use defalut.toml
+##### ```go run .```  // use the defalut.toml inside root_conf folder
 
 #### 2."config" sub-program::
 
 ##### config is the program used to show or set config file
 
-#### 2.1 set config
+#### 2.1 custom config 
 
-##### ```go run . --conf={config_name} config set ...```
+##### ```go run . --conf={config_name} config set ...``` //using {config_name}.toml
 
 ##### ```go run . config set ...```   //using default.toml
 
