@@ -43,6 +43,7 @@ func Allow(key string, duration_second int64, Count int) bool {
 		if nowTime-limit_info.LastSetUnixTime >= duration_second {
 			limit_info.CountLeft = Count
 			limit_info.LastSetUnixTime = nowTime
+			allow = true
 		} else {
 			limit_info.CountLeft--
 			if limit_info.CountLeft >= 0 {
