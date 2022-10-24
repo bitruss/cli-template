@@ -23,7 +23,7 @@ func SmartQuery(key string, resultHolderAlloc func() interface{}, serialization 
 
 		resultHolder = resultHolderAlloc()
 
-		err := Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, resultHolder)
+		err := Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, serialization, key, resultHolder)
 		if err == nil {
 			basic.Logger.Debugln(queryDescription, " hit from redis")
 			Ref_Set(reference_plugin.GetInstance(), key, resultHolder)
