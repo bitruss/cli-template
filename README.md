@@ -2,7 +2,16 @@
 
 # How to use
 
-#### 1."default_" application:
+
+#### before you start first check your config
+
+#### root_conf 
+```
+root_conf is your default config where you could put various kinds of toml files . e.g : "default.toml" , "dev.toml" ....
+```
+
+
+#### 1."default_" sub-program:
 
 ##### default_ is the main program
 
@@ -12,7 +21,7 @@
 
 ##### ```go run .```  // just use defalut.toml
 
-#### 2."config" application:
+#### 2."config" sub-program::
 
 ##### config is the program used to show or set config file
 
@@ -22,7 +31,7 @@
 
 ##### ```go run . config set ...```   //using default.toml
 
-#### 3. log
+#### 3. log sub-program:
 
 #### 3.1 show all logs
 
@@ -32,22 +41,30 @@
 
 ##### ```go run . log --only_err=true```
 
-#### 4. "api" application:
+#### 4. "api" sub-program::
 
 ##### 4.1 generate the api documents
 
 ##### ```go run . gen_api```
 
+
+#### 5. "db" sub-program::
+
+##### ```go run . db init_data```
+
+
 ## Running process
+```
+.check root_conf folder 
+.check db folder (you may need to deploy the .sql)
+```
 
-```sh
-
+```
 1.entry -> main.go
 2.basic logger is initialized 
 3.cmd/cmd.go ->ConfigCmd() is called
 4.read the related config file
-5.--> go to cmd application "config"|"default_"|"log"
-
+5.--> go to cmd application "config"|"default_"|"log"|"db"
 
 ```
 

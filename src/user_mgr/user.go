@@ -7,10 +7,21 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
 	"github.com/coreservice-io/cli-template/plugin/sqldb_plugin"
 	"github.com/coreservice-io/cli-template/src/common/data"
+	"github.com/coreservice-io/cli-template/src/common/json"
 	"github.com/coreservice-io/cli-template/src/common/smart_cache"
 	"github.com/coreservice-io/utils/hash_util"
 	"github.com/coreservice-io/utils/rand_util"
 )
+
+func RolesToStr(roles ...string) string {
+	r_str, _ := json.Marshal(roles)
+	return string(r_str)
+}
+
+func PermissionsToStr(permissions ...string) string {
+	p_str, _ := json.Marshal(permissions)
+	return string(p_str)
+}
 
 func CreateUser(email string, passwd string, roles string, permissions string) (*UserModel, error) {
 	sha256_passwd := hash_util.SHA256String(passwd)
@@ -129,7 +140,7 @@ func QueryUser(id *int64, token *string, emailPattern *string, email *string, fo
 	}
 }
 
-//return true if all element defined in array is a allowed permission definition
+// return true if all element defined in array is a allowed permission definition
 func CheckPermissionList(permissions []string) bool {
 	for _, v := range permissions {
 		if !data.InArray(v, UserPermissions) {
@@ -139,7 +150,7 @@ func CheckPermissionList(permissions []string) bool {
 	return true
 }
 
-//return true if all element defined in array is a allowed role definition
+// return true if all element defined in array is a allowed role definition
 func CheckRoleList(roles []string) bool {
 	for _, v := range roles {
 		if !data.InArray(v, UserRoles) {

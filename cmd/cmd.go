@@ -13,6 +13,7 @@ import (
 	"github.com/coreservice-io/cli-template/cmd/default_"
 	"github.com/coreservice-io/cli-template/cmd/default_/http/api"
 	cmd_log "github.com/coreservice-io/cli-template/cmd/log"
+	"github.com/coreservice-io/cli-template/db"
 	ilog "github.com/coreservice-io/log"
 	"github.com/urfave/cli/v2"
 )
@@ -20,6 +21,7 @@ import (
 const CMD_NAME_DEFAULT = "default"
 const CMD_NAME_GEN_API = "gen_api"
 const CMD_NAME_LOG = "log"
+const CMD_NAME_DB = "db"
 const CMD_NAME_CONFIG = "config"
 
 // //////config to do cmd ///////////
@@ -81,6 +83,22 @@ func ConfigCmd() *cli.App {
 				Action: func(clictx *cli.Context) error {
 					cmd_log.StartLog(clictx)
 					return nil
+				},
+			},
+			{
+				Name:  CMD_NAME_DB,
+				Usage: "db command",
+				Subcommands: []*cli.Command{
+					{
+						Name:  "init_data",
+						Usage: "create initial data",
+						Action: func(clictx *cli.Context) error {
+							fmt.Println("======== start of db init_data ========")
+							db.InitData()
+							fmt.Println("======== end  of  db init_data ========")
+							return nil
+						},
+					},
 				},
 			},
 			{
