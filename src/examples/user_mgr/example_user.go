@@ -97,7 +97,7 @@ func QueryUser(id *int64, status *string, name *string, email *string, limit int
 	}
 
 	/////
-	sq_result, sq_err := smart_cache.SmartQuery(key, resultHolderAlloc, fromCache, updateCache, 300, query, "UserQuery")
+	sq_result, sq_err := smart_cache.SmartQuery(key, resultHolderAlloc, true, fromCache, updateCache, 300, query, "UserQuery")
 
 	/////
 	if sq_err != nil {

@@ -9,7 +9,7 @@ import (
 )
 
 // for Query ,return QueryNilErr if Query result is nil  -> as set nil to cache is not supported
-func SmartQuery(key string, resultHolderAlloc func() interface{}, fromCache bool, updateCache bool, cacheTTLSecs int64, Query func(resultHolder interface{}) error, queryDescription string) (interface{}, error) {
+func SmartQuery(key string, resultHolderAlloc func() interface{}, serialization bool, fromCache bool, updateCache bool, cacheTTLSecs int64, Query func(resultHolder interface{}) error, queryDescription string) (interface{}, error) {
 
 	var resultHolder interface{}
 
@@ -61,7 +61,7 @@ func SmartQuery(key string, resultHolderAlloc func() interface{}, fromCache bool
 		}
 	} else {
 		if updateCache {
-			RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, resultHolder, cacheTTLSecs)
+			RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), serialization, key, resultHolder, cacheTTLSecs)
 		}
 		return resultHolder, nil
 	}
