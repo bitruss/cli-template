@@ -33,6 +33,8 @@ func DeclareApi(httpServer *echo.Echo) {
 	configHealth(httpServer)
 	//user
 	configUser(httpServer)
+	//kv
+	config_kv(httpServer)
 }
 
 func ConfigApi(httpServer *echo.Echo) {
