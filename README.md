@@ -11,12 +11,19 @@ root_conf is your default config where you could put
 various kinds of toml files . e.g : "default.toml" , "dev.toml" ....
 ```
 
+#### overwrite root_conf with your own conf , example:
+#### below command will create a custom conf inside the user_conf folder
+```
+go run ./ config set --https.enable=false
+```
+
 
 ## Running process
 ```
 .check root_conf folder 
 .check db folder (you may need to deploy the .sql)
 ```
+
 
 ```
 1.entry -> main.go
