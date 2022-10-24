@@ -75,7 +75,7 @@ func Ref_Set_TTL(localRef *reference.Reference, keystr string, value interface{}
 }
 
 // //first try from localRef if not found then try from remote redis
-func Redis_Get(ctx context.Context, Redis *redis.ClusterClient, isJSON bool, keystr string, result interface{}) error {
+func Redis_Get(ctx context.Context, Redis *redis.ClusterClient, serialization bool, keystr string, result interface{}) error {
 	// 1/5 check ttl
 	if rand.Intn(5) == 0 {
 		ttl, err := Redis.TTL(context.Background(), keystr).Result()
@@ -105,15 +105,15 @@ func Redis_Get(ctx context.Context, Redis *redis.ClusterClient, isJSON bool, key
 	default:
 	}
 
-	if isJSON {
+	if serialization {
 		return json.Unmarshal(r_bytes, result)
 	} else {
 		return scmd.Scan(result)
 	}
 }
 
-func RR_Set(ctx context.Context, Redis *redis.ClusterClient, localRef *reference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64) error {
-	return RR_Set_TTL(ctx, Redis, localRef, isJSON, keystr, value, redis_ttl_second, local_reference_secs)
+func RR_Set(ctx context.Context, Redis *redis.ClusterClient, localRef *reference.Reference, serialization bool, keystr string, value interface{}, redis_ttl_second int64) error {
+	return RR_Set_TTL(ctx, Redis, localRef, serialization, keystr, value, redis_ttl_second, local_reference_secs)
 }
 
 func RR_SetQueryErr(ctx context.Context, Redis *redis.ClusterClient, keystr string) error {
@@ -130,11 +130,11 @@ func RR_SetQueryNilErr_TTL(ctx context.Context, Redis *redis.ClusterClient, keys
 
 // reference set && redis set
 // set both value to both local reference & remote redis
-func RR_Set_TTL(ctx context.Context, Redis *redis.ClusterClient, localRef *reference.Reference, isJSON bool, keystr string, value interface{}, redis_ttl_second int64, ref_ttl_second int64) error {
+func RR_Set_TTL(ctx context.Context, Redis *redis.ClusterClient, localRef *reference.Reference, serialization bool, keystr string, value interface{}, redis_ttl_second int64, ref_ttl_second int64) error {
 	if value == nil {
 		return errors.New("value nil not allowed")
 	}
-	if isJSON {
+	if serialization {
 		err := localRef.Set(keystr, value, ref_ttl_second)
 		if err != nil {
 			return err
