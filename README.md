@@ -7,7 +7,24 @@
 
 #### root_conf 
 ```
-root_conf is your default config where you could put various kinds of toml files . e.g : "default.toml" , "dev.toml" ....
+root_conf is your default config where you could put 
+various kinds of toml files . e.g : "default.toml" , "dev.toml" ....
+```
+
+
+## Running process
+```
+.check root_conf folder 
+.check db folder (you may need to deploy the .sql)
+```
+
+```
+1.entry -> main.go
+2.basic logger is initialized 
+3.cmd/cmd.go ->ConfigCmd() is called
+4.read the related config file
+5.--> go to cmd application "config"|"default_"|"log"|"db"
+
 ```
 
 
@@ -52,21 +69,6 @@ root_conf is your default config where you could put various kinds of toml files
 
 ##### ```go run . db init_data```
 
-
-## Running process
-```
-.check root_conf folder 
-.check db folder (you may need to deploy the .sql)
-```
-
-```
-1.entry -> main.go
-2.basic logger is initialized 
-3.cmd/cmd.go ->ConfigCmd() is called
-4.read the related config file
-5.--> go to cmd application "config"|"default_"|"log"|"db"
-
-```
 
 ## API
 
