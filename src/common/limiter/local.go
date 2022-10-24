@@ -35,7 +35,7 @@ func Allow(key string, duration_second int64, Count int) bool {
 			LastSetUnixTime: nowTime,
 		}
 
-		reference_plugin.GetInstance().Set(lKey, limit_info, duration_second*5)
+		reference_plugin.GetInstance().Set(lKey, limit_info, duration_second*5+60)
 
 	} else {
 		limit_info = value.(*limitInfo)
