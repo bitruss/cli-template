@@ -45,6 +45,158 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/kv/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kv"
+                ],
+                "summary": "creat key value pair",
+                "parameters": [
+                    {
+                        "description": "creat key value pair",
+                        "name": "msg",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Msg_Req_CreateKv"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "result",
+                        "schema": {
+                            "$ref": "#/definitions/api.API_META_STATUS"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kv/delete": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kv"
+                ],
+                "summary": "delete key value pair",
+                "parameters": [
+                    {
+                        "description": "delete key value pair",
+                        "name": "msg",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Msg_Req_DeleteKv"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "result",
+                        "schema": {
+                            "$ref": "#/definitions/api.API_META_STATUS"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kv/query": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kv"
+                ],
+                "summary": "query key value pair",
+                "parameters": [
+                    {
+                        "description": "query key value pair",
+                        "name": "msg",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Msg_Req_QueryKv"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "result",
+                        "schema": {
+                            "$ref": "#/definitions/api.Msg_Resp_QueryKv"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kv/update": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kv"
+                ],
+                "summary": "update key value pair",
+                "parameters": [
+                    {
+                        "description": "update key value pair",
+                        "name": "msg",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Msg_Req_UpdateKv"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "result",
+                        "schema": {
+                            "$ref": "#/definitions/api.API_META_STATUS"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/create": {
             "post": {
                 "security": [
@@ -172,6 +324,23 @@ const docTemplate = `{
                 }
             }
         },
+        "api.DBKV": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
         "api.MSG_REQ_create_user": {
             "type": "object",
             "properties": {
@@ -294,6 +463,108 @@ const docTemplate = `{
                 }
             }
         },
+        "api.Msg_Req_CreateKv": {
+            "description": "Msg_Req_CreateRule",
+            "type": "object",
+            "properties": {
+                "description": {
+                    "description": "required",
+                    "type": "string"
+                },
+                "key": {
+                    "description": "required",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "required",
+                    "type": "string"
+                }
+            }
+        },
+        "api.Msg_Req_DeleteKv": {
+            "description": "Msg_Req_DeleteKv",
+            "type": "object",
+            "properties": {
+                "filter": {
+                    "description": "required",
+                    "$ref": "#/definitions/api.Msg_Req_DeleteKv_Filter"
+                }
+            }
+        },
+        "api.Msg_Req_DeleteKv_Filter": {
+            "description": "Msg_Req_DeleteKv_Filter",
+            "type": "object",
+            "properties": {
+                "keys": {
+                    "description": "required",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "api.Msg_Req_QueryKv": {
+            "description": "Msg_Req_QueryKv",
+            "type": "object",
+            "properties": {
+                "filter": {
+                    "description": "required",
+                    "$ref": "#/definitions/api.Msg_Req_QueryKv_Filter"
+                }
+            }
+        },
+        "api.Msg_Req_QueryKv_Filter": {
+            "description": "Msg_Req_QueryKv_Filter",
+            "type": "object",
+            "properties": {
+                "keys": {
+                    "description": "optional",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "api.Msg_Req_UpdateKv": {
+            "description": "Msg_Req_UpdateKv",
+            "type": "object",
+            "properties": {
+                "filter": {
+                    "description": "required",
+                    "$ref": "#/definitions/api.Msg_Req_UpdateKv_Filter"
+                },
+                "update": {
+                    "description": "required",
+                    "$ref": "#/definitions/api.Msg_Req_UpdateKv_To"
+                }
+            }
+        },
+        "api.Msg_Req_UpdateKv_Filter": {
+            "description": "Msg_Req_UpdateKv_Filter",
+            "type": "object",
+            "properties": {
+                "key": {
+                    "description": "required",
+                    "type": "string"
+                }
+            }
+        },
+        "api.Msg_Req_UpdateKv_To": {
+            "description": "Msg_Req_UpdateKv_To",
+            "type": "object",
+            "properties": {
+                "description": {
+                    "description": "required",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "required",
+                    "type": "string"
+                }
+            }
+        },
         "api.Msg_Req_update_user_to": {
             "type": "object",
             "properties": {
@@ -305,6 +576,26 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "string"
+                }
+            }
+        },
+        "api.Msg_Resp_QueryKv": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "kv": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.DBKV"
+                    }
+                },
+                "meta_message": {
+                    "type": "string"
+                },
+                "meta_status": {
+                    "type": "integer"
                 }
             }
         }

@@ -6,6 +6,17 @@ definitions:
       meta_status:
         type: integer
     type: object
+  api.DBKV:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      key:
+        type: string
+      value:
+        type: string
+    type: object
   api.MSG_REQ_create_user:
     properties:
       email:
@@ -86,6 +97,78 @@ definitions:
       name:
         type: string
     type: object
+  api.Msg_Req_CreateKv:
+    description: Msg_Req_CreateRule
+    properties:
+      description:
+        description: required
+        type: string
+      key:
+        description: required
+        type: string
+      value:
+        description: required
+        type: string
+    type: object
+  api.Msg_Req_DeleteKv:
+    description: Msg_Req_DeleteKv
+    properties:
+      filter:
+        $ref: '#/definitions/api.Msg_Req_DeleteKv_Filter'
+        description: required
+    type: object
+  api.Msg_Req_DeleteKv_Filter:
+    description: Msg_Req_DeleteKv_Filter
+    properties:
+      keys:
+        description: required
+        items:
+          type: string
+        type: array
+    type: object
+  api.Msg_Req_QueryKv:
+    description: Msg_Req_QueryKv
+    properties:
+      filter:
+        $ref: '#/definitions/api.Msg_Req_QueryKv_Filter'
+        description: required
+    type: object
+  api.Msg_Req_QueryKv_Filter:
+    description: Msg_Req_QueryKv_Filter
+    properties:
+      keys:
+        description: optional
+        items:
+          type: string
+        type: array
+    type: object
+  api.Msg_Req_UpdateKv:
+    description: Msg_Req_UpdateKv
+    properties:
+      filter:
+        $ref: '#/definitions/api.Msg_Req_UpdateKv_Filter'
+        description: required
+      update:
+        $ref: '#/definitions/api.Msg_Req_UpdateKv_To'
+        description: required
+    type: object
+  api.Msg_Req_UpdateKv_Filter:
+    description: Msg_Req_UpdateKv_Filter
+    properties:
+      key:
+        description: required
+        type: string
+    type: object
+  api.Msg_Req_UpdateKv_To:
+    description: Msg_Req_UpdateKv_To
+    properties:
+      description:
+        description: required
+        type: string
+      value:
+        description: required
+        type: string
+    type: object
   api.Msg_Req_update_user_to:
     properties:
       email:
@@ -94,6 +177,19 @@ definitions:
         type: string
       status:
         type: string
+    type: object
+  api.Msg_Resp_QueryKv:
+    properties:
+      count:
+        type: integer
+      kv:
+        items:
+          $ref: '#/definitions/api.DBKV'
+        type: array
+      meta_message:
+        type: string
+      meta_status:
+        type: integer
     type: object
 info:
   contact:
@@ -121,6 +217,98 @@ paths:
       summary: /api/health
       tags:
       - health
+  /api/kv/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: creat key value pair
+        in: body
+        name: msg
+        required: true
+        schema:
+          $ref: '#/definitions/api.Msg_Req_CreateKv'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: result
+          schema:
+            $ref: '#/definitions/api.API_META_STATUS'
+      security:
+      - ApiKeyAuth: []
+      summary: creat key value pair
+      tags:
+      - kv
+  /api/kv/delete:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: delete key value pair
+        in: body
+        name: msg
+        required: true
+        schema:
+          $ref: '#/definitions/api.Msg_Req_DeleteKv'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: result
+          schema:
+            $ref: '#/definitions/api.API_META_STATUS'
+      security:
+      - ApiKeyAuth: []
+      summary: delete key value pair
+      tags:
+      - kv
+  /api/kv/query:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: query key value pair
+        in: body
+        name: msg
+        required: true
+        schema:
+          $ref: '#/definitions/api.Msg_Req_QueryKv'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: result
+          schema:
+            $ref: '#/definitions/api.Msg_Resp_QueryKv'
+      security:
+      - ApiKeyAuth: []
+      summary: query key value pair
+      tags:
+      - kv
+  /api/kv/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: update key value pair
+        in: body
+        name: msg
+        required: true
+        schema:
+          $ref: '#/definitions/api.Msg_Req_UpdateKv'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: result
+          schema:
+            $ref: '#/definitions/api.API_META_STATUS'
+      security:
+      - ApiKeyAuth: []
+      summary: update key value pair
+      tags:
+      - kv
   /api/user/create:
     post:
       consumes:
