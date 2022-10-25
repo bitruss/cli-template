@@ -2,33 +2,32 @@ package test
 
 import (
 	"context"
-	"log"
 	"testing"
 
+	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/component"
+	"github.com/coreservice-io/cli-template/config"
 	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
 	"github.com/coreservice-io/cli-template/plugin/reference_plugin"
 	"github.com/coreservice-io/cli-template/src/common/smart_cache"
 )
 
 func initialize_smc() {
-	//redis
-	err := redis_plugin.Init(&redis_plugin.Config{
-		Address:   "127.0.0.1",
-		UserName:  "",
-		Password:  "",
-		Port:      6379,
-		KeyPrefix: "userTest:",
-		UseTLS:    false,
-	})
-	if err != nil {
-		log.Fatalln("redis init err", err)
+
+	config.ConfigBasic()
+
+	config_toml := config.Get_config().Toml_config
+
+	/////////////////////////
+	if err := component.InitReference(); err != nil {
+		basic.Logger.Fatalln(err)
 	}
 
-	//reference
-	err = reference_plugin.Init()
-	if err != nil {
-		log.Fatalln("reference init err", err)
+	/////////////////////////
+	if err := component.InitRedis(config_toml); err != nil {
+		basic.Logger.Fatalln(err)
 	}
+
 }
 
 type person struct {
@@ -42,15 +41,15 @@ func Test_BuildInType(t *testing.T) {
 	v := 7
 	err := smart_cache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), false, key, &v, 300)
 	if err != nil {
-		log.Println("RR_Set error", err)
+		basic.Logger.Infoln("RR_Set error", err)
 	}
 	r := smart_cache.Ref_Get(reference_plugin.GetInstance(), key)
 	if r != nil {
-		log.Println(r.(*int))
+		basic.Logger.Infoln(r.(*int))
 	}
 	var rInt int
 	smart_cache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, false, key, &rInt)
-	log.Println(rInt)
+	basic.Logger.Infoln(rInt)
 }
 
 func Test_Struct(t *testing.T) {
@@ -62,13 +61,13 @@ func Test_Struct(t *testing.T) {
 	}
 	err := smart_cache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), true, key, v, 300)
 	if err != nil {
-		log.Println("RR_Set error", err)
+		basic.Logger.Infoln("RR_Set error", err)
 	}
 	r := smart_cache.Ref_Get(reference_plugin.GetInstance(), key)
 	if r != nil {
-		log.Println(r.(*person))
+		basic.Logger.Infoln(r.(*person))
 	}
 	var p person
 	smart_cache.Redis_Get(context.Background(), redis_plugin.GetInstance().ClusterClient, true, key, &p)
-	log.Println(p)
+	basic.Logger.Infoln(p)
 }

@@ -1,21 +1,22 @@
-package db
+package db_cmd
 
 import (
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/component"
+	"github.com/coreservice-io/cli-template/config"
 )
 
-func startDBComponent() {
+func StartDBComponent(toml_conf *config.TomlConfig) {
 	/////////////////////////
 	if err := component.InitReference(); err != nil {
 		basic.Logger.Fatalln(err)
 	}
 	/////////////////////////
-	if err := component.InitDB(); err != nil {
+	if err := component.InitDB(toml_conf); err != nil {
 		basic.Logger.Fatalln(err)
 	}
 	/////////////////////////
-	if err := component.InitRedis(); err != nil {
+	if err := component.InitRedis(toml_conf); err != nil {
 		basic.Logger.Fatalln(err)
 	}
 }

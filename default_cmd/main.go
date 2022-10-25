@@ -1,11 +1,11 @@
-package default_
+package default_cmd
 
 import (
 	"time"
 
 	"github.com/coreservice-io/cli-template/basic"
-	"github.com/coreservice-io/cli-template/basic/conf"
-	"github.com/coreservice-io/cli-template/cmd/default_/http"
+	"github.com/coreservice-io/cli-template/config"
+	"github.com/coreservice-io/cli-template/default_cmd/http"
 	"github.com/coreservice-io/cli-template/plugin/auto_cert_plugin"
 	"github.com/coreservice-io/cli-template/plugin/geo_ip_plugin"
 	"github.com/fatih/color"
@@ -59,7 +59,7 @@ func start_jobs() {
 	}
 
 	// //start the auto_cert auto-updating job
-	if conf.Get_config().Toml_config.Auto_cert.Enable {
+	if config.Get_config().Toml_config.Auto_cert.Enable {
 		auto_cert_plugin.GetInstance().AutoUpdate(func(new_crt_str, new_key_str string) {
 			//reload server
 			sre := http.ServerReloadCert()

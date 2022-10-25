@@ -1,4 +1,4 @@
-package db
+package db_cmd
 
 import (
 	"github.com/coreservice-io/cli-template/basic"
@@ -7,7 +7,6 @@ import (
 )
 
 func Reconfig() {
-	startDBComponent()
 	/////////////////////
 	reconfigAdmin()
 }

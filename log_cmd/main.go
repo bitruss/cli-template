@@ -1,4 +1,4 @@
-package log
+package log_cmd
 
 import (
 	"github.com/coreservice-io/cli-template/basic"

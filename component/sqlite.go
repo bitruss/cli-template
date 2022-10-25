@@ -4,12 +4,11 @@ import (
 	"errors"
 
 	"github.com/coreservice-io/cli-template/basic"
-	"github.com/coreservice-io/cli-template/basic/conf"
+	"github.com/coreservice-io/cli-template/config"
 	"github.com/coreservice-io/cli-template/plugin/sqlite_plugin"
 )
 
-func InitSqlite() error {
-	toml_conf := conf.Get_config().Toml_config
+func InitSqlite(toml_conf *config.TomlConfig) error {
 
 	if toml_conf.Sqlite.Enable {
 		sqlite_abs_path, sqlite_abs_path_exist, _ := basic.PathExist(toml_conf.Sqlite.Path)

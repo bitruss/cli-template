@@ -1,11 +1,11 @@
-package conf
+package config
 
 type TomlConfig struct {
-	Log            Log           `toml:"log"`
-	Http           HttpConfig    `toml:"http"`
-	Https          HttpsConfig   `toml:"https"`
-	Auto_cert      AutoCert      `toml:"auto_cert"`
-	Api            API           `toml:"api"`
+	Log       Log         `toml:"log"`
+	Http      HttpConfig  `toml:"http"`
+	Https     HttpsConfig `toml:"https"`
+	Auto_cert AutoCert    `toml:"auto_cert"`
+	//Api            API           `toml:"api"`
 	Redis          Redis         `toml:"redis"`
 	Spr            Spr           `tome:"spr"`
 	Db             DB            `toml:"db"`
@@ -20,11 +20,11 @@ type Log struct {
 	Level string `toml:"level"`
 }
 
-type API struct {
-	Doc_gen_search_dir string `toml:"doc_gen_search_dir"`
-	Doc_gen_mainfile   string `toml:"doc_gen_mainfile"`
-	Doc_gen_output_dir string `toml:"doc_gen_output_dir"`
-}
+// type API struct {
+// 	Doc_gen_search_dir string `toml:"doc_gen_search_dir"`
+// 	Doc_gen_mainfile   string `toml:"doc_gen_mainfile"`
+// 	Doc_gen_output_dir string `toml:"doc_gen_output_dir"`
+// }
 
 type HttpConfig struct {
 	Enable bool `toml:"enable"`

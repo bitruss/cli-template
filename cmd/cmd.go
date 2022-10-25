@@ -2,20 +2,14 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 
-	"os"
-	"strings"
-
-	"github.com/coreservice-io/cli-template/basic"
-	"github.com/coreservice-io/cli-template/basic/conf"
-	"github.com/coreservice-io/cli-template/cmd/config"
-	"github.com/coreservice-io/cli-template/cmd/default_"
-	"github.com/coreservice-io/cli-template/cmd/default_/http/api"
-	cmd_log "github.com/coreservice-io/cli-template/cmd/log"
-	"github.com/coreservice-io/cli-template/db"
-	ilog "github.com/coreservice-io/log"
 	"github.com/urfave/cli/v2"
+
+	"github.com/coreservice-io/cli-template/config"
+	"github.com/coreservice-io/cli-template/db_cmd"
+	"github.com/coreservice-io/cli-template/default_cmd"
+	"github.com/coreservice-io/cli-template/default_cmd/http/api"
+	"github.com/coreservice-io/cli-template/log_cmd"
 )
 
 const CMD_NAME_DEFAULT = "default"
@@ -27,39 +21,10 @@ const CMD_NAME_CONFIG = "config"
 // //////config to do cmd ///////////
 func ConfigCmd() *cli.App {
 
-	//////////init config/////////////
-	toml_target := "default"
-
-	real_args := []string{}
-	for _, arg := range os.Args {
-		arg_lower := strings.ToLower(arg)
-		if strings.HasPrefix(arg_lower, "-conf=") || strings.HasPrefix(arg_lower, "--conf=") {
-			toml_target = strings.TrimPrefix(arg_lower, "--conf=")
-			toml_target = strings.TrimPrefix(toml_target, "-conf=")
-			continue
-		}
-		real_args = append(real_args, arg)
-	}
-
-	os.Args = real_args
-	conf_err := conf.Init_config(toml_target)
-	if conf_err != nil {
-		log.Fatal("config err", conf_err)
-	}
-
-	configuration := conf.Get_config()
-
-	/////set up basic logger ///////
-	basic.InitLogger()
-
-	/////set loglevel//////
-	loglevel := ilog.ParseLogLevel(configuration.Toml_config.Log.Level)
-	basic.Logger.SetLevel(loglevel)
-	basic.Logger.Infoln("loglevel used:", ilog.LogLevelToTag(loglevel))
-	////////////////////////////////
+	real_args := config.ConfigBasic()
 
 	var defaultAction = func(clictx *cli.Context) error {
-		default_.StartDefault(clictx)
+		default_cmd.StartDefault(clictx)
 		return nil
 	}
 
@@ -77,11 +42,19 @@ func ConfigCmd() *cli.App {
 
 		Commands: []*cli.Command{
 			{
+				Name:  CMD_NAME_GEN_API,
+				Usage: "api command",
+				Action: func(clictx *cli.Context) error {
+					api.GenApiDocs()
+					return nil
+				},
+			},
+			{
 				Name:  CMD_NAME_LOG,
 				Usage: "print all logs",
-				Flags: cmd_log.GetFlags(),
+				Flags: log_cmd.GetFlags(),
 				Action: func(clictx *cli.Context) error {
-					cmd_log.StartLog(clictx)
+					log_cmd.StartLog(clictx)
 					return nil
 				},
 			},
@@ -94,7 +67,8 @@ func ConfigCmd() *cli.App {
 						Usage: "initialize db data",
 						Action: func(clictx *cli.Context) error {
 							fmt.Println("======== start of db data initialization ========")
-							db.Initialize()
+							db_cmd.StartDBComponent(config.Get_config().Toml_config)
+							db_cmd.Initialize()
 							fmt.Println("======== end  of  db data initialization ========")
 							return nil
 						},
@@ -104,19 +78,12 @@ func ConfigCmd() *cli.App {
 						Usage: "reconfig db data",
 						Action: func(clictx *cli.Context) error {
 							fmt.Println("======== start of db data reconfiguration ========")
-							db.Reconfig()
+							db_cmd.StartDBComponent(config.Get_config().Toml_config)
+							db_cmd.Reconfig()
 							fmt.Println("======== end  of  db data reconfiguration ========")
 							return nil
 						},
 					},
-				},
-			},
-			{
-				Name:  CMD_NAME_GEN_API,
-				Usage: "api command",
-				Action: func(clictx *cli.Context) error {
-					api.GenApiDocs()
-					return nil
 				},
 			},
 			{
@@ -129,7 +96,7 @@ func ConfigCmd() *cli.App {
 						Usage: "show configs",
 						Action: func(clictx *cli.Context) error {
 							fmt.Println("======== start of config ========")
-							configs, _ := conf.Get_config().Read_merge_config()
+							configs, _ := config.Get_config().Read_merge_config()
 							fmt.Println(configs)
 							fmt.Println("======== end  of  config ========")
 							return nil
@@ -139,9 +106,9 @@ func ConfigCmd() *cli.App {
 					{
 						Name:  "set",
 						Usage: "set config",
-						Flags: append(config.Cli_get_flags(), &cli.StringFlag{Name: "config", Required: false}),
+						Flags: append(Cli_get_flags(), &cli.StringFlag{Name: "config", Required: false}),
 						Action: func(clictx *cli.Context) error {
-							return config.Cli_set_config(clictx)
+							return Cli_set_config(clictx)
 						},
 					},
 				},

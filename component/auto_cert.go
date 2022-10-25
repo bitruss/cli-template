@@ -4,12 +4,11 @@ import (
 	"errors"
 
 	"github.com/coreservice-io/cli-template/basic"
-	"github.com/coreservice-io/cli-template/basic/conf"
+	"github.com/coreservice-io/cli-template/config"
 	"github.com/coreservice-io/cli-template/plugin/auto_cert_plugin"
 )
 
-func InitAutoCert() error {
-	toml_conf := conf.Get_config().Toml_config
+func InitAutoCert(toml_conf *config.TomlConfig) error {
 
 	if toml_conf.Auto_cert.Enable {
 

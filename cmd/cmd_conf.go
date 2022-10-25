@@ -1,10 +1,10 @@
-package config
+package cmd
 
 import (
 	"errors"
 	"strings"
 
-	"github.com/coreservice-io/cli-template/basic/conf"
+	"github.com/coreservice-io/cli-template/config"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 )
@@ -36,7 +36,7 @@ var log_level_map = map[string]struct{}{
 }
 
 func Cli_set_config(clictx *cli.Context) error {
-	config := conf.Get_config()
+	config := config.Get_config()
 
 	if clictx.IsSet("log.level") {
 		log_level := strings.ToUpper(clictx.String("log.level"))

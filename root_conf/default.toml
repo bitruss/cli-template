@@ -20,10 +20,7 @@ init_download = true
 key_path = ''
 url = ''
 
-[api]
-doc_gen_search_dir = 'cmd/default_/http/api'
-doc_gen_mainfile = 'api.go'
-doc_gen_output_dir = 'cmd/default_/http/api_docs'
+ 
 
 [redis]
 enable = false

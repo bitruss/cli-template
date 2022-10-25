@@ -2,12 +2,11 @@ package component
 
 import (
 	"github.com/coreservice-io/cli-template/basic"
-	"github.com/coreservice-io/cli-template/basic/conf"
+	"github.com/coreservice-io/cli-template/config"
 	"github.com/coreservice-io/cli-template/plugin/sqldb_plugin"
 )
 
-func InitDB() error {
-	toml_conf := conf.Get_config().Toml_config
+func InitDB(toml_conf *config.TomlConfig) error {
 
 	if toml_conf.Db.Enable {
 		db_conf := sqldb_plugin.Config{

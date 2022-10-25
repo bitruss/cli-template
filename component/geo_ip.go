@@ -4,12 +4,11 @@ import (
 	"errors"
 
 	"github.com/coreservice-io/cli-template/basic"
-	"github.com/coreservice-io/cli-template/basic/conf"
+	"github.com/coreservice-io/cli-template/config"
 	"github.com/coreservice-io/cli-template/plugin/geo_ip_plugin"
 )
 
-func InitGeoIp() error {
-	toml_conf := conf.Get_config().Toml_config
+func InitGeoIp(toml_conf *config.TomlConfig) error {
 
 	if toml_conf.Geo_ip.Enable {
 		dbFilePath_abs, dbFilePath_abs_exist, _ := basic.PathExist(toml_conf.Geo_ip.Db_path)

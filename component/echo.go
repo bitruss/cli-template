@@ -4,13 +4,11 @@ import (
 	"errors"
 
 	"github.com/coreservice-io/cli-template/basic"
-	"github.com/coreservice-io/cli-template/basic/conf"
+	"github.com/coreservice-io/cli-template/config"
 	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
 )
 
-func Init_http_echo_server() error {
-
-	toml_conf := conf.Get_config().Toml_config
+func Init_http_echo_server(toml_conf *config.TomlConfig) error {
 
 	if toml_conf.Http.Enable {
 		if err := echo_plugin.Init_("http", echo_plugin.Config{Port: toml_conf.Http.Port, Tls: false, Crt_path: "", Key_path: ""},
@@ -27,9 +25,8 @@ func Init_http_echo_server() error {
 	}
 }
 
-func Init_https_echo_server() error {
+func Init_https_echo_server(toml_conf *config.TomlConfig) error {
 
-	toml_conf := conf.Get_config().Toml_config
 	if toml_conf.Https.Enable {
 
 		crt_abs_path, crt_path_exist, _ := basic.PathExist(toml_conf.Https.Crt_path)
@@ -56,12 +53,12 @@ func Init_https_echo_server() error {
 	}
 }
 
-func InitEchoServer() error {
-	http_err := Init_http_echo_server()
+func InitEchoServer(toml_conf *config.TomlConfig) error {
+	http_err := Init_http_echo_server(toml_conf)
 	if http_err != nil {
 		return http_err
 	}
-	https_err := Init_https_echo_server()
+	https_err := Init_https_echo_server(toml_conf)
 	if https_err != nil {
 		return https_err
 	}
