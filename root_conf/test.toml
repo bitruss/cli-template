@@ -1,0 +1,16 @@
+[log]
+level = 'INFO'
+
+[http]
+enable = true
+port = 80
+
+
+[redis]
+enable = false
+use_tls = true
+host = 'localhost'
+port = 6379
+username = 'xxxx'
+password = 'xxxx'
+prefix = 'template'
