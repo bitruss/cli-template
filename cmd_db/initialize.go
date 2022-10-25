@@ -1,9 +1,12 @@
 package cmd_db
 
 import (
+	"errors"
+
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/plugin/sqldb_plugin"
 	"github.com/coreservice-io/cli-template/src/common/dbkv"
+	"github.com/coreservice-io/cli-template/src/common/smart_cache"
 	"github.com/coreservice-io/cli-template/src/user_mgr"
 	"gorm.io/gorm"
 )
@@ -18,31 +21,36 @@ func Initialize() {
 	StartDBComponent()
 
 	key := "db_initialized"
-	result, _ := dbkv.GetDBKV(sqldb_plugin.GetInstance(), nil, &key, false, false)
-	if result != nil {
-		initialized, _ := result.ToBool()
-		if initialized {
-			basic.Logger.Infoln("db already initialized")
-			return
-		}
-	}
 
 	err := sqldb_plugin.GetInstance().Transaction(func(tx *gorm.DB) error {
+
+		_, err := dbkv.GetDBKV(tx, nil, &key, false, false)
+
+		if err == nil {
+			return errors.New("db already initialized")
+		}
+
+		if err != smart_cache.QueryNilErr {
+			return errors.New("db error:" + err.Error())
+		}
+
 		// create your own data here which won't change in the future
-		reconfigAdmin(tx)
+		configAdmin(tx)
 
 		// dbkv
-		return dbkv.SetDBKV_Bool(tx, key, true, "db initialized sign")
+		return dbkv.SetDBKV_Bool(tx, key, true, "db initialized mark")
 	})
+
 	if err != nil {
 		basic.Logger.Errorln("db initialize error:", err)
 		return
+	} else {
+		basic.Logger.Infoln("db initialized")
 	}
 
-	basic.Logger.Infoln("db initialized")
 }
 
-func reconfigAdmin(tx *gorm.DB) {
+func configAdmin(tx *gorm.DB) {
 	default_u_admin, err := user_mgr.CreateUser(tx, ini_admin_email, ini_admin_password,
 		user_mgr.RolesToStr(ini_admin_roles...), user_mgr.PermissionsToStr(ini_admin_permissions...))
 	if err != nil {

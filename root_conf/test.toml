@@ -2,8 +2,31 @@
 level = 'INFO'
 
 [http]
-enable = false
+enable = true
 port = 80
+
+[https]
+enable = true
+port = 443
+crt_path = 'assets/cert/crt.crt'
+key_path = 'assets/cert/key.key'
+html_dir = 'assets/html'
+
+[auto_cert]
+enable = false
+check_interval = 3600
+crt_path = ''
+init_download = true
+key_path = ''
+url = ''
+
+[db]
+enable = true
+host = "debi718.f3322.net"
+port = 9002
+username = "cli"
+password = "123456"
+name = 'cli_template'
 
 
 [redis]
@@ -14,3 +37,33 @@ port = 9003
 username = ''
 password = ''
 prefix = ''
+
+
+[spr]
+enable = false
+
+[elasticsearch]
+enable = false
+host = 'localhost'
+username = 'xxxx'
+password = 'xxxx'
+
+[geo_ip]
+enable = true
+db_path = 'assets/geo_ip/geo_ip.csv'
+
+[leveldb]
+enable = false
+path = ''
+
+[smtp]
+enable = false
+host = ''
+port = 587
+password = ''
+username = ''
+
+[sqlite]
+enable = false
+path = ''
+
