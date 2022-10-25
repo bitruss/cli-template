@@ -1,26 +1,26 @@
-## cli-template
+### cli-template
 
-### description: 
+#### description: 
 ```
 this is a template project that you can fork or copy as a project to start with.
 ```
 
-### designed with:
+#### designed with:
 ```
 1.easy configuration (toml)
 2.command line support
 3.rich plugins
 ```
 
-### main entry point file
+#### main entry point file
 ```
 main.go is the entry file
 other test entries are under 'test' folders
 ```
 
-### steps to start:
+#### steps to start:
 
-#### step1. config your project 
+##### step1. config your project 
 ```
 1. check folder 'root_conf' where you can put different {config_name}.toml files
 2. the 'default.toml' config is used if not explicited configured 
@@ -29,14 +29,14 @@ other test entries are under 'test' folders
 4. you can also edit user_conf/*.toml files directly without the help of command line
 ```
 
-#### step2. check database initialization 
+##### step2. check database initialization 
 ```
 1. config your database in your *.toml file
 2. open your database and construct the tables using file 'cmd_db/table.sql'
 3. run 'go run ./ db init' which will call the function 'Initialize()' inside the 'cmd_db/initialize.go' file which initialize the db data
 ```
 
-#### step3. write api
+##### step3. write api
 ```
 1.go to `cmd_default` folder where your main program locate
 2.go to 'http/api' folder to add your own api file
@@ -45,7 +45,7 @@ other test entries are under 'test' folders
 5.you can view the api pages with 'localhost'
 ```
 
-### Command line hints
+#### Command line hints
 ```
 go run . gen_api                //generate api
 go run . config set ...         //set configs
