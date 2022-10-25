@@ -15,7 +15,6 @@ import (
 // 4.return the real args
 func ConfigBasic(toml_target string) []string {
 	//////////init config/////////////
-
 	real_args := []string{}
 	for _, arg := range os.Args {
 		arg_lower := strings.ToLower(arg)

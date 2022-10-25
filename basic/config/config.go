@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/utils/path_util"
@@ -80,9 +81,17 @@ func Init_config(conf_target string) error {
 	//read root config
 	root_conf_toml_rel_path := filepath.Join("root_conf", conf_target+".toml")
 	r_c_p, r_c_p_exist, _ := path_util.SmartPathExist(root_conf_toml_rel_path)
+
+	if !r_c_p_exist {
+		_, filename, _, _ := runtime.Caller(0) //if currently doing golang test unit
+		r_c_p = filepath.Join(filename, "..", "..", "..", "root_conf", conf_target+".toml")
+		r_c_p_exist, _ = path_util.AbsPathExist(r_c_p)
+	}
+
 	if !r_c_p_exist {
 		return errors.New("no root config file:" + root_conf_toml_rel_path)
 	}
+
 	cfg.Root_config_path = r_c_p
 	cfg.Root_config_tree, err = toml.LoadFile(r_c_p)
 	if err != nil {

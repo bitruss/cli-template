@@ -12,7 +12,7 @@ import (
 	"github.com/coreservice-io/cli-template/src/common/smart_cache"
 )
 
-func initialize_smc() {
+func initialize_component() {
 
 	config.ConfigBasic("test")
 
@@ -36,7 +36,8 @@ type person struct {
 }
 
 func Test_BuildInType(t *testing.T) {
-	initialize_smc()
+
+	initialize_component()
 	key := "test:111"
 	v := 7
 	err := smart_cache.RR_Set(context.Background(), redis_plugin.GetInstance().ClusterClient, reference_plugin.GetInstance(), false, key, &v, 300)
@@ -53,7 +54,7 @@ func Test_BuildInType(t *testing.T) {
 }
 
 func Test_Struct(t *testing.T) {
-	initialize_smc()
+	initialize_component()
 	key := "test:111"
 	v := &person{
 		Name: "Jack",
