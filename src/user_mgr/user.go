@@ -5,7 +5,6 @@ import (
 
 	"github.com/coreservice-io/cli-template/basic"
 	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
-	"github.com/coreservice-io/cli-template/plugin/sqldb_plugin"
 	"github.com/coreservice-io/cli-template/src/common/json"
 	"github.com/coreservice-io/cli-template/src/common/smart_cache"
 	"github.com/coreservice-io/utils/hash_util"
@@ -60,7 +59,7 @@ func UpdateUser(tx *gorm.DB, updateData map[string]interface{}, id int64) error 
 		return err
 	}
 
-	//update cache , for fast api middleware token auth
+	// update cache , for fast api middleware token auth
 	QueryUser(tx, nil, &queryResult.Users[0].Token, nil, nil, nil, 1, 0, false, true)
 	return nil
 }
@@ -79,7 +78,7 @@ func QueryUser(tx *gorm.DB, id *int64, token *string, emailPattern *string, emai
 		}, errors.New("emailPattern ,email :can't be set at the same time")
 	}
 
-	//gen_key
+	// gen_key
 	ck := smart_cache.NewConnectKey("users")
 	ck.C_Int64_Ptr("id", id).
 		C_Str_Ptr("token", token).
@@ -91,7 +90,7 @@ func QueryUser(tx *gorm.DB, id *int64, token *string, emailPattern *string, emai
 
 	key := redis_plugin.GetInstance().GenKey(ck.String())
 
-	/////
+	// ///
 	resultHolderAlloc := func() interface{} {
 		return &QueryUserResult{
 			Users:       []*UserModel{},
@@ -99,11 +98,11 @@ func QueryUser(tx *gorm.DB, id *int64, token *string, emailPattern *string, emai
 		}
 	}
 
-	/////
+	// ///
 	query := func(resultHolder interface{}) error {
 		queryResult := resultHolder.(*QueryUserResult)
 
-		query := sqldb_plugin.GetInstance().Table("users")
+		query := tx.Table("users")
 		if emailPattern != nil {
 			query.Where("email LIKE ?", "%"+*emailPattern+"%")
 		}
@@ -133,10 +132,10 @@ func QueryUser(tx *gorm.DB, id *int64, token *string, emailPattern *string, emai
 		return query.Find(&queryResult.Users).Error
 	}
 
-	/////
+	// ///
 	sq_result, sq_err := smart_cache.SmartQuery(key, resultHolderAlloc, true, fromCache, updateCache, 300, query, "QueryUser")
 
-	/////
+	// ///
 	if sq_err != nil {
 		return nil, sq_err
 	} else {
