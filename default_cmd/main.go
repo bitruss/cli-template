@@ -9,10 +9,9 @@ import (
 	"github.com/coreservice-io/cli-template/plugin/auto_cert_plugin"
 	"github.com/coreservice-io/cli-template/plugin/geo_ip_plugin"
 	"github.com/fatih/color"
-	"github.com/urfave/cli/v2"
 )
 
-func StartDefault(clictx *cli.Context) {
+func StartDefault() {
 
 	//defer func() {
 	//	//global.ReleaseResources()

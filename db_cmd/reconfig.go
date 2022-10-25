@@ -7,6 +7,7 @@ import (
 )
 
 func Reconfig() {
+	StartDBComponent()
 	/////////////////////
 	reconfigAdmin()
 }

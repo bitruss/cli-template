@@ -24,7 +24,7 @@ func ConfigCmd() *cli.App {
 	real_args := config.ConfigBasic()
 
 	var defaultAction = func(clictx *cli.Context) error {
-		default_cmd.StartDefault(clictx)
+		default_cmd.StartDefault()
 		return nil
 	}
 
@@ -54,7 +54,9 @@ func ConfigCmd() *cli.App {
 				Usage: "print all logs",
 				Flags: log_cmd.GetFlags(),
 				Action: func(clictx *cli.Context) error {
-					log_cmd.StartLog(clictx)
+					num := clictx.Int64("num")
+					onlyerr := clictx.Bool("only_err")
+					log_cmd.StartLog(onlyerr, num)
 					return nil
 				},
 			},
@@ -67,7 +69,6 @@ func ConfigCmd() *cli.App {
 						Usage: "initialize db data",
 						Action: func(clictx *cli.Context) error {
 							fmt.Println("======== start of db data initialization ========")
-							db_cmd.StartDBComponent(config.Get_config().Toml_config)
 							db_cmd.Initialize()
 							fmt.Println("======== end  of  db data initialization ========")
 							return nil
@@ -78,7 +79,6 @@ func ConfigCmd() *cli.App {
 						Usage: "reconfig db data",
 						Action: func(clictx *cli.Context) error {
 							fmt.Println("======== start of db data reconfiguration ========")
-							db_cmd.StartDBComponent(config.Get_config().Toml_config)
 							db_cmd.Reconfig()
 							fmt.Println("======== end  of  db data reconfiguration ========")
 							return nil

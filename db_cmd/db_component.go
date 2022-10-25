@@ -6,7 +6,10 @@ import (
 	"github.com/coreservice-io/cli-template/config"
 )
 
-func StartDBComponent(toml_conf *config.TomlConfig) {
+func StartDBComponent() {
+
+	toml_conf := config.Get_config().Toml_config
+
 	/////////////////////////
 	if err := component.InitReference(); err != nil {
 		basic.Logger.Fatalln(err)
