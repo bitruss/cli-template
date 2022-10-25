@@ -1,85 +1,55 @@
 # cli-template
 
-# How to use
-
-
-#### before you start first check your config
-
-#### root_conf 
+## description: 
 ```
-root_conf is your default config where you could put 
-various kinds of toml files . e.g : "default.toml" , "dev.toml" ....
+this is a template project that you can fork or copy as a project to start with.
 ```
 
-#### overwrite root_conf with your own conf , example:
-#### below command will create a custom conf inside the user_conf folder
+## designed with:
 ```
-go run ./ config set --https.enable=false
-```
-
-
-## Running process
-```
-.check root_conf folder 
-.check db folder (you may need to deploy the .sql)
+1.easy configuration (toml)
+2.command line support
+3.rich plugins
 ```
 
-
+## main entry point file
 ```
-1.entry -> main.go
-2.basic logger is initialized 
-3.cmd/cmd.go ->ConfigCmd() is called
-4.read the related config file
-5.--> go to cmd application "config"|"default_"|"log"|"db"
-
+main.go is the entry file
+other test entries are under 'test' folders
 ```
 
+## steps to start:
 
-#### 1."default_" sub-program:
-
-##### default_ is the main program
-
-#### 1.1 run default program with {config_name}
-
-##### ```go run . --conf={config_name}``` // will use the {config_name}.toml inside root_conf folder
-
-##### ```go run .```  // use the defalut.toml inside root_conf folder
-
-#### 2."config" sub-program::
-
-##### config is the program used to show or set config file
-
-#### 2.1 custom config 
-
-##### ```go run . --conf={config_name} config set ...``` //using {config_name}.toml
-
-##### ```go run . config set ...```   //using default.toml
-
-#### 3. log sub-program:
-
-#### 3.1 show all logs
-
-##### ```go run . log```
-
-#### 3.2 only show error logs : [error,panic,fatal]
-
-##### ```go run . log --only_err=true```
-
-#### 4. "api" sub-program::
-
-##### 4.1 generate the api documents
-
-##### ```go run . gen_api```
-
-
-#### 5. "db" sub-program::
-
-##### ```go run . db init_data```
-
-
-## API
-
+### step1. config your project 
 ```
-After running default_ main program, you can go directly to your browser to 
-check and invoke the api swagger docs
+1. check folder 'root_conf' where you can put different {config_name}.toml files
+2. the 'default.toml' config is used if not explicited configured 
+3. you can run 'go run ./ config set --https.enable=false' to setup your own config file (generated inside 'user_conf/default.toml' )
+3. you can run 'go run ./ config --conf=test set --https.enable=false' to setup your own config file (generated inside 'user_conf/test.toml' )
+4. you can also edit user_conf/*.toml files directly without the help of command line
+```
+
+### step2. check database initialization 
+```
+1. config your database in your *.toml file
+2. open your database and construct the tables using file 'cmd_db/table.sql'
+3. run 'go run ./ db init' which will call the function 'Initialize()' inside the 'cmd_db/initialize.go' file which initialize the db data
+```
+
+### step3. write api
+```
+1.go to `cmd_default` folder where your main program locate
+2.go to 'http/api' folder to add your own api file
+3.run 'go run ./ gen_api' to auto generate your api files
+4.run 'go run ./' to start your main program with http server 
+5.you can view the api pages with 'localhost'
+```
+
+## Command line hints
+```
+go run . gen_api                //generate api
+go run . config set ...         //set configs
+go run . log                    //show all logs
+go run . log --only_err=true    //show all error logs [error,panic,fatal]
+
 ```
