@@ -1,11 +1,11 @@
-package default_cmd
+package cmd_default
 
 import (
 	"time"
 
 	"github.com/coreservice-io/cli-template/basic"
-	"github.com/coreservice-io/cli-template/config"
-	"github.com/coreservice-io/cli-template/default_cmd/http"
+	"github.com/coreservice-io/cli-template/basic/config"
+	"github.com/coreservice-io/cli-template/cmd_default/http"
 	"github.com/coreservice-io/cli-template/plugin/auto_cert_plugin"
 	"github.com/coreservice-io/cli-template/plugin/geo_ip_plugin"
 	"github.com/fatih/color"

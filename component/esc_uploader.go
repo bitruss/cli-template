@@ -2,7 +2,7 @@ package component
 
 import (
 	"github.com/coreservice-io/cli-template/basic"
-	"github.com/coreservice-io/cli-template/config"
+	"github.com/coreservice-io/cli-template/basic/config"
 	"github.com/coreservice-io/cli-template/plugin/ecs_uploader_plugin"
 )
 

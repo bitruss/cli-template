@@ -5,7 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	_ "github.com/coreservice-io/cli-template/default_cmd/http/api_docs"
+	_ "github.com/coreservice-io/cli-template/cmd_default/http/api_docs"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"github.com/swaggo/swag/gen"
 )
@@ -43,12 +43,12 @@ func ConfigApi(httpServer *echo.Echo) {
 
 func GenApiDocs() {
 
-	api_f, api_f_exist, _ := basic.PathExist("default_cmd/http/api")
+	api_f, api_f_exist, _ := basic.PathExist("cmd_default/http/api")
 	if !api_f_exist {
 		basic.Logger.Errorln("api_doc_gen_search_dir folder not exist:", api_f)
 		return
 	}
-	api_doc_f, api_doc_f_exist, _ := basic.PathExist("default_cmd/http/api_docs")
+	api_doc_f, api_doc_f_exist, _ := basic.PathExist("cmd_default/http/api_docs")
 	if !api_doc_f_exist {
 		basic.Logger.Errorln("api_doc_gen_output_dir folder not exist:", api_doc_f)
 		return

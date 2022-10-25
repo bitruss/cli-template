@@ -1,9 +1,9 @@
-package default_cmd
+package cmd_default
 
 import (
 	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/basic/config"
 	"github.com/coreservice-io/cli-template/component"
-	"github.com/coreservice-io/cli-template/config"
 )
 
 func InitComponent() {

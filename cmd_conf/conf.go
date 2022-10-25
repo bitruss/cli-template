@@ -1,10 +1,10 @@
-package cmd
+package cmd_conf
 
 import (
 	"errors"
 	"strings"
 
-	"github.com/coreservice-io/cli-template/config"
+	"github.com/coreservice-io/cli-template/basic/config"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 )

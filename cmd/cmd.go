@@ -5,11 +5,12 @@ import (
 
 	"github.com/urfave/cli/v2"
 
-	"github.com/coreservice-io/cli-template/config"
-	"github.com/coreservice-io/cli-template/db_cmd"
-	"github.com/coreservice-io/cli-template/default_cmd"
-	"github.com/coreservice-io/cli-template/default_cmd/http/api"
-	"github.com/coreservice-io/cli-template/log_cmd"
+	"github.com/coreservice-io/cli-template/basic/config"
+	"github.com/coreservice-io/cli-template/cmd_conf"
+	"github.com/coreservice-io/cli-template/cmd_db"
+	"github.com/coreservice-io/cli-template/cmd_default"
+	"github.com/coreservice-io/cli-template/cmd_default/http/api"
+	"github.com/coreservice-io/cli-template/cmd_log"
 )
 
 const CMD_NAME_DEFAULT = "default"
@@ -24,7 +25,7 @@ func ConfigCmd() *cli.App {
 	real_args := config.ConfigBasic("default")
 
 	var defaultAction = func(clictx *cli.Context) error {
-		default_cmd.StartDefault()
+		cmd_default.StartDefault()
 		return nil
 	}
 
@@ -52,11 +53,11 @@ func ConfigCmd() *cli.App {
 			{
 				Name:  CMD_NAME_LOG,
 				Usage: "print all logs",
-				Flags: log_cmd.GetFlags(),
+				Flags: cmd_log.GetFlags(),
 				Action: func(clictx *cli.Context) error {
 					num := clictx.Int64("num")
 					onlyerr := clictx.Bool("only_err")
-					log_cmd.StartLog(onlyerr, num)
+					cmd_log.StartLog(onlyerr, num)
 					return nil
 				},
 			},
@@ -69,18 +70,8 @@ func ConfigCmd() *cli.App {
 						Usage: "initialize db data",
 						Action: func(clictx *cli.Context) error {
 							fmt.Println("======== start of db data initialization ========")
-							db_cmd.Initialize()
+							cmd_db.Initialize()
 							fmt.Println("======== end  of  db data initialization ========")
-							return nil
-						},
-					},
-					{
-						Name:  "reconfig",
-						Usage: "reconfig db data",
-						Action: func(clictx *cli.Context) error {
-							fmt.Println("======== start of db data reconfiguration ========")
-							db_cmd.Reconfig()
-							fmt.Println("======== end  of  db data reconfiguration ========")
 							return nil
 						},
 					},
@@ -106,9 +97,9 @@ func ConfigCmd() *cli.App {
 					{
 						Name:  "set",
 						Usage: "set config",
-						Flags: append(Cli_get_flags(), &cli.StringFlag{Name: "config", Required: false}),
+						Flags: append(cmd_conf.Cli_get_flags(), &cli.StringFlag{Name: "config", Required: false}),
 						Action: func(clictx *cli.Context) error {
-							return Cli_set_config(clictx)
+							return cmd_conf.Cli_set_config(clictx)
 						},
 					},
 				},

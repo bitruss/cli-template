@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/coreservice-io/cli-template/basic"
+	"github.com/coreservice-io/cli-template/basic/config"
 	"github.com/coreservice-io/cli-template/component"
-	"github.com/coreservice-io/cli-template/config"
 	"github.com/coreservice-io/cli-template/plugin/redis_plugin"
 	"github.com/coreservice-io/cli-template/plugin/reference_plugin"
 	"github.com/coreservice-io/cli-template/src/common/smart_cache"

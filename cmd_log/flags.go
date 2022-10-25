@@ -1,4 +1,4 @@
-package log_cmd
+package cmd_log
 
 import (
 	"github.com/urfave/cli/v2"

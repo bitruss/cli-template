@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/coreservice-io/cli-template/basic"
-	"github.com/coreservice-io/cli-template/config"
-	"github.com/coreservice-io/cli-template/default_cmd/http/api"
+	"github.com/coreservice-io/cli-template/basic/config"
+	"github.com/coreservice-io/cli-template/cmd_default/http/api"
 	"github.com/coreservice-io/cli-template/plugin/echo_plugin"
 	"github.com/labstack/echo/v4"
 )
