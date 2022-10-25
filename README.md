@@ -1,55 +1,61 @@
-### cli-template
+# cli-template
 
-#### description: 
-```
-this is a template project that you can fork or copy as a project to start with.
-```
+<p align="center">
+  <img width="120" src="./cli-template.svg">
+</p>
 
-#### designed with:
-```
-1.easy configuration (toml)
-2.command line support
-3.rich plugins
-```
+<a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
+</a>
+<a href="https://meson.network/">
+    <img src="https://img.shields.io/badge/made%20by-Meson%20Network-blue.svg?style=flat-square" alt="License: MIT">
+</a>
 
-#### main entry point file
-```
+> This is a template project that you can fork or copy as a project to start with.
+
+## ⚡️ Designed With
+
+- Easy Configuration (toml)
+- Command Line Support
+- Rich Plugins
+
+## 🎈 Main Entry Point File
+
+```bash
 main.go is the entry file
-other test entries are under 'test' folders
+other test entries are under `test` folders
 ```
 
-#### steps to start:
+## 📚 Steps To Start
 
-##### step1. config your project 
-```
-1. check folder 'root_conf' where you can put different {config_name}.toml files
-2. the 'default.toml' config is used if not explicited configured 
-3. you can run 'go run ./ config set --https.enable=false' to setup your own config file (generated inside 'user_conf/default.toml' )
-3. you can run 'go run ./ config --conf=test set --https.enable=false' to setup your own config file (generated inside 'user_conf/test.toml' )
-4. you can also edit user_conf/*.toml files directly without the help of command line
-```
+### Step1. Config Your Project
 
-##### step2. check database initialization 
-```
-1. config your database in your *.toml file
-2. open your database and construct the tables using file 'cmd_db/table.sql'
-3. run 'go run ./ db init' which will call the function 'Initialize()' inside the 'cmd_db/initialize.go' file which initialize the db data
-```
+- Check folder `root_conf` where you can put different {config_name}.toml files
+- The 'default.toml' config is used if not explicited configured 
+- You can run `go run ./ config set --https.enable=false` to setup your own config file (generated inside 'user_conf/default.toml' )
+- You can run 'go run ./ config --conf=test set --https.enable=false' to setup your own config file (generated inside 'user_conf/test.toml' )
+- You can also edit user_conf/*.toml files directly without the help of command line
 
-##### step3. write api
-```
-1.go to `cmd_default` folder where your main program locate
-2.go to 'http/api' folder to add your own api file
-3.run 'go run ./ gen_api' to auto generate your api files
-4.run 'go run ./' to start your main program with http server 
-5.you can view the api pages with 'localhost'
-```
 
-#### Command line hints
-```
-go run . gen_api                //generate api
-go run . config set ...         //set configs
-go run . log                    //show all logs
-go run . log --only_err=true    //show all error logs [error,panic,fatal]
+### Step2. Check Database Initialization
 
+- Config your database in your *.toml file
+- Open your database and construct the tables using file `cmd_db/table.sql`
+- Run `go run ./ db init` which will call the function `Initialize()` inside the `cmd_db/initialize.go` file which initialize the db data
+
+### Step3. Write API
+
+- Go to `cmd_default` folder where your main program locate
+- Go to `http/api` folder to add your own api file
+- Run `go run ./ gen_api` to auto generate your api files
+- Run `go run ./` to start your main program with http server 
+- You can view the api pages with `localhost`
+
+## ⚙️ Command line hints
+
+```bash
+$ go run . gen_api                //generate api
+$ go run . config set ...         //set configs
+$ go run . log                    //show all logs
+$ go run . log --only_err=true    //show all error logs [error,panic,fatal]
 ```
