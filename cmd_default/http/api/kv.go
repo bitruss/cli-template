@@ -18,23 +18,23 @@ type DBKV struct {
 	Description string `json:"description"`
 }
 
-//create
+// create
 // @Description Msg_Req_CreateRule
 type Msg_Req_CreateKv struct {
-	Key         string `json:"key"`         //required
-	Value       string `json:"value"`       //required
-	Description string `json:"description"` //required
+	Key         string `json:"key"`         // required
+	Value       string `json:"value"`       // required
+	Description string `json:"description"` // required
 }
 
-//query
+// query
 // @Description Msg_Req_QueryKv_Filter
 type Msg_Req_QueryKv_Filter struct {
-	Keys *[]string `json:"keys"` //optional
+	Keys *[]string `json:"keys"` // optional
 }
 
 // @Description Msg_Req_QueryKv
 type Msg_Req_QueryKv struct {
-	Filter Msg_Req_QueryKv_Filter `json:"filter"` //required
+	Filter Msg_Req_QueryKv_Filter `json:"filter"` // required
 }
 
 type Msg_Resp_QueryKv struct {
@@ -43,36 +43,36 @@ type Msg_Resp_QueryKv struct {
 	Count int64   `json:"count"`
 }
 
-//delete
+// delete
 // @Description Msg_Req_DeleteKv_Filter
 type Msg_Req_DeleteKv_Filter struct {
-	Keys []string `json:"keys"` //required
+	Keys []string `json:"keys"` // required
 }
 
 // @Description Msg_Req_DeleteKv
 type Msg_Req_DeleteKv struct {
-	Filter Msg_Req_DeleteKv_Filter `json:"filter"` //required
+	Filter Msg_Req_DeleteKv_Filter `json:"filter"` // required
 }
 
-//update
+// update
 // @Description Msg_Req_UpdateKv_Filter
 type Msg_Req_UpdateKv_Filter struct {
-	Key string `json:"key"` //required
+	Key string `json:"key"` // required
 }
 
 // @Description Msg_Req_UpdateKv_To
 type Msg_Req_UpdateKv_To struct {
-	Value       string `json:"value"`       //required
-	Description string `json:"description"` //required
+	Value       string `json:"value"`       // required
+	Description string `json:"description"` // required
 }
 
 // @Description Msg_Req_UpdateKv
 type Msg_Req_UpdateKv struct {
-	Filter Msg_Req_UpdateKv_Filter `json:"filter"` //required
-	Update Msg_Req_UpdateKv_To     `json:"update"` //required
+	Filter Msg_Req_UpdateKv_Filter `json:"filter"` // required
+	Update Msg_Req_UpdateKv_To     `json:"update"` // required
 }
 
-func config_kv(httpServer *echo.Echo) {
+func configKv(httpServer *echo.Echo) {
 	httpServer.POST("/api/kv/create", createKvHandler, MidToken)
 	httpServer.POST("/api/kv/query", queryKvHandler, MidToken)
 	httpServer.POST("/api/kv/delete", deleteKvHandler, MidToken)

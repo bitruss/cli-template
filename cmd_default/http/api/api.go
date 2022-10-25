@@ -29,12 +29,12 @@ import (
 // @name                        Authorization
 
 func DeclareApi(httpServer *echo.Echo) {
-	//health
+	// health
 	configHealth(httpServer)
-	//user
+	// user
 	configUser(httpServer)
-	//kv
-	config_kv(httpServer)
+	// kv
+	configKv(httpServer)
 }
 
 func ConfigApi(httpServer *echo.Echo) {
