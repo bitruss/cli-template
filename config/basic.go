@@ -13,9 +13,8 @@ import (
 // 2.setup the basic working directory
 // 3.setup the basic logger
 // 4.return the real args
-func ConfigBasic() []string {
+func ConfigBasic(toml_target string) []string {
 	//////////init config/////////////
-	toml_target := "default"
 
 	real_args := []string{}
 	for _, arg := range os.Args {

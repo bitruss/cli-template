@@ -14,7 +14,7 @@ import (
 
 func initialize_smc() {
 
-	config.ConfigBasic()
+	config.ConfigBasic("test")
 
 	config_toml := config.Get_config().Toml_config
 

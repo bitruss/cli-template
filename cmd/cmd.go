@@ -21,7 +21,7 @@ const CMD_NAME_CONFIG = "config"
 // //////config to do cmd ///////////
 func ConfigCmd() *cli.App {
 
-	real_args := config.ConfigBasic()
+	real_args := config.ConfigBasic("default")
 
 	var defaultAction = func(clictx *cli.Context) error {
 		default_cmd.StartDefault()
